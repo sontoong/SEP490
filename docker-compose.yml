@@ -34,7 +34,7 @@ services:
     container_name: webapp
     environment:
       - MY_APP_API_END_POINT=${API_END_POINT}
-      - MY_APP_ENVIRONMENT=ProductionEnvironment
+      - MY_APP_ENVIRONMENT=Production
     build: 
       context: ./webapp
       dockerfile: Dockerfile

@@ -27,17 +27,9 @@ export default function MyHeader() {
   function getHeader(): ItemType[] {
     switch (state.currentUser.Role) {
       case ROLE.admin:
-        return [
-          generateItem("Cities", "/cities", ""),
-          generateItem("Tours", "/tours"),
-          generateItem("Guides", "/guides"),
-        ];
+        return [generateItem("Cities", "/cities", "")];
       default:
-        return [
-          generateItem("Cities", "/cities"),
-          generateItem("Tours", "/tours"),
-          generateItem("Guides", "/guides"),
-        ];
+        return [generateItem("Cities", "/cities")];
     }
   }
 
@@ -92,7 +84,7 @@ export default function MyHeader() {
 
   return (
     <>
-      <Header className="sticky top-0 z-50 flex w-full  items-center bg-white">
+      <Header className="sticky top-0 z-50 flex w-full items-center bg-white">
         <img
           alt=""
           className="w-[150px] hover:cursor-pointer"

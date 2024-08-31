@@ -1,0 +1,17 @@
+//dependencies
+ant design icons [npm i @ant-design/icons]
+ant design plots [npm i @ant-design/plots]
+redux toolkit [npm i @reduxjs/toolkit]
+antd [npm i antd]
+axios [npm i axios]
+dayjs [npm i dayjs]
+jwt-decode [npm i jwt-decode]
+nprogress [npm i nprogress]
+react redux [npm i react-redux]
+react router dom [npm i react-router-dom]
+redux persist [npm i redux-persist]
+uuid [npm i uuid]
+
+//dev dependencies
+prettier plugin tailwindcss [npm install -D prettier prettier-plugin-tailwindcss]
+tailwindcss [npm install -D tailwindcss postcss autoprefixer]

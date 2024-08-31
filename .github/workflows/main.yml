@@ -49,7 +49,7 @@ jobs:
           script: |
             set -e
             cd /home/${{github.event.repository.name}}
-            sudo git fetch origin ${{ github.event.pull_request.head.ref }}
+            sudo git pull origin ${{ github.event.pull_request.head.ref }}
             sudo git checkout ${{ github.event.pull_request.head.ref }}
             docker compose pull -q
             docker compose up --build -d --remove-orphans --force-recreate

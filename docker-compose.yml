@@ -1,0 +1,56 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_DATABASE: sep490
+      MYSQL_ROOT_PASSWORD: 12345
+    volumes:
+      - db_data:/var/lib/mysql
+
+  nginx:
+    container_name: nginx
+    depends_on:
+      # - api
+      - webapp
+    restart: always
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/ssl/cert.cer:/etc/ssl/cert.cer
+      - /etc/ssl/key.key:/etc/ssl/key.key
+      - /etc/ssl/cloudflare.crt:/etc/ssl/cloudflare.crt
+
+  webapp:
+    # depends_on:
+    #   - api
+    restart: always
+    image: "${DOCKER_REPO:?error}-webapp:latest"
+    container_name: webapp
+    environment:
+      - MY_APP_API_END_POINT=${API_END_POINT}
+      - MY_APP_ENVIRONMENT=Production
+    build: 
+      context: ./webapp
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+
+  # api:
+  #   image: "${DOCKER_REPO:?error}-backend:latest"
+  #   container_name: webapp
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - '8000:8000'
+  #   depends_on:
+  #     - db
+
+volumes:
+  db_data: {}

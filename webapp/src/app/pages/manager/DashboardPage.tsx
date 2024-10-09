@@ -4,8 +4,7 @@ import { useTitle } from "../../hooks/useTitle";
 export default function DashboardPage() {
   useTitle({
     tabTitle: "Dashboard - EWMH",
-    title: `Thống Kê`,
-    path: "/dashboard",
+    paths: [{ title: "Thống Kê", path: "/dashboard" }],
   });
   return (
     <div>

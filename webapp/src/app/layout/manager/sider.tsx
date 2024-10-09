@@ -47,16 +47,16 @@ export default function MySider() {
       case "2":
         return [
           getItem("Thống kê", "dashboard", <FundOutlined />),
-          getItem("Leader", "leader-manage", <SolutionOutlined />),
-          getItem("Nhân viên", "classes", <TeamOutlined />),
-          getItem("Gói dịch vụ", "classes", <BookOutlined />),
-          getItem("Sản phẩm", "classes", <ToolOutlined />),
-          getItem("Hợp đồng", "classes", <FileTextOutlined />),
-          getItem("Yêu cầu", "classes", <DropboxOutlined />),
-          getItem("Đơn hàng", "classes", <ShoppingCartOutlined />),
-          getItem("Chat", "classes", <WechatOutlined />),
-          getItem("Đánh giá", "classes", <LikeOutlined />),
-          getItem("Chung cư", "classes", <HomeOutlined />),
+          getItem("Leader", "leaders", <SolutionOutlined />),
+          getItem("Nhân viên", "workers", <TeamOutlined />),
+          getItem("Gói dịch vụ", "services", <BookOutlined />),
+          getItem("Sản phẩm", "products]", <ToolOutlined />),
+          getItem("Hợp đồng", "contracts", <FileTextOutlined />),
+          getItem("Yêu cầu", "requests", <DropboxOutlined />),
+          getItem("Đơn hàng", "orders", <ShoppingCartOutlined />),
+          getItem("Chat", "chat", <WechatOutlined />),
+          getItem("Đánh giá", "ratings", <LikeOutlined />),
+          getItem("Chung cư", "apartments", <HomeOutlined />),
         ];
       default:
         return [];

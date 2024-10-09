@@ -15,7 +15,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         },
       }}
     >
-      <Layout>
+      <Layout className="min-h-screen">
         <Sider />
         <Layout className="bg-white">
           <Header />

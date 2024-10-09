@@ -3,12 +3,13 @@ import React from "react";
 import { useAppSelector } from "../../redux/hook";
 
 export default function MyContent({ children }: { children: React.ReactNode }) {
-  const { headerTitle } = useAppSelector((state) => state.header);
+  const { paths } = useAppSelector((state) => state.header);
+  const currentPath = paths ? paths[paths.length - 1] : {};
   return (
     <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
-      {headerTitle.title && (
+      {currentPath.title && (
         <div className="pb-5 text-5xl font-semibold uppercase text-primary">
-          {headerTitle.title}
+          {currentPath.title}
         </div>
       )}
       <main className="justify-center bg-white">{children}</main>

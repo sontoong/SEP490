@@ -30,7 +30,7 @@ const PrivateRoute = ({
       console.log(Role);
       switch (Role) {
         case ROLE.admin:
-          return <Navigate to="/user-manage" />;
+          return <Navigate to="/user-management" />;
         case ROLE.manager:
           return <Navigate to="/dashboard" />;
         default:

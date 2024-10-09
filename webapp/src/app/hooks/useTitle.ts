@@ -4,20 +4,19 @@ import { setHeaderTitle } from "../redux/slice/headerSlice";
 
 type HeaderTitle = {
   tabTitle: string;
-  title?: string;
-  path?: string;
+  paths?: { title?: string; path?: string }[];
 };
 
-export function useTitle({ tabTitle, title, path }: HeaderTitle) {
+export function useTitle({ tabTitle, paths }: HeaderTitle) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const prevTitle = document.title;
     document.title = tabTitle;
-    dispatch(setHeaderTitle({ title, path }));
+    dispatch(setHeaderTitle(paths));
 
     return () => {
       document.title = prevTitle;
     };
-  }, [dispatch, title, path, tabTitle]);
+  }, [dispatch, paths, tabTitle]);
 }

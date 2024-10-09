@@ -1,21 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface HeaderState {
-  headerTitle: { title?: string; path?: string };
+  paths?: { title?: string; path?: string }[];
 }
 
 const initialState: HeaderState = {
-  headerTitle: { title: "", path: "" },
+  paths: [{ title: "", path: "" }],
 };
 export const headerSlice = createSlice({
   name: "header",
   initialState,
   reducers: {
-    setHeaderTitle: (
-      state,
-      action: PayloadAction<HeaderState["headerTitle"]>,
-    ) => {
-      state.headerTitle = action.payload;
+    setHeaderTitle: (state, action: PayloadAction<HeaderState["paths"]>) => {
+      state.paths = action.payload;
     },
   },
 });

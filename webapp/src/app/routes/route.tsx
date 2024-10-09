@@ -46,7 +46,7 @@ export const router = createBrowserRouter([
       },
       //admin
       {
-        path: "user-manage",
+        path: "user-management",
         element: (
           <Suspense fallback={<></>}>
             <PrivateRoute inverted={false} requiredRoles={[ROLE.admin]}>
@@ -62,23 +62,23 @@ export const router = createBrowserRouter([
         path: "dashboard",
         element: (
           <Suspense fallback={<></>}>
-            {/* <PrivateRoute inverted={false} requiredRoles={[ROLE.admin]}> */}
-            <ManagerLayout>
-              <DashboardPage />
-            </ManagerLayout>
-            {/* </PrivateRoute> */}
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <DashboardPage />
+              </ManagerLayout>
+            </PrivateRoute>
           </Suspense>
         ),
       },
       {
-        path: "leader-manage",
+        path: "leaders",
         element: (
           <Suspense fallback={<></>}>
-            {/* <PrivateRoute inverted={false} requiredRoles={[ROLE.admin]}> */}
-            <ManagerLayout>
-              <LeaderManagementPage />
-            </ManagerLayout>
-            {/* </PrivateRoute> */}
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <LeaderManagementPage />
+              </ManagerLayout>
+            </PrivateRoute>
           </Suspense>
         ),
       },

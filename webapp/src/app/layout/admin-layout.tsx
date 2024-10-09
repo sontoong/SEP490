@@ -1,6 +1,6 @@
 import Header from "./header";
 import Content from "./admin/content";
-import { Layout } from "antd";
+import { ConfigProvider, Layout } from "antd";
 // import { useCallback, useEffect, useState } from "react";
 // import agent from "../../utils/agent";
 // import { roleCheckSuccess } from "../../redux/slice/roleSlice";
@@ -33,12 +33,22 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   //   );
 
   return (
-    <Layout className="min-h-screen">
-      <Layout className="bg-white">
-        <Header />
-        <Content children={children} />
+    <ConfigProvider
+      theme={{
+        components: {
+          Layout: {
+            headerBg: "#4CC9C7",
+          },
+        },
+      }}
+    >
+      <Layout className="min-h-screen">
+        <Layout className="bg-white">
+          <Header />
+          <Content children={children} />
+        </Layout>
       </Layout>
-    </Layout>
+    </ConfigProvider>
   );
 };
 

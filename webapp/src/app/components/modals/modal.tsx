@@ -11,7 +11,7 @@ function CustomModal({ children, ...rest }: CustomModalProp) {
         theme={{
           components: {
             Modal: {
-              titleColor: "#004AAD",
+              titleColor: "#FF7A00",
             },
           },
         }}
@@ -23,8 +23,6 @@ function CustomModal({ children, ...rest }: CustomModalProp) {
     </>
   );
 }
-
-type CustomModalProp = ModalProps;
 
 function OTP(props: OTPProps) {
   const dispatch = useAppDispatch();
@@ -79,8 +77,11 @@ function OTP(props: OTPProps) {
 }
 
 CustomModal.OTP = OTP;
+CustomModal.useModal = Modal.useModal;
 
 export default CustomModal;
+
+type CustomModalProp = ModalProps;
 
 type OTPProps = ModalProps & {
   extraValues: object;

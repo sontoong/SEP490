@@ -1,17 +1,16 @@
 import { Form, FormProps } from "antd";
 import { RequiredFields } from "../../utils/types";
+import { ReactNode } from "react";
 
-interface DefaultFormProps
-  extends Omit<
-    RequiredFields<FormProps, "initialValues" | "name">,
-    "layout" | "scrollToFirstError"
-  > {}
+type DefaultFormProps = Omit<
+  RequiredFields<FormProps, "initialValues" | "name">,
+  "layout" | "scrollToFirstError"
+>;
 
 function DefaultForm(props: DefaultFormProps) {
   const { children } = props;
   return (
     <Form
-      {...props}
       layout="vertical"
       scrollToFirstError={{
         behavior: "smooth",
@@ -19,8 +18,9 @@ function DefaultForm(props: DefaultFormProps) {
         inline: "center",
       }}
       requiredMark="optional"
+      {...props}
     >
-      <>{children}</>
+      <>{children as ReactNode}</>
     </Form>
   );
 }

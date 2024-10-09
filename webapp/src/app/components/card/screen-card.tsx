@@ -1,6 +1,9 @@
-import { Card, CardProps, ConfigProvider, Typography } from "antd";
+import { Card, CardProps, ConfigProvider, theme, Typography } from "antd";
+
+const { useToken } = theme;
 
 const CustomScreenCard = ({ cardTitle, ...rest }: CustomScreenCardProps) => {
+  const { token } = useToken();
   const { Title } = Typography;
 
   return (
@@ -8,7 +11,8 @@ const CustomScreenCard = ({ cardTitle, ...rest }: CustomScreenCardProps) => {
       theme={{
         components: {
           Card: {
-            headerBg: "#004AAD",
+            headerBg: "#4CC9C7",
+            // colorBgContainer: "#4CC9C7",
           },
         },
       }}
@@ -16,11 +20,11 @@ const CustomScreenCard = ({ cardTitle, ...rest }: CustomScreenCardProps) => {
       <Card
         title={
           <Title
-            level={4}
+            level={3}
             style={{
+              color: token.colorTextLightSolid,
               margin: 0,
               textTransform: "uppercase",
-              color: "#FFDE59",
               textAlign: "center",
               fontWeight: "bold",
             }}

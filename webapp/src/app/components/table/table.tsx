@@ -4,11 +4,13 @@ function CustomTable({ ...rest }: TableProps) {
   return (
     <ConfigProvider
       theme={{
+        token: {
+          fontSize: 17,
+        },
         components: {
           Table: {
-            headerBg: "#004AAD",
-            headerColor: "#FFDE59",
-            headerSplitColor: "#004AAD",
+            headerBg: "#4CC9C7",
+            headerColor: "#fff",
           },
         },
       }}

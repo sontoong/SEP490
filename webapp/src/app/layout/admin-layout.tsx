@@ -1,6 +1,5 @@
-import Header from "./public/header";
-import Footer from "./public/footer";
-import Content from "./public/content";
+import Header from "./header";
+import Content from "./admin/content";
 import { Layout } from "antd";
 // import { useCallback, useEffect, useState } from "react";
 // import agent from "../../utils/agent";
@@ -38,7 +37,6 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       <Layout className="bg-white">
         <Header />
         <Content children={children} />
-        <Footer />
       </Layout>
     </Layout>
   );

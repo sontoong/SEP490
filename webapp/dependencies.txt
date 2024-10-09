@@ -11,6 +11,8 @@ react redux [npm i react-redux]
 react router dom [npm i react-router-dom]
 redux persist [npm i redux-persist]
 uuid [npm i uuid]
+clsx [npm i clsx]
+tailwind-merge [npm i tailwind-merge]
 
 //dev dependencies
 prettier plugin tailwindcss [npm install -D prettier prettier-plugin-tailwindcss]

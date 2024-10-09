@@ -1,21 +1,17 @@
-import {
-  BookOutlined,
-  HistoryOutlined,
-  LogoutOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, Layout, Menu, MenuProps, Modal, Spin } from "antd";
 import { ItemType } from "antd/es/menu/interface";
 import { useLocation, useNavigate } from "react-router-dom";
-import logo from "../../../assets/logo.png";
-import { ROLE } from "../../../constants/role";
-import { PrimaryButton } from "../../components/buttons";
-import { useAuth } from "../../hooks/useAuth";
-import { ensureBase64Avatar, isEmptyObject } from "../../utils/helpers";
+import logo from "../../assets/images/logo.png";
+import { ROLE } from "../../constants/role";
+import { PrimaryButton } from "../components/buttons";
+import { useAuth } from "../hooks/useAuth";
+import { ensureBase64Avatar } from "../utils/helpers";
+import { isLoggedIn } from "../redux/slice/authSlice";
 
 const { Header } = Layout;
 
-export default function MyHeader() {
+export default function CustomHeader() {
   const location = useLocation();
   const navigate = useNavigate();
   const { state, handleLogout } = useAuth();
@@ -27,9 +23,11 @@ export default function MyHeader() {
   function getHeader(): ItemType[] {
     switch (state.currentUser.Role) {
       case ROLE.admin:
-        return [generateItem("Cities", "/cities", "")];
+        return [];
+      case ROLE.manager:
+        return [];
       default:
-        return [generateItem("Cities", "/cities")];
+        return [];
     }
   }
 
@@ -38,23 +36,15 @@ export default function MyHeader() {
       case ROLE.admin:
         return [
           generateItemProfile(
-            "Thông tin cá nhân",
-            "/customer/profile",
-            <UserOutlined />,
+            "Đăng xuất",
+            "",
+            <LogoutOutlined />,
+            undefined,
+            logOut,
           ),
-          generateItemProfile(
-            "Danh sách chờ",
-            "/customer/request",
-            <BookOutlined />,
-          ),
-          generateItemProfile(
-            "Giao dịch",
-            "/customer/payment-history",
-            <HistoryOutlined />,
-          ),
-          {
-            type: "divider",
-          },
+        ];
+      case ROLE.manager:
+        return [
           generateItemProfile(
             "Đăng xuất",
             "",
@@ -84,7 +74,7 @@ export default function MyHeader() {
 
   return (
     <>
-      <Header className="sticky top-0 z-50 flex w-full items-center bg-white">
+      <Header className="sticky top-0 z-50 flex w-full items-center">
         <img
           alt=""
           className="w-[150px] hover:cursor-pointer"
@@ -105,9 +95,9 @@ export default function MyHeader() {
             .map((_, index, arr) => `/${arr.slice(0, index + 1).join("/")}`)}
           onClick={onClick}
         />
-        {isEmptyObject(state.currentUser) ? (
+        {!isLoggedIn() ? (
           <PrimaryButton
-            text="Get started"
+            text="Đăng nhập"
             className="self-center rounded-full"
             bgColor="#000000"
             size="middle"
@@ -133,7 +123,7 @@ export default function MyHeader() {
               className="fixed right-4 top-3 cursor-pointer"
               size={"large"}
               icon={<UserOutlined />}
-              src={ensureBase64Avatar(state.currentUser?.Email)} //fix this
+              src={ensureBase64Avatar(state.currentUser.AvatarUrl)}
             />
           </Dropdown>
         )}
@@ -148,19 +138,19 @@ export default function MyHeader() {
   );
 }
 
-function generateItem(
-  label: string,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: ItemType[],
-): ItemType {
-  return {
-    key,
-    icon,
-    children,
-    label: <span className="text-lg font-bold">{label}</span>,
-  };
-}
+// function generateItemHeader(
+//   label: string,
+//   key: React.Key,
+//   icon?: React.ReactNode,
+//   children?: ItemType[],
+// ): ItemType {
+//   return {
+//     key,
+//     icon,
+//     children,
+//     label: <span className="text-lg font-bold">{label}</span>,
+//   };
+// }
 
 function generateItemProfile(
   label: React.ReactNode,

@@ -15,19 +15,17 @@ import {
 import { ConfigProvider, Menu, MenuProps } from "antd";
 import Sider from "antd/es/layout/Sider";
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { cn } from "../../utils/cn";
 import logo from "../../../assets/images/logo.png";
 import logo2 from "../../../assets/images/logo2.png";
 
-type MenuItem = Required<MenuProps>["items"][number];
-
 export default function MySider() {
-  const select = useLocation();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { state } = useAuth();
 
-  const selected = select.pathname.split("/")[1];
   const [collapsed, setCollapsed] = useState(window.innerWidth < 1280);
 
   useEffect(() => {
@@ -42,21 +40,71 @@ export default function MySider() {
     };
   }, []);
 
-  const getConditionalItems = (): MenuItem[] => {
+  const getSiderItems = (): MenuItem[] => {
     switch (state.currentUser.Role) {
       case "2":
         return [
-          getItem("Thống kê", "dashboard", <FundOutlined />),
-          getItem("Leader", "leaders", <SolutionOutlined />),
-          getItem("Nhân viên", "workers", <TeamOutlined />),
-          getItem("Gói dịch vụ", "services", <BookOutlined />),
-          getItem("Sản phẩm", "products]", <ToolOutlined />),
-          getItem("Hợp đồng", "contracts", <FileTextOutlined />),
-          getItem("Yêu cầu", "requests", <DropboxOutlined />),
-          getItem("Đơn hàng", "orders", <ShoppingCartOutlined />),
-          getItem("Chat", "chat", <WechatOutlined />),
-          getItem("Đánh giá", "ratings", <LikeOutlined />),
-          getItem("Chung cư", "apartments", <HomeOutlined />),
+          getItem(
+            "Thống kê",
+            "/dashboard",
+            () => navigate("/dashboard"),
+            <FundOutlined />,
+          ),
+          getItem(
+            "Leader",
+            "/leaders",
+            () => navigate("/leaders"),
+            <SolutionOutlined />,
+          ),
+          getItem(
+            "Nhân viên",
+            "/workers",
+            () => navigate("/workers"),
+            <TeamOutlined />,
+          ),
+          getItem(
+            "Gói dịch vụ",
+            "/services",
+            () => navigate("/services"),
+            <BookOutlined />,
+          ),
+          getItem(
+            "Sản phẩm",
+            "/products",
+            () => navigate("/products"),
+            <ToolOutlined />,
+          ),
+          getItem(
+            "Hợp đồng",
+            "/contracts",
+            () => navigate("/contracts"),
+            <FileTextOutlined />,
+          ),
+          getItem(
+            "Yêu cầu",
+            "/requests",
+            () => navigate("/requests"),
+            <DropboxOutlined />,
+          ),
+          getItem(
+            "Đơn hàng",
+            "/orders",
+            () => navigate("/orders"),
+            <ShoppingCartOutlined />,
+          ),
+          getItem("Chat", "/chat", () => navigate("/chat"), <WechatOutlined />),
+          getItem(
+            "Đánh giá",
+            "/ratings",
+            () => navigate("/ratings"),
+            <LikeOutlined />,
+          ),
+          getItem(
+            "Chung cư",
+            "/apartments",
+            () => navigate("/apartments"),
+            <HomeOutlined />,
+          ),
         ];
       default:
         return [];
@@ -75,6 +123,7 @@ export default function MySider() {
         </div>
       }
       width={256}
+      style={{ scrollbarWidth: "thin", scrollbarColor: "unset" }}
     >
       <div className="flex justify-center border-r-[1px] border-gray-200">
         <div
@@ -82,13 +131,17 @@ export default function MySider() {
             hidden: collapsed,
           })}
         >
-          <img src={logo2} alt="logo" className="max-w-[50px] py-2" />
+          <img
+            src={logo2}
+            alt="logo"
+            className="max-w-[50px] py-2 brightness-0 invert"
+          />
           <img src={logo} alt="logo" className="max-w-[100px] py-2" />
         </div>
         <img
           src={logo2}
           alt="logo"
-          className={cn("max-w-[50px] py-2", {
+          className={cn("max-w-[50px] py-2 brightness-0 invert", {
             hidden: !collapsed,
           })}
         />
@@ -96,11 +149,12 @@ export default function MySider() {
       <ConfigProvider
         theme={{
           token: {
-            fontSize: 16,
+            fontSize: 18,
           },
           components: {
             Menu: {
               itemBg: "#1EA19F",
+              popupBg: "#1EA19F",
               itemColor: "#fff",
               itemHoverColor: "#fff",
               itemActiveBg: "#FF7A00",
@@ -111,9 +165,12 @@ export default function MySider() {
         }}
       >
         <Menu
-          defaultSelectedKeys={[selected]}
           mode="inline"
-          items={getConditionalItems()}
+          items={getSiderItems()}
+          selectedKeys={location.pathname
+            .split("/")
+            .slice(1)
+            .map((_, index, arr) => `/${arr.slice(0, index + 1).join("/")}`)}
         />
       </ConfigProvider>
     </Sider>
@@ -123,6 +180,7 @@ export default function MySider() {
 function getItem(
   label: React.ReactNode,
   key: React.Key,
+  onClick?: () => void,
   icon?: React.ReactNode,
   children?: MenuItem[],
 ): MenuItem {
@@ -130,6 +188,9 @@ function getItem(
     key,
     icon,
     children,
-    label: <Link to={`/${key}`}>{label}</Link>,
+    label,
+    onClick,
   } as MenuItem;
 }
+
+type MenuItem = Required<MenuProps>["items"][number];

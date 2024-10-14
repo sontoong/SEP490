@@ -27,7 +27,6 @@ const PrivateRoute = ({
 
   if (inverted) {
     if (isAuth) {
-      console.log(Role);
       switch (Role) {
         case ROLE.admin:
           return <Navigate to="/user-management" />;

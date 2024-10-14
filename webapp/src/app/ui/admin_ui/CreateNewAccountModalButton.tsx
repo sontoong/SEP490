@@ -17,7 +17,7 @@ import { roleNameGenerator } from "../../utils/generators/roleName";
 import { formatDateToLocal } from "../../utils/helpers";
 import { User } from "../../models/user";
 
-export default function CreateNewAccountModal() {
+export default function CreateNewAccountModalButton() {
   const [form] = Form.useForm();
   const [modal, contextHolder] = Modal.useModal();
   const [isModalVisible, setIsModalVisible] = useState(false);

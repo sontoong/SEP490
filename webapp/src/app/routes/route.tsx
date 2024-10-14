@@ -22,6 +22,15 @@ import UserManagementPage from "../pages/admin/UserManagementPage";
 //manager
 import DashboardPage from "../pages/manager/DashboardPage";
 import LeaderManagementPage from "../pages/manager/LeaderManagementPage";
+import WorkerManagementPage from "../pages/manager/WorkerManagementPage";
+import ServiceManagementPage from "../pages/manager/ServiceManagementPage";
+import ProductManagementPage from "../pages/manager/ProductManagementPage";
+import ContractManagementPage from "../pages/manager/ContractManagementPage";
+import RequestManagementPage from "../pages/manager/RequestManagementPage";
+import OrderManagementPage from "../pages/manager/OrderManagementPage";
+import ChatPage from "../pages/manager/ChatPage";
+import RatingManagementPage from "../pages/manager/RatingManagementPage";
+import ApartmentManagementPage from "../pages/manager/ApartmentManagementPage";
 
 //other page
 import NotFoundPage from "../pages/404Page";
@@ -82,6 +91,115 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: "workers",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <WorkerManagementPage />
+              </ManagerLayout>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "services",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <ServiceManagementPage />
+              </ManagerLayout>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "products",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <ProductManagementPage />
+              </ManagerLayout>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "contracts",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <ContractManagementPage />
+              </ManagerLayout>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "requests",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <RequestManagementPage />
+              </ManagerLayout>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "orders",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <OrderManagementPage />
+              </ManagerLayout>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "chat",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <ChatPage />
+              </ManagerLayout>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "ratings",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <RatingManagementPage />
+              </ManagerLayout>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "apartments",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <ApartmentManagementPage />
+              </ManagerLayout>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      //rest
       {
         path: "test",
         element: (

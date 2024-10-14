@@ -9,7 +9,7 @@ import { accountStatusGenerator } from "../../utils/generators/accountStatus";
 import { Avatar } from "../../components/avatar";
 import UserManagementDropdown from "../../ui/admin_ui/UserManagementDropdown";
 import { roleNameGenerator } from "../../utils/generators/roleName";
-import CreateNewAccountModal from "../../ui/admin_ui/CreateNewAccountModal";
+import CreateNewAccountModalButton from "../../ui/admin_ui/CreateNewAccountModalButton";
 
 export default function UserManagementPage() {
   useTitle({ tabTitle: "User Management - EWMH" });
@@ -27,7 +27,7 @@ export default function UserManagementPage() {
     <div className="px-10 py-10">
       <Space direction="vertical" size={20} className="w-full">
         <div className="flex justify-end">
-          <CreateNewAccountModal />
+          <CreateNewAccountModalButton />
         </div>
         <div className="flex items-center justify-between">
           <div className="text-2xl font-semibold text-primary">

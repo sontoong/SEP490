@@ -1,6 +1,5 @@
 import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, Layout, Menu, MenuProps, Modal, Spin } from "antd";
-import { ItemType } from "antd/es/menu/interface";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import { ROLE } from "../../constants/role";
@@ -20,7 +19,7 @@ export default function CustomHeader() {
     handleLogout();
   };
 
-  function getHeader(): ItemType[] {
+  function getHeaderItems(): MenuItem[] {
     switch (state.currentUser.Role) {
       case ROLE.admin:
         return [];
@@ -31,7 +30,7 @@ export default function CustomHeader() {
     }
   }
 
-  function getProfileDropdown(): ItemType[] {
+  function getProfileDropdown(): MenuItem[] {
     switch (state.currentUser.Role) {
       case ROLE.admin:
         return [
@@ -39,8 +38,8 @@ export default function CustomHeader() {
             "Đăng xuất",
             "",
             <LogoutOutlined />,
-            undefined,
             logOut,
+            undefined,
           ),
         ];
       case ROLE.manager:
@@ -49,8 +48,8 @@ export default function CustomHeader() {
             "Đăng xuất",
             "",
             <LogoutOutlined />,
-            undefined,
             logOut,
+            undefined,
           ),
         ];
       default:
@@ -59,18 +58,12 @@ export default function CustomHeader() {
             "Đăng xuất",
             "",
             <LogoutOutlined />,
-            undefined,
             logOut,
+            undefined,
           ),
         ];
     }
   }
-
-  const onClick: MenuProps["onClick"] = (e) => {
-    if (e.key) {
-      navigate(e.key);
-    }
-  };
 
   return (
     <>
@@ -83,7 +76,7 @@ export default function CustomHeader() {
         />
         <Menu
           mode="horizontal"
-          items={getHeader()}
+          items={getHeaderItems()}
           style={{
             flex: 1,
             minWidth: 0,
@@ -93,7 +86,6 @@ export default function CustomHeader() {
             .split("/")
             .slice(1)
             .map((_, index, arr) => `/${arr.slice(0, index + 1).join("/")}`)}
-          onClick={onClick}
         />
         {!isLoggedIn() ? (
           <PrimaryButton
@@ -113,7 +105,6 @@ export default function CustomHeader() {
                 .map(
                   (_, index, arr) => `/${arr.slice(0, index + 1).join("/")}`,
                 ),
-              onClick: onClick,
             }}
             placement="bottomRight"
             trigger={["click"]}
@@ -142,6 +133,7 @@ export default function CustomHeader() {
 //   label: string,
 //   key: React.Key,
 //   icon?: React.ReactNode,
+//   onClick?: () => void,
 //   children?: ItemType[],
 // ): ItemType {
 //   return {
@@ -149,6 +141,7 @@ export default function CustomHeader() {
 //     icon,
 //     children,
 //     label: <span className="text-lg font-bold">{label}</span>,
+//     onClick,
 //   };
 // }
 
@@ -156,9 +149,9 @@ function generateItemProfile(
   label: React.ReactNode,
   key: React.Key,
   icon?: React.ReactNode,
-  children?: ItemType[],
   onClick?: () => void,
-): ItemType {
+  children?: MenuItem[],
+): MenuItem {
   return {
     key,
     icon,
@@ -167,3 +160,5 @@ function generateItemProfile(
     onClick,
   };
 }
+
+type MenuItem = Required<MenuProps>["items"][number];

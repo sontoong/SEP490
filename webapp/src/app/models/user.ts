@@ -13,6 +13,7 @@ export type User = {
 
 export type Leader = User & {
   LeaderId: string;
+  ApartmentAreaName?: string;
 };
 
 export type Worker = User & {

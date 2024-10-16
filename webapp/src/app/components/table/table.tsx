@@ -4,11 +4,9 @@ function CustomTable({ ...rest }: TableProps) {
   return (
     <ConfigProvider
       theme={{
-        token: {
-          fontSize: 17,
-        },
         components: {
           Table: {
+            cellFontSize: 17,
             headerBg: "#4CC9C7",
             headerColor: "#fff",
           },

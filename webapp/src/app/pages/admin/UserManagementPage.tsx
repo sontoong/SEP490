@@ -1,21 +1,26 @@
-import { Space, TableProps } from "antd";
+import { Space, TableProps, Tag } from "antd";
+import { Avatar } from "../../components/avatar";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
 import { Table } from "../../components/table";
 import { useTitle } from "../../hooks/useTitle";
 import { Customer, Leader, Worker } from "../../models/user";
-import { users } from "../../../constants/testData";
+import CreateNewAccountModalButton from "../../ui/admin_ui/UserManagementPage/CreateNewAccountModalButton";
+import UserManagementDropdown from "../../ui/admin_ui/UserManagementPage/UserManagementDropdown";
 import { accountStatusGenerator } from "../../utils/generators/accountStatus";
-import { Avatar } from "../../components/avatar";
-import UserManagementDropdown from "../../ui/admin_ui/UserManagementDropdown";
 import { roleNameGenerator } from "../../utils/generators/roleName";
-import CreateNewAccountModalButton from "../../ui/admin_ui/CreateNewAccountModalButton";
+
+import { users } from "../../../constants/testData";
+import { Modal } from "../../components/modals";
+import { WarningOutlined } from "@ant-design/icons";
 
 export default function UserManagementPage() {
   useTitle({ tabTitle: "User Management - EWMH" });
+  const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();
+  const [disableReasonForm] = Form.useForm();
 
-  const initialValues = {
+  const initialValuesSearch = {
     searchString: "",
   };
 
@@ -23,53 +28,84 @@ export default function UserManagementPage() {
     console.log(values);
   };
 
-  return (
-    <div className="px-10 py-10">
-      <Space direction="vertical" size={20} className="w-full">
-        <div className="flex justify-end">
-          <CreateNewAccountModalButton />
+  function handleConfirmUnlock() {
+    modal.confirm({
+      icon: <WarningOutlined />,
+      width: "fit-content",
+      title: (
+        <div className="flex items-center whitespace-nowrap text-sm">
+          <span>Bạn có muốn đổi trạng thái thành</span>
+          <Tag color="green" className="mx-1">
+            Đang hoạt động
+          </Tag>
+          <span>?</span>
         </div>
-        <div className="flex items-center justify-between">
-          <div className="text-2xl font-semibold text-primary">
-            Danh sách người dùng
-          </div>
+      ),
+      onOk() {},
+    });
+  }
+
+  function handleConfirmLock() {
+    const initialValuesDisableReason = {
+      disableReason: "Lý do",
+    };
+
+    const handleConfirmLockSubmit = (values: any) => {
+      console.log(values);
+    };
+
+    modal.confirm({
+      icon: <WarningOutlined />,
+      width: "fit-content",
+      afterClose: () => {
+        disableReasonForm.resetFields();
+      },
+      title: (
+        <div className="flex items-center whitespace-nowrap text-sm">
+          <span>Bạn có muốn đổi trạng thái thành</span>
+          <Tag color="volcano" className="mx-1">
+            Vô hiệu hóa
+          </Tag>
+          <span>?</span>
+        </div>
+      ),
+      content: (
+        <Space direction="vertical" className="w-full">
+          <div className="text-base text-secondary">Ghi chú</div>
           <Form
-            form={searchForm}
-            initialValues={initialValues}
-            name="SearchForm"
-            onFinish={handleSearchSubmit}
+            form={disableReasonForm}
+            initialValues={initialValuesDisableReason}
+            name="DisableReasonForm"
+            onFinish={handleConfirmLockSubmit}
           >
             <Form.Item
               noStyle
-              name="searchString"
+              name="disableReason"
               rules={[
                 {
                   type: "string",
-                  required: true,
-                  whitespace: true,
-                  message: "",
                 },
               ]}
             >
-              <Input.Search
-                placeholder="Tìm kiếm"
-                onSearch={() => searchForm.submit()}
-              />
+              <Input.TextArea placeholder="Nhập ghi chú" />
             </Form.Item>
           </Form>
-        </div>
-        <Table
-          columns={userListColumns} //weird lib bug
-          dataSource={users}
-          rowKey={(record) => record.AccountId}
-        />
-      </Space>
-    </div>
-  );
-}
+        </Space>
+      ),
+      onOk: async () => {
+        const sleep = (ms: number) => {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        };
 
-const userListColumns: TableProps<Leader | Customer | Worker | any>["columns"] =
-  [
+        disableReasonForm.submit();
+        await sleep(1000); // Example delay
+      },
+    });
+  }
+
+  const userListColumns: TableProps<
+    Leader | Customer | Worker | any
+  >["columns"] = [
     {
       title: "Tên",
       dataIndex: "Fullname",
@@ -116,7 +152,18 @@ const userListColumns: TableProps<Leader | Customer | Worker | any>["columns"] =
     {
       title: "Trạng thái",
       dataIndex: "IsDisabled",
-      render: (_, { IsDisabled }) => accountStatusGenerator(IsDisabled),
+      render: (_, { IsDisabled }) => {
+        return (
+          <div
+            onClick={() =>
+              IsDisabled ? handleConfirmUnlock() : handleConfirmLock()
+            }
+            className="cursor-pointer"
+          >
+            {accountStatusGenerator(IsDisabled)}
+          </div>
+        );
+      },
       filters: [
         {
           text: "Hoạt động",
@@ -139,3 +186,49 @@ const userListColumns: TableProps<Leader | Customer | Worker | any>["columns"] =
       render: (_, record) => <UserManagementDropdown record={record} />,
     },
   ];
+
+  return (
+    <div className="px-10 py-10">
+      <Space direction="vertical" size={20} className="w-full">
+        <div className="flex justify-end">
+          <CreateNewAccountModalButton />
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="text-2xl font-semibold text-primary">
+            Danh sách người dùng
+          </div>
+          <Form
+            form={searchForm}
+            initialValues={initialValuesSearch}
+            name="SearchForm"
+            onFinish={handleSearchSubmit}
+          >
+            <Form.Item
+              noStyle
+              name="searchString"
+              rules={[
+                {
+                  type: "string",
+                  required: true,
+                  whitespace: true,
+                  message: "",
+                },
+              ]}
+            >
+              <Input.Search
+                placeholder="Tìm kiếm"
+                onSearch={() => searchForm.submit()}
+              />
+            </Form.Item>
+          </Form>
+        </div>
+        <Table
+          columns={userListColumns} //weird lib bug
+          dataSource={users}
+          rowKey={(record) => record.AccountId}
+        />
+      </Space>
+      {contextHolder}
+    </div>
+  );
+}

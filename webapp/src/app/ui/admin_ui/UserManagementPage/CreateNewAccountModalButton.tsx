@@ -1,8 +1,8 @@
 import { Input, Space } from "antd";
-import { Form } from "../../components/form";
-import { Modal } from "../../components/modals";
-import { InputDate } from "../../components/inputs";
-import { PrimaryButton } from "../../components/buttons";
+import { Form } from "../../../components/form";
+import { Modal } from "../../../components/modals";
+import { InputDate } from "../../../components/inputs";
+import { PrimaryButton } from "../../../components/buttons";
 import {
   EditOutlined,
   PlusCircleOutlined,
@@ -11,11 +11,11 @@ import {
   WarningOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
-import Radio from "../../components/radio/Radio";
+import Radio from "../../../components/radio/Radio";
 // import { Avatar } from "../../components/avatar";
-import { roleNameGenerator } from "../../utils/generators/roleName";
-import { formatDateToLocal } from "../../utils/helpers";
-import { User } from "../../models/user";
+import { roleNameGenerator } from "../../../utils/generators/roleName";
+import { formatDateToLocal } from "../../../utils/helpers";
+import { User } from "../../../models/user";
 
 export default function CreateNewAccountModalButton() {
   const [form] = Form.useForm();
@@ -39,11 +39,10 @@ export default function CreateNewAccountModalButton() {
   };
 
   const handleCreateAccountModalCancel = () => {
-    form.resetFields();
     setIsModalVisible(false);
   };
 
-  const onFinish = (values: any) => {
+  const onFormFinish = (values: any) => {
     handlePreviewDetail(values);
   };
 
@@ -77,9 +76,15 @@ export default function CreateNewAccountModalButton() {
           </Space>
         </Space>
       ),
-      onOk() {
-        form.resetFields();
+      onCancel: () => {
         setIsModalVisible(false);
+      },
+      onOk: async () => {
+        const sleep = (ms: number) => {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        };
+
+        await sleep(1000); // Example delay
       },
     });
   };
@@ -102,6 +107,7 @@ export default function CreateNewAccountModalButton() {
         }
         maskClosable={false}
         open={isModalVisible}
+        afterClose={form.resetFields}
         onOk={handleCreateAccountModalOk}
         onCancel={handleCreateAccountModalCancel}
         closeIcon={null}
@@ -111,8 +117,8 @@ export default function CreateNewAccountModalButton() {
           <Form
             form={form}
             initialValues={initialValues}
-            name="DescriptionForm"
-            onFinish={onFinish}
+            name="CreateAccountForm"
+            onFinish={onFormFinish}
             clearOnDestroy
           >
             {dom}

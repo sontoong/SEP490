@@ -5,19 +5,27 @@ import {
   MailFilled,
   PhoneFilled,
   UserOutlined,
-  WarningOutlined,
 } from "@ant-design/icons";
-import { Divider, Dropdown, Modal, Space, Tag } from "antd";
+import { Divider, Modal, Space } from "antd";
 import { MenuProps } from "antd/lib";
-import { User } from "../../models/user";
-import { Input } from "../../components/inputs";
-import { Avatar } from "../../components/avatar";
-import { roleNameGenerator } from "../../utils/generators/roleName";
+import { User } from "../../../models/user";
+import { Avatar } from "../../../components/avatar";
+import { roleNameGenerator } from "../../../utils/generators/roleName";
+import { Dropdown } from "../../../components/dropdown";
 
 const UserManagementDropdown = ({ record }: { record: User }) => {
   const [modal, contextHolder] = Modal.useModal();
 
-  const handleViewDetail = () => {
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: "Xem thông tin tài khoản",
+      onClick: handleViewDetail,
+      icon: <EyeOutlined />,
+    },
+  ];
+
+  function handleViewDetail() {
     modal.info({
       icon: <UserOutlined />,
       width: "fit-content",
@@ -68,68 +76,7 @@ const UserManagementDropdown = ({ record }: { record: User }) => {
       ),
       onOk() {},
     });
-  };
-
-  const handleConfirmUnlock = () => {
-    modal.confirm({
-      icon: <WarningOutlined />,
-      width: "fit-content",
-      title: (
-        <div className="flex items-center whitespace-nowrap text-sm">
-          <span>Bạn có muốn đổi trạng thái thành</span>
-          <Tag color="green" className="mx-1">
-            Đang hoạt động
-          </Tag>
-          <span>?</span>
-        </div>
-      ),
-      onOk() {},
-    });
-  };
-
-  const handleConfirmLock = () => {
-    modal.confirm({
-      icon: <WarningOutlined />,
-      width: "fit-content",
-      title: (
-        <div className="flex items-center whitespace-nowrap text-sm">
-          <span>Bạn có muốn đổi trạng thái thành</span>
-          <Tag color="volcano" className="mx-1">
-            Vô hiệu hóa
-          </Tag>
-          <span>?</span>
-        </div>
-      ),
-      content: (
-        <Space direction="vertical" className="w-full">
-          <div className="text-base text-secondary">Ghi chú</div>
-          <Input.TextArea placeholder="Nhập ghi chú" />
-        </Space>
-      ),
-      onOk() {},
-    });
-  };
-
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: "Xem thông tin tài khoản",
-      onClick: handleViewDetail,
-      icon: <EyeOutlined />,
-    },
-    {
-      key: "2",
-      label: "Mở khóa tài khoản",
-      disabled: record.IsDisabled !== true,
-      onClick: handleConfirmUnlock,
-    },
-    {
-      key: "3",
-      label: "Khóa tài khoản",
-      disabled: record.IsDisabled !== false,
-      onClick: handleConfirmLock,
-    },
-  ];
+  }
 
   return (
     <>

@@ -1,6 +1,4 @@
-import { Customer, Leader, Worker } from "../app/models/user";
-
-export const users: (Leader | Worker | Customer)[] = [
+export const users = [
   {
     AccountId: "1",
     Fullname: "John Doe",
@@ -13,6 +11,7 @@ export const users: (Leader | Worker | Customer)[] = [
     DisabledReason: "",
     Role: "3", // Leader
     LeaderId: "LDR001",
+    ApartmentAreaName: "Vinhome",
   },
   {
     AccountId: "2",
@@ -137,5 +136,48 @@ export const users: (Leader | Worker | Customer)[] = [
     Role: "4", // Worker
     WorkerId: "WRK004",
     LeaderId: "LDR003",
+  },
+];
+
+export const apartmentAreas = [
+  {
+    AreaId: "A001",
+    LeaderId: "L001",
+    Name: "Sunrise Apartments",
+    Description:
+      "A modern apartment complex located near the city center with excellent amenities.",
+    Address: "123 Sunset Blvd, New York, NY",
+    ManagementCompany: "Urban Living Co.",
+    AvatarUrl: "https://example.com/avatars/sunrise.jpg",
+  },
+  {
+    AreaId: "A002",
+    LeaderId: "L002",
+    Name: "Greenwood Estates",
+    Description:
+      "A serene residential area surrounded by greenery, perfect for families.",
+    Address: "456 Oakwood Drive, Los Angeles, CA",
+    ManagementCompany: "Green Management Ltd.",
+    AvatarUrl: "https://example.com/avatars/greenwood.jpg",
+  },
+  {
+    AreaId: "A003",
+    LeaderId: "L003",
+    Name: "Oceanview Towers",
+    Description:
+      "Luxury apartments offering stunning views of the ocean, with premium facilities.",
+    Address: "789 Seaside Ave, Miami, FL",
+    ManagementCompany: "Seaside Properties LLC",
+    AvatarUrl: "https://example.com/avatars/oceanview.jpg",
+  },
+  {
+    AreaId: "A004",
+    LeaderId: "L004",
+    Name: "Downtown Heights",
+    Description:
+      "High-rise apartments located in the heart of the city, close to major attractions.",
+    Address: "101 Main Street, Chicago, IL",
+    ManagementCompany: "Skyline Realty Group",
+    AvatarUrl: "https://example.com/avatars/downtown.jpg",
   },
 ];

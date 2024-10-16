@@ -1,15 +1,22 @@
 import { Select, SelectProps } from "antd";
 
-export function CustomSelectTag(props: CustomSelectProps) {
-  return <Select mode="multiple" allowClear {...props} />;
+export function CustomSelect(props: CustomSelectProps) {
+  return <Select optionFilterProp="label" showSearch allowClear {...props} />;
 }
 
-export function CustomSelect(props: CustomSelectProps) {
-  return <Select allowClear {...props} />;
+export function CustomSelectTag(props: CustomSelectProps) {
+  return (
+    <Select
+      optionFilterProp="label"
+      showSearch
+      mode="multiple"
+      allowClear
+      {...props}
+    />
+  );
 }
 
 CustomSelect.Tag = CustomSelectTag;
-CustomSelect.Option = Select.Option;
 
 export default CustomSelect;
 

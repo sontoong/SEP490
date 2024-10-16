@@ -36,7 +36,7 @@ function SearchInput(props: TCustomSearchProps) {
     <Input.Search
       size="large"
       allowClear
-      enterButton={<SearchOutlined style={{ fontSize: "1.5rem" }} />}
+      enterButton={<SearchOutlined />}
       {...props}
     />
   );

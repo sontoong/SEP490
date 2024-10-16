@@ -28,26 +28,9 @@ export default function UserManagementPage() {
     console.log(values);
   };
 
-  function handleConfirmUnlock() {
-    modal.confirm({
-      icon: <WarningOutlined />,
-      width: "fit-content",
-      title: (
-        <div className="flex items-center whitespace-nowrap text-sm">
-          <span>Bạn có muốn đổi trạng thái thành</span>
-          <Tag color="green" className="mx-1">
-            Đang hoạt động
-          </Tag>
-          <span>?</span>
-        </div>
-      ),
-      onOk() {},
-    });
-  }
-
   function handleConfirmLock() {
     const initialValuesDisableReason = {
-      disableReason: "Lý do",
+      disableReason: "",
     };
 
     const handleConfirmLockSubmit = (values: any) => {
@@ -103,6 +86,23 @@ export default function UserManagementPage() {
     });
   }
 
+  function handleConfirmUnlock() {
+    modal.confirm({
+      icon: <WarningOutlined />,
+      width: "fit-content",
+      title: (
+        <div className="flex items-center whitespace-nowrap text-sm">
+          <span>Bạn có muốn đổi trạng thái thành</span>
+          <Tag color="green" className="mx-1">
+            Đang hoạt động
+          </Tag>
+          <span>?</span>
+        </div>
+      ),
+      onOk() {},
+    });
+  }
+
   const userListColumns: TableProps<
     Leader | Customer | Worker | any
   >["columns"] = [
@@ -135,7 +135,7 @@ export default function UserManagementPage() {
           value: "2",
         },
         {
-          text: "Lãnh đạo",
+          text: "Leader",
           value: "3",
         },
         {

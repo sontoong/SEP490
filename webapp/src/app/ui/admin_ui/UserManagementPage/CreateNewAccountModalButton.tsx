@@ -112,7 +112,6 @@ export default function CreateNewAccountModalButton() {
         onCancel={handleCreateAccountModalCancel}
         closeIcon={null}
         // confirmLoading={state.isSending}
-        forceRender
         modalRender={(dom) => (
           <Form
             form={form}
@@ -176,7 +175,7 @@ export default function CreateNewAccountModalButton() {
                 {
                   icon: <SolutionOutlined />,
                   enName: "Team Leader",
-                  vnName: "Lãnh đạo nhóm",
+                  vnName: "Leader",
                   value: "3",
                 },
                 {

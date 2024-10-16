@@ -11,14 +11,13 @@ import { Divider, Modal, Space } from "antd";
 import { MenuProps } from "antd/lib";
 import { Avatar } from "../../../components/avatar";
 import { Dropdown } from "../../../components/dropdown";
-import { Leader } from "../../../models/user";
+import { Worker } from "../../../models/user";
 import { useState } from "react";
-import ChangeApartmentAreaModal from "./ChangeApartmentAreaModal";
+import ChangeLeaderModal from "./ChangeLeaderModal";
 
-const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
+const WorkerManagementDropdown = ({ record }: { record: Worker }) => {
   const [modal, contextHolder] = Modal.useModal();
-  const [isChangeApartmentAreaModalOpen, setIsChangeApartmentAreaModalOpen] =
-    useState(false);
+  const [isChangeLeaderModalOpen, setIsChangeLeaderModalOpen] = useState(false);
 
   const items: MenuProps["items"] = [
     {
@@ -29,8 +28,8 @@ const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
     },
     {
       key: "2",
-      label: "Đổi chung cư",
-      onClick: () => setIsChangeApartmentAreaModalOpen(true),
+      label: "Giao cho Leader",
+      onClick: () => setIsChangeLeaderModalOpen(true),
       icon: <EditOutlined />,
     },
   ];
@@ -52,8 +51,8 @@ const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
               <strong>Họ và Tên:</strong> {record.Fullname}
             </div>
             <div>
-              <strong>Chung cư:</strong>{" "}
-              {record.ApartmentAreaName ? record.ApartmentAreaName : "N/A"}
+              <strong>Leader:</strong>{" "}
+              {record.LeaderId ? record.LeaderId : "N/A"}
             </div>
           </Space>
           <Divider type="vertical" className="h-[150px] bg-black" />
@@ -94,13 +93,13 @@ const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
       <Dropdown menu={{ items }} trigger={["click"]}>
         <EllipsisOutlined className="text-lg" />
       </Dropdown>
-      <ChangeApartmentAreaModal
-        open={isChangeApartmentAreaModalOpen}
-        setIsModalOpen={setIsChangeApartmentAreaModalOpen}
+      <ChangeLeaderModal
+        open={isChangeLeaderModalOpen}
+        setIsModalOpen={setIsChangeLeaderModalOpen}
       />
       {contextHolder}
     </>
   );
 };
 
-export default LeaderManagementDropdown;
+export default WorkerManagementDropdown;

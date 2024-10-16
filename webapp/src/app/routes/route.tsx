@@ -35,16 +35,13 @@ import ApartmentManagementPage from "../pages/manager/ApartmentManagementPage";
 //other page
 import NotFoundPage from "../pages/404Page";
 import TestPage from "../pages/TestPage";
-import { NormalizeUrl } from "./NormalizeUrl";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <Suspense fallback={<></>}>
-        <NormalizeUrl>
-          <Outlet />
-        </NormalizeUrl>
+        <Outlet />
         <ScrollRestoration />
       </Suspense>
     ),

@@ -7,7 +7,7 @@ import { useTitle } from "../../hooks/useTitle";
 import { accountStatusGenerator } from "../../utils/generators/accountStatus";
 
 import { users } from "../../../constants/testData";
-import { Customer, Leader, Worker } from "../../models/user";
+import { Leader } from "../../models/user";
 import LeaderManagementDropdown from "../../ui/manager_ui/LeaderManagementPage/LeaderManagementDropdown";
 import { Modal } from "../../components/modals";
 import { WarningOutlined } from "@ant-design/icons";
@@ -21,7 +21,7 @@ export default function LeaderManagementPage() {
   const [searchForm] = Form.useForm();
   const [disableReasonForm] = Form.useForm();
 
-  const initialValues = {
+  const initialValuesSearch = {
     searchString: "",
   };
 
@@ -31,7 +31,7 @@ export default function LeaderManagementPage() {
 
   function handleConfirmLock() {
     const initialValuesDisableReason = {
-      disableReason: "Lý do",
+      disableReason: "",
     };
 
     const handleConfirmLockSubmit = (values: any) => {
@@ -104,9 +104,7 @@ export default function LeaderManagementPage() {
     });
   }
 
-  const userListColumns: TableProps<
-    Leader | Customer | Worker | any
-  >["columns"] = [
+  const leaderListColumns: TableProps<Leader | any>["columns"] = [
     {
       title: "Họ và Tên",
       dataIndex: "Fullname",
@@ -168,7 +166,7 @@ export default function LeaderManagementPage() {
         <div className="flex items-center justify-end">
           <Form
             form={searchForm}
-            initialValues={initialValues}
+            initialValues={initialValuesSearch}
             name="SearchForm"
             onFinish={handleSearchSubmit}
           >
@@ -192,7 +190,7 @@ export default function LeaderManagementPage() {
           </Form>
         </div>
         <Table
-          columns={userListColumns} //weird lib bug
+          columns={leaderListColumns} //weird lib bug
           dataSource={users}
           rowKey={(record) => record.AccountId}
         />

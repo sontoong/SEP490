@@ -1,3 +1,5 @@
+import { Leader } from "../app/models/user";
+
 export const users = [
   {
     AccountId: "1",
@@ -25,7 +27,6 @@ export const users = [
     DisabledReason: "",
     Role: "4", // Worker
     WorkerId: "WRK001",
-    LeaderId: "LDR001",
   },
   {
     AccountId: "3",
@@ -138,6 +139,11 @@ export const users = [
     LeaderId: "LDR003",
   },
 ];
+
+export const leaders: Leader[] = users.filter(
+  (user) => user.Role === "3",
+) as Leader[];
+export const workers = users.filter((user) => user.Role === "4");
 
 export const apartmentAreas = [
   {

@@ -81,9 +81,7 @@ const UserManagementDropdown = ({ record }: { record: User }) => {
   return (
     <>
       <Dropdown menu={{ items }} trigger={["click"]}>
-        <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-          <EllipsisOutlined className="text-lg" />
-        </a>
+        <EllipsisOutlined className="text-lg" />
       </Dropdown>
       {contextHolder}
     </>

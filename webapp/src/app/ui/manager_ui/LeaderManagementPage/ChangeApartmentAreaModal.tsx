@@ -48,7 +48,6 @@ export default function ChangeApartmentAreaModal({
       onCancel={handleCancel}
       closeIcon={null}
       maskClosable={false}
-      forceRender
       modalRender={(dom) => (
         <Form
           form={changeApartmentForm}

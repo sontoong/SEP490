@@ -7,7 +7,7 @@ import { useTitle } from "../../hooks/useTitle";
 import { Customer, Leader, Worker } from "../../models/user";
 import CreateNewAccountModalButton from "../../ui/admin_ui/UserManagementPage/CreateNewAccountModalButton";
 import UserManagementDropdown from "../../ui/admin_ui/UserManagementPage/UserManagementDropdown";
-import { accountStatusGenerator } from "../../utils/generators/accountStatus";
+import { statusGenerator } from "../../utils/generators/status";
 import { roleNameGenerator } from "../../utils/generators/roleName";
 
 import { users } from "../../../constants/testData";
@@ -160,7 +160,7 @@ export default function UserManagementPage() {
             }
             className="cursor-pointer"
           >
-            {accountStatusGenerator(IsDisabled)}
+            {statusGenerator(IsDisabled)}
           </div>
         );
       },

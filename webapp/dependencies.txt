@@ -13,6 +13,10 @@ redux persist [npm i redux-persist]
 uuid [npm i uuid]
 clsx [npm i clsx]
 tailwind-merge [npm i tailwind-merge]
+tiptap [npm install @tiptap/react @tiptap/pm @tiptap/starter-kit
+]
+html-react-parser [npm i html-react-parser]
+dompurify [npm i dompurify]
 
 //dev dependencies
 prettier plugin tailwindcss [npm install -D prettier prettier-plugin-tailwindcss]

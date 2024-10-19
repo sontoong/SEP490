@@ -4,7 +4,7 @@ import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
 import { Table } from "../../components/table";
 import { useTitle } from "../../hooks/useTitle";
-import { accountStatusGenerator } from "../../utils/generators/accountStatus";
+import { statusGenerator } from "../../utils/generators/status";
 
 import { users } from "../../../constants/testData";
 import { Leader } from "../../models/user";
@@ -137,7 +137,7 @@ export default function LeaderManagementPage() {
             }
             className="cursor-pointer"
           >
-            {accountStatusGenerator(IsDisabled)}
+            {statusGenerator(IsDisabled)}
           </div>
         );
       },

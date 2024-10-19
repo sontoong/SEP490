@@ -18,13 +18,13 @@ function CustomInput({
         },
       }}
     >
-      <Input size="large" {...rest} />
+      <Input {...rest} />
     </ConfigProvider>
   );
 }
 
 function CustomInputPassword(props: TCustomInputProps) {
-  return <Input.Password size="large" {...props} />;
+  return <Input.Password {...props} />;
 }
 
 function CustomInputTextArea(props: TCustomTextAreaProps) {

@@ -4,7 +4,7 @@ import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
 import agent from "./agent";
-import { Envs } from "./env";
+import { Envs } from "../utils/env";
 
 NProgress.configure({ showSpinner: false });
 

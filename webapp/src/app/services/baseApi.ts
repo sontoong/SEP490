@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
-import { Envs } from "./env";
+import { Envs } from "../utils/env";
 
 NProgress.configure({ showSpinner: false });
 

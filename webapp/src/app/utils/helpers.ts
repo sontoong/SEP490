@@ -3,9 +3,12 @@ import dayjs from "dayjs";
 type Locale = "vi-VN" | "en-US" | "fr-FR" | "ja-JP";
 
 export const formatCurrency = (
-  amount: number | null | undefined,
+  amount: number | string | null | undefined,
   locale: Locale = "vi-VN",
 ) => {
+  if (typeof amount === "string") {
+    amount = parseInt(amount);
+  }
   let returnAmount = 0;
 
   if (amount === null || amount === undefined) {

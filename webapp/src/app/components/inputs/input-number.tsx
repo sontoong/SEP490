@@ -1,6 +1,6 @@
 import { InputNumber, InputNumberProps } from "antd";
 
-function CustomInputNumber({ ...props }: TCustomInputNumber) {
+function CustomInputNumber(props: TCustomInputNumber) {
   return <InputNumber min={0} changeOnWheel {...props} />;
 }
 

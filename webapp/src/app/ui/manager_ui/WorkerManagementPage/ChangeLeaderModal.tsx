@@ -62,10 +62,9 @@ export default function ChangeLeaderModal({
       )}
     >
       <Space direction="vertical" className="w-full">
-        <div className="text-sm text-secondary">Leader</div>
         <Form.Item
-          noStyle
           name="leader"
+          label={<div className="text-sm text-secondary">Leader</div>}
           rules={[
             {
               required: true,

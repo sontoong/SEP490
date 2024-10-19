@@ -60,9 +60,8 @@ export default function ChangeApartmentAreaModal({
       )}
     >
       <Space direction="vertical" className="w-full">
-        <div className="text-sm text-secondary">Chung cư</div>
         <Form.Item
-          noStyle
+          label={<div className="text-sm text-secondary">Chung cư</div>}
           name="apartmentArea"
           rules={[
             {

@@ -1,3 +1,6 @@
+import { ApartmentArea } from "../app/models/apartmentArea";
+import { Product } from "../app/models/product";
+import { ServicePackage } from "../app/models/service";
 import { Leader } from "../app/models/user";
 
 export const users = [
@@ -145,7 +148,7 @@ export const leaders: Leader[] = users.filter(
 ) as Leader[];
 export const workers = users.filter((user) => user.Role === "4");
 
-export const apartmentAreas = [
+export const apartmentAreas: ApartmentArea[] = [
   {
     AreaId: "A001",
     LeaderId: "L001",
@@ -185,5 +188,293 @@ export const apartmentAreas = [
     Address: "101 Main Street, Chicago, IL",
     ManagementCompany: "Skyline Realty Group",
     AvatarUrl: "https://example.com/avatars/downtown.jpg",
+  },
+];
+
+export const servicePackages: ServicePackage[] = [
+  {
+    ServicePackageId: "sp1",
+    Name: "Basic Package",
+    Description: "A basic service package offering essential features.",
+    ImageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-zGx3CM__4cH8JcOorVchRpA9Yhhd53ihYA&s",
+    NumOfRequest: 100,
+    Policy:
+      "<ol><li><p><strong><em><s><u>Quis aute deserunt duis incididunt aliqua velit anim quis commodo amet. Amet amet quis laborum dolor laboris sint culpa aliqua irure aute pariatur consectetur. Anim adipisicing velit deserunt ut esse ex tempor magna dolor tempor culpa dolore ad. Qui aliqua aute ad dolor ipsum esse sunt ea deserunt mollit. Est irure velit proident laborum non aliquip veniam nisi ipsum ad et excepteur. Enim consequat pariatur sint aliqua minim nulla nisi officia. Labore consectetur consequat ad veniam non minim culpa duis ullamc</u></s></em></strong></p></li><li><p>o cillum veniam reprehenderit dolore.Minim ut Lorem labore veniam est nulla eu commodo ex minim adipisicing aute. Cupidatat magna ut tempor quis in enim aliquip adipisicing irure fugiat tempor aute enim id. Ipsum anim in fugiat quis minim. Duis quis adipisicing elit consequat voluptate ad exercitation in voluptate anim exercitation minim elit et.</p></li></ol>",
+    Status: true,
+    ServicePackagePrices: {
+      ServicePackagePriceId: "sp1p1",
+      Date: "2024-01-01",
+      PriceByDate: 1000,
+    },
+  },
+  {
+    ServicePackageId: "sp2",
+    Name: "Premium Package",
+    Description: "A premium package with extended features.",
+    ImageUrl: "https://example.com/images/premium-package.jpg",
+    NumOfRequest: 500,
+    Policy: "Premium policy terms.",
+    Status: true,
+    ServicePackagePrices: {
+      ServicePackagePriceId: "sp2p1",
+      Date: "2024-02-01",
+      PriceByDate: 1000,
+    },
+  },
+  {
+    ServicePackageId: "sp3",
+    Name: "Enterprise Package",
+    Description: "An enterprise package designed for large businesses.",
+    ImageUrl: "https://example.com/images/enterprise-package.jpg",
+    NumOfRequest: 1000,
+    Policy: "Enterprise policy terms.",
+    Status: true,
+    ServicePackagePrices: {
+      ServicePackagePriceId: "sp3p1",
+      Date: "2024-03-01",
+      PriceByDate: 1000,
+    },
+  },
+  {
+    ServicePackageId: "sp4",
+    Name: "Startup Package",
+    Description: "Perfect for startups looking for a cost-effective solution.",
+    ImageUrl: "https://example.com/images/startup-package.jpg",
+    NumOfRequest: 250,
+    Policy: "Startup policy terms.",
+    Status: false,
+    ServicePackagePrices: {
+      ServicePackagePriceId: "sp4p1",
+      Date: "2024-04-01",
+      PriceByDate: 1000,
+    },
+  },
+  {
+    ServicePackageId: "sp5",
+    Name: "Small Business Package",
+    Description: "A package tailored for small businesses.",
+    ImageUrl: "https://example.com/images/small-business-package.jpg",
+    NumOfRequest: 300,
+    Policy: "Small business policy terms.",
+    Status: true,
+    ServicePackagePrices: {
+      ServicePackagePriceId: "sp5p1",
+      Date: "2024-05-01",
+      PriceByDate: 1000,
+    },
+  },
+  {
+    ServicePackageId: "sp6",
+    Name: "Freelancer Package",
+    Description: "Ideal for freelancers and individuals.",
+    ImageUrl: "https://example.com/images/freelancer-package.jpg",
+    NumOfRequest: 50,
+    Policy: "Freelancer policy terms.",
+    Status: false,
+    ServicePackagePrices: {
+      ServicePackagePriceId: "sp6p1",
+      Date: "2024-06-01",
+      PriceByDate: 1000,
+    },
+  },
+  {
+    ServicePackageId: "sp7",
+    Name: "Pro Package",
+    Description: "A professional package for serious users.",
+    ImageUrl: "https://example.com/images/pro-package.jpg",
+    NumOfRequest: 700,
+    Policy: "Pro package policy terms.",
+    Status: true,
+    ServicePackagePrices: {
+      ServicePackagePriceId: "sp7p1",
+      Date: "2024-07-01",
+      PriceByDate: 1000,
+    },
+  },
+  {
+    ServicePackageId: "sp8",
+    Name: "Unlimited Package",
+    Description: "Unlimited requests and priority support.",
+    ImageUrl: "https://example.com/images/unlimited-package.jpg",
+    NumOfRequest: 200,
+    Policy: "Unlimited policy terms.",
+    Status: true,
+    ServicePackagePrices: {
+      ServicePackagePriceId: "sp8p1",
+      Date: "2024-08-01",
+      PriceByDate: 1000,
+    },
+  },
+  {
+    ServicePackageId: "sp9",
+    Name: "Seasonal Package",
+    Description: "Special package available for a limited time.",
+    ImageUrl: "https://example.com/images/seasonal-package.jpg",
+    NumOfRequest: 200,
+    Policy: "Seasonal policy terms.",
+    Status: false,
+    ServicePackagePrices: {
+      ServicePackagePriceId: "sp9p1",
+      Date: "2024-09-01",
+      PriceByDate: 1000,
+    },
+  },
+  {
+    ServicePackageId: "sp10",
+    Name: "VIP Package",
+    Description: "Exclusive VIP package with all perks.",
+    ImageUrl: "https://example.com/images/vip-package.jpg",
+    NumOfRequest: 200,
+    Policy: "VIP policy terms.",
+    Status: true,
+    ServicePackagePrices: {
+      ServicePackagePriceId: "sp10p1",
+      Date: "2024-10-01",
+      PriceByDate: 1000,
+    },
+  },
+];
+
+export const products: Product[] = [
+  {
+    ProductId: "1",
+    Name: "Laptop Pro",
+    Description: "A high-performance laptop with a sleek design.",
+    ImageUrl: "https://example.com/images/laptop-pro.jpg",
+    In_Of_stock: 25,
+    WarrantyMonths: 24,
+    ProductPrices: {
+      ProductPriceId: "p1",
+      Date: "2024-10-01",
+      PriceByDate: 1200.99,
+    },
+    Status: true,
+  },
+  {
+    ProductId: "2",
+    Name: "Smartphone Max",
+    Description: "A smartphone with a stunning display and powerful processor.",
+    ImageUrl: "https://example.com/images/smartphone-max.jpg",
+    In_Of_stock: 50,
+    WarrantyMonths: 12,
+    ProductPrices: {
+      ProductPriceId: "p2",
+      Date: "2024-10-02",
+      PriceByDate: 999.99,
+    },
+    Status: true,
+  },
+  {
+    ProductId: "3",
+    Name: "Wireless Headphones",
+    Description: "Noise-cancelling wireless headphones with long battery life.",
+    ImageUrl: "https://example.com/images/headphones.jpg",
+    In_Of_stock: 100,
+    WarrantyMonths: 18,
+    ProductPrices: {
+      ProductPriceId: "p3",
+      Date: "2024-10-03",
+      PriceByDate: 199.99,
+    },
+    Status: true,
+  },
+  {
+    ProductId: "4",
+    Name: "Gaming Keyboard",
+    Description: "RGB backlit mechanical keyboard with custom keycaps.",
+    ImageUrl: "https://example.com/images/keyboard.jpg",
+    In_Of_stock: 75,
+    WarrantyMonths: 36,
+    ProductPrices: {
+      ProductPriceId: "p4",
+      Date: "2024-10-04",
+      PriceByDate: 129.99,
+    },
+    Status: true,
+  },
+  {
+    ProductId: "5",
+    Name: "4K Monitor",
+    Description: "Ultra-HD monitor with HDR and high refresh rate.",
+    ImageUrl: "https://example.com/images/4k-monitor.jpg",
+    In_Of_stock: 30,
+    WarrantyMonths: 24,
+    ProductPrices: {
+      ProductPriceId: "p5",
+      Date: "2024-10-05",
+      PriceByDate: 499.99,
+    },
+    Status: true,
+  },
+  {
+    ProductId: "6",
+    Name: "Smartwatch",
+    Description: "Fitness tracking smartwatch with heart rate monitor.",
+    ImageUrl: "https://example.com/images/smartwatch.jpg",
+    In_Of_stock: 80,
+    WarrantyMonths: 12,
+    ProductPrices: {
+      ProductPriceId: "p6",
+      Date: "2024-10-06",
+      PriceByDate: 249.99,
+    },
+    Status: true,
+  },
+  {
+    ProductId: "7",
+    Name: "Bluetooth Speaker",
+    Description: "Portable Bluetooth speaker with powerful sound.",
+    ImageUrl: "https://example.com/images/speaker.jpg",
+    In_Of_stock: 150,
+    WarrantyMonths: 12,
+    ProductPrices: {
+      ProductPriceId: "p7",
+      Date: "2024-10-07",
+      PriceByDate: 79.99,
+    },
+    Status: true,
+  },
+  {
+    ProductId: "8",
+    Name: "Tablet Pro",
+    Description: "10-inch tablet with a sharp display and fast processor.",
+    ImageUrl: "https://example.com/images/tablet-pro.jpg",
+    In_Of_stock: 40,
+    WarrantyMonths: 12,
+    ProductPrices: {
+      ProductPriceId: "p8",
+      Date: "2024-10-08",
+      PriceByDate: 699.99,
+    },
+    Status: true,
+  },
+  {
+    ProductId: "9",
+    Name: "Gaming Mouse",
+    Description: "Precision gaming mouse with customizable buttons.",
+    ImageUrl: "https://example.com/images/mouse.jpg",
+    In_Of_stock: 120,
+    WarrantyMonths: 24,
+    ProductPrices: {
+      ProductPriceId: "p9",
+      Date: "2024-10-09",
+      PriceByDate: 59.99,
+    },
+    Status: true,
+  },
+  {
+    ProductId: "10",
+    Name: "USB-C Hub",
+    Description: "Multi-port USB-C hub with HDMI, USB 3.0, and SD card reader.",
+    ImageUrl: "https://example.com/images/usb-hub.jpg",
+    In_Of_stock: 200,
+    WarrantyMonths: 12,
+    ProductPrices: {
+      ProductPriceId: "p10",
+      Date: "2024-10-10",
+      PriceByDate: 49.99,
+    },
+    Status: true,
   },
 ];

@@ -1,6 +1,6 @@
 import { Tag } from "antd";
 
-export function accountStatusGenerator(isDisabled: boolean) {
+export function statusGenerator(isDisabled: boolean) {
   switch (isDisabled) {
     case true:
       return <Tag color="volcano">Vô hiệu hóa</Tag>;

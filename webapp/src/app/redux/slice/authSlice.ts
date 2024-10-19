@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import agent from "../../utils/agent";
+import agent from "../../services/agent";
 import { AxiosError } from "axios";
 import { User } from "../../models/user";
 // import { jwtDecode } from "jwt-decode";

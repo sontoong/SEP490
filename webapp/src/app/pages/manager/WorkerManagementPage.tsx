@@ -7,7 +7,7 @@ import { Modal } from "../../components/modals";
 import { WarningOutlined } from "@ant-design/icons";
 import { Worker } from "../../models/user";
 import { Avatar } from "../../components/avatar";
-import { accountStatusGenerator } from "../../utils/generators/accountStatus";
+import { statusGenerator } from "../../utils/generators/status";
 import { workers } from "../../../constants/testData";
 import WorkerManagementDropdown from "../../ui/manager_ui/WorkerManagementPage/WorkerManagementDropdown";
 
@@ -136,7 +136,7 @@ export default function WorkerManagementPage() {
       dataIndex: "IsDisabled",
       render: (_, { IsDisabled, LeaderId }) => {
         return LeaderId ? (
-          <div>{accountStatusGenerator(IsDisabled)}</div>
+          <div>{statusGenerator(IsDisabled)}</div>
         ) : (
           <div
             onClick={() =>
@@ -144,7 +144,7 @@ export default function WorkerManagementPage() {
             }
             className="cursor-pointer"
           >
-            {accountStatusGenerator(IsDisabled)}
+            {statusGenerator(IsDisabled)}
           </div>
         );
       },

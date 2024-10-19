@@ -1,7 +1,8 @@
 import { ApartmentArea } from "../app/models/apartmentArea";
+import { Contract } from "../app/models/contract";
 import { Product } from "../app/models/product";
 import { ServicePackage } from "../app/models/service";
-import { Leader } from "../app/models/user";
+import { Customer, Leader, Worker } from "../app/models/user";
 
 export const users = [
   {
@@ -143,10 +144,13 @@ export const users = [
   },
 ];
 
+export const customers: Customer[] = users.filter(
+  (user) => user.Role === "5",
+) as Customer[];
 export const leaders: Leader[] = users.filter(
   (user) => user.Role === "3",
 ) as Leader[];
-export const workers = users.filter((user) => user.Role === "4");
+export const workers = users.filter((user) => user.Role === "4") as Worker[];
 
 export const apartmentAreas: ApartmentArea[] = [
   {
@@ -476,5 +480,88 @@ export const products: Product[] = [
       PriceByDate: 49.99,
     },
     Status: true,
+  },
+];
+
+export const contracts: Contract[] = [
+  {
+    ContractId: "49125066-5383-4c5e-8d52-ffb5ac336c4b",
+    CustomerId: "1aff316c-decf-4ca4-8f23-5a20c09cd6ee",
+    ServicePackageId: "c0e7f349-4c60-4942-a919-1885b89eb2dc",
+    FileUrl: "http://gomez.info/",
+    PurchaseTime: "2024-03-03T21:31:18",
+    RemainingNumOfRequests: 0,
+  },
+  {
+    ContractId: "fbd64ffc-b225-419f-8c4f-82f0df15030f",
+    CustomerId: "7c334083-dc57-43d7-8f56-60a610869cac",
+    ServicePackageId: "fb4ea98b-4f36-49ec-93d5-f25e05614dbd",
+    FileUrl: "https://baldwin.com/",
+    PurchaseTime: "2024-05-15T17:39:50",
+    RemainingNumOfRequests: 13,
+  },
+  {
+    ContractId: "9d6eaa5c-abeb-4bd2-9b2c-6a951f1b1661",
+    CustomerId: "357df805-2472-4b13-970b-a67801b573c6",
+    ServicePackageId: "b3bf5184-2d92-4184-96e0-94004e2f5e11",
+    FileUrl: "http://brown.net/",
+    PurchaseTime: "2024-04-14T20:56:34",
+    RemainingNumOfRequests: 90,
+  },
+  {
+    ContractId: "62a73a37-1f4a-4a21-8877-58367bbd8b39",
+    CustomerId: "51f2adcf-eb8c-4e38-921d-5bbd04e29b4c",
+    ServicePackageId: "91e4c93d-8c4f-42fe-9a2e-b351a3353ab2",
+    FileUrl: "http://www.miller.com/",
+    PurchaseTime: "2024-01-20T14:55:28",
+    RemainingNumOfRequests: 38,
+  },
+  {
+    ContractId: "51fae428-ff2d-4c5a-901d-eb30c0fd3274",
+    CustomerId: "9b6e1986-ff79-4599-9ba0-175f05fe8eda",
+    ServicePackageId: "094340ff-f7d1-4378-ac82-fd01d4b039bb",
+    FileUrl: "https://russell-duran.com/",
+    PurchaseTime: "2024-04-07T22:20:26",
+    RemainingNumOfRequests: 36,
+  },
+  {
+    ContractId: "7e5b7a67-75f9-4bcf-bc61-e8489c624870",
+    CustomerId: "7c3ab6c6-c0b5-48a0-b972-133febcb4585",
+    ServicePackageId: "74de5738-f1a4-4ef7-b42e-4c4201495b48",
+    FileUrl: "http://www.cook.com/",
+    PurchaseTime: "2024-05-07T09:42:36",
+    RemainingNumOfRequests: 48,
+  },
+  {
+    ContractId: "b477d918-59a5-4785-bf10-98cc194bf015",
+    CustomerId: "0c1777a2-97ac-4075-b3eb-b299bf744de8",
+    ServicePackageId: "a25cfc2c-5332-48f5-8c71-1d5cb1a6f010",
+    FileUrl: "https://www.berry.com/",
+    PurchaseTime: "2024-09-23T02:32:11",
+    RemainingNumOfRequests: 71,
+  },
+  {
+    ContractId: "6dde4507-296d-43de-92e9-5b6f1bcb0f9d",
+    CustomerId: "117b392f-a3e1-426c-a596-55e259055508",
+    ServicePackageId: "a6a47745-f0a6-4a87-8c10-1ca807228f48",
+    FileUrl: "https://www.rodriguez-lawrence.biz/",
+    PurchaseTime: "2024-10-15T15:44:25",
+    RemainingNumOfRequests: 86,
+  },
+  {
+    ContractId: "05d00615-5de9-4490-a6fb-50410a3049ce",
+    CustomerId: "80af820a-b1c5-462c-9448-dc32b3a20600",
+    ServicePackageId: "aa0a95ef-6030-45dc-990e-05aafec176da",
+    FileUrl: "http://www.lewis-king.com/",
+    PurchaseTime: "2024-07-03T06:02:49",
+    RemainingNumOfRequests: 17,
+  },
+  {
+    ContractId: "3abbc62a-7a26-446d-a9b3-fb7c60720541",
+    CustomerId: "a639d850-761b-45f9-bb72-5c94397401f2",
+    ServicePackageId: "595692be-9521-468c-88ba-bd2e2213508c",
+    FileUrl: "http://shaw-bowman.com/",
+    PurchaseTime: "2024-04-01T11:56:21",
+    RemainingNumOfRequests: 46,
   },
 ];

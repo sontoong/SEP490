@@ -13,6 +13,7 @@ export default {
       colors: {
         primary: "#FF7A00",
         secondary: "#4CC9C7",
+        lightSecondary: "#52d9d7",
         sidebar: "#1EA19F",
         active: "#38CF2B",
         inactive: "#CF2B2B",

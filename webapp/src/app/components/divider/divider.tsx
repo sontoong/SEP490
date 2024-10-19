@@ -1,23 +1,23 @@
 import { ConfigProvider, Divider, DividerProps, theme } from "antd";
 
-const CustomDivider = ({colorSplit, ...rest} : CustomDividerProps) => {
+const CustomDivider = ({ splitColor, ...rest }: CustomDividerProps) => {
   const { token } = theme.useToken();
 
   return (
     <ConfigProvider
       theme={{
         token: {
-            colorSplit: colorSplit ?? token.colorSplit
+          colorSplit: splitColor ?? token.colorSplit,
         },
       }}
     >
-      <Divider {...rest}/>
+      <Divider {...rest} />
     </ConfigProvider>
   );
 };
 
 type CustomDividerProps = DividerProps & {
-    colorSplit: string;
-  };
+  splitColor?: string;
+};
 
 export default CustomDivider;

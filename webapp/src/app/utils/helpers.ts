@@ -93,10 +93,15 @@ export const formatToTimeDifference = (
   }
 };
 
-export const calculateDateToNow = (
-  time: string | number,
-  locale: string = "vi-VN",
-) => {
+export const calculateDateToNow = ({
+  time,
+  format = false,
+  locale = "vi-VN",
+}: {
+  time: string | number;
+  locale?: string;
+  format?: boolean;
+}) => {
   if (typeof time === "string") {
     time = Date.parse(time);
   }
@@ -104,7 +109,9 @@ export const calculateDateToNow = (
   const today = Math.floor(Date.now());
 
   const timeDifference = today - time;
-  return formatToTimeDifference(timeDifference, locale);
+  return format
+    ? formatToTimeDifference(timeDifference, locale)
+    : timeDifference;
 };
 
 export const dateToLocalISOString = (date: dayjs.Dayjs) => {

@@ -86,6 +86,11 @@ export default function ProductManagementPage() {
       dataIndex: ["ProductPrices", "PriceByDate"],
     },
     {
+      title: "Số lượng",
+      dataIndex: "In_Of_stock",
+      sorter: (a, b) => a.In_Of_stock - b.In_Of_stock,
+    },
+    {
       title: "Trạng thái",
       dataIndex: "Status",
       render: (_, { Status }) => {

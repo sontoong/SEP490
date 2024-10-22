@@ -1,6 +1,5 @@
 import { FileOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, ConfigProvider } from "antd";
-import { AvatarProps } from "antd/lib";
+import { Avatar, AvatarProps, ConfigProvider } from "antd";
 import { ensureBase64Avatar } from "../../utils/helpers";
 
 function CustomAvatar(props: CustomAvatarProps) {

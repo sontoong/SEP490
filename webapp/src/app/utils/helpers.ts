@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { UserDefinedKeys } from "./types";
 
 type Locale = "vi-VN" | "en-US" | "fr-FR" | "ja-JP";
 
@@ -58,7 +59,7 @@ export const formatDate = (isoString: string) => {
 };
 
 export const formatDateToLocal = (
-  dateStr: string,
+  dateStr?: string,
   locale: string = "vi-VN",
 ) => {
   if (dateStr === null || dateStr === undefined) return "";
@@ -208,3 +209,23 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
 export const isEmptyObject = (obj: object) => {
   return Object.keys(obj).length === 0;
 };
+
+export function combineArraysLoose<T extends object, U extends object>(
+  array1: T[],
+  array2: U[],
+  fields: UserDefinedKeys<T & U>[],
+): (T & Partial<U>)[] {
+  console.log("arr1: ", array1);
+  console.log("arr2: ", array2);
+  return array1.map((item1) => {
+    const match = array2.find((item2) => {
+      return fields.every((field) => {
+        const value1 = field in item1 ? item1[field as keyof T] : undefined;
+        const value2 = field in item2 ? item2[field as keyof U] : undefined;
+        return value1 === value2;
+      });
+    });
+
+    return match ? { ...item1, ...match } : item1;
+  });
+}

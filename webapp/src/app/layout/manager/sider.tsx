@@ -12,14 +12,15 @@ import {
   LikeOutlined,
   HomeOutlined,
 } from "@ant-design/icons";
-import { ConfigProvider, Menu, MenuProps } from "antd";
-import Sider from "antd/es/layout/Sider";
+import { ConfigProvider, Layout, Menu, MenuProps } from "antd";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { cn } from "../../utils/cn";
 import logo from "../../../assets/images/logo.png";
 import logo2 from "../../../assets/images/logo2.png";
+
+const { Sider } = Layout;
 
 export default function MySider() {
   const location = useLocation();

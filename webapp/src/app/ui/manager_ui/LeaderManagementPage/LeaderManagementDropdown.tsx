@@ -7,8 +7,7 @@ import {
   PhoneFilled,
   UserOutlined,
 } from "@ant-design/icons";
-import { Divider, Modal, Space } from "antd";
-import { MenuProps } from "antd/lib";
+import { Divider, MenuProps, Modal, Space } from "antd";
 import { Avatar } from "../../../components/avatar";
 import { Dropdown } from "../../../components/dropdown";
 import { Leader } from "../../../models/user";

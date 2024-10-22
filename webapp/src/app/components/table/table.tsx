@@ -1,12 +1,12 @@
 import { ConfigProvider, Table, TableProps } from "antd";
 
-function CustomTable({ ...rest }: TableProps) {
+function CustomTable({ fontSize, ...rest }: CustomTableProps) {
   return (
     <ConfigProvider
       theme={{
         components: {
           Table: {
-            cellFontSize: 17,
+            cellFontSize: fontSize ?? 17,
             headerBg: "#4CC9C7",
             headerColor: "#fff",
             headerSortActiveBg: "#52d9d7",
@@ -21,3 +21,7 @@ function CustomTable({ ...rest }: TableProps) {
 }
 
 export default CustomTable;
+
+type CustomTableProps = TableProps & {
+  fontSize?: number;
+};

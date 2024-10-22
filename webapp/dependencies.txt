@@ -17,6 +17,7 @@ tiptap [npm install @tiptap/react @tiptap/pm @tiptap/starter-kit
 ]
 html-react-parser [npm i html-react-parser]
 dompurify [npm i dompurify]
+react-infinite-scroll-component [npm i react-infinite-scroll-component]
 
 //dev dependencies
 prettier plugin tailwindcss [npm install -D prettier prettier-plugin-tailwindcss]

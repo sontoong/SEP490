@@ -1,15 +1,12 @@
-import { Content } from "antd/es/layout/layout";
+import { Layout } from "antd";
 import React from "react";
 // import { useAppSelector } from "../../redux/hook";
 
+const { Content } = Layout;
+
 export default function MyContent({ children }: { children: React.ReactNode }) {
-  //   const { headerTitle } = useAppSelector((state) => state.header);
-  //   const currentHeader = headerTitle[headerTitle.length - 1];
   return (
     <Content>
-      {/* {currentHeader.title && (
-        <div className="pb-5 text-xl uppercase">{currentHeader.title}</div>
-      )} */}
       <main className="justify-center bg-white">{children}</main>
     </Content>
   );

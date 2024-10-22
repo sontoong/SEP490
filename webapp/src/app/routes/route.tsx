@@ -31,6 +31,7 @@ import OrderManagementPage from "../pages/manager/OrderManagementPage";
 import ChatPage from "../pages/manager/ChatPage";
 import RatingManagementPage from "../pages/manager/RatingManagementPage";
 import ApartmentManagementPage from "../pages/manager/ApartmentManagementPage";
+import RequestDetailsPage from "../pages/manager/RequestDetailsPage";
 
 //other page
 import NotFoundPage from "../pages/404Page";
@@ -143,6 +144,18 @@ export const router = createBrowserRouter([
             <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
               <ManagerLayout>
                 <RequestManagementPage />
+              </ManagerLayout>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "requests/:requestId",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <RequestDetailsPage />
               </ManagerLayout>
             </PrivateRoute>
           </Suspense>

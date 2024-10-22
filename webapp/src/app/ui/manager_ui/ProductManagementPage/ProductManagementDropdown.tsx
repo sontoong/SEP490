@@ -4,8 +4,7 @@ import {
   EyeOutlined,
   ToolOutlined,
 } from "@ant-design/icons";
-import { Modal, Space } from "antd";
-import { MenuProps } from "antd/lib";
+import { MenuProps, Modal, Space } from "antd";
 import { useState } from "react";
 import { Avatar } from "../../../components/avatar";
 import { Dropdown } from "../../../components/dropdown";

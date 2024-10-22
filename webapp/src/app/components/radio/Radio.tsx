@@ -1,7 +1,6 @@
 import React from "react";
 import NotFound from "../not-found/not-found";
-import { Space } from "antd";
-import { SpaceProps } from "antd/lib";
+import { Space, SpaceProps } from "antd";
 
 type RecordType = {
   value: any; // required 'value' field

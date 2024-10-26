@@ -35,6 +35,8 @@ services:
   api0:
     image: "hasamu/ewmh:api.gateway"
     container_name: api0
+    ports:
+      - '8000:8080'
 
   api1:
     image: "hasamu/ewmh:users.api"

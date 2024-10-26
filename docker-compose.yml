@@ -3,6 +3,10 @@ services:
     container_name: nginx
     depends_on:
       - webapp
+      - api0
+      - api1
+      - api2
+      - api3
     restart: always
     build: 
       context: ./nginx

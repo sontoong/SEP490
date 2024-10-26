@@ -51,5 +51,6 @@ jobs:
             cd /home/${{github.event.repository.name}}
             sudo git pull origin ${{ github.event.pull_request.head.ref }}
             sudo git checkout ${{ github.event.pull_request.head.ref }}
+            docker compose down
             docker compose pull -q
             docker compose up --build -d --remove-orphans

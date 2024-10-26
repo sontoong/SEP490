@@ -225,7 +225,9 @@ export const router = createBrowserRouter([
         path: "*",
         element: (
           <Suspense fallback={<></>}>
-            <NotFoundPage />
+            <PrivateRoute inverted={false}>
+              <NotFoundPage />
+            </PrivateRoute>
           </Suspense>
         ),
       },

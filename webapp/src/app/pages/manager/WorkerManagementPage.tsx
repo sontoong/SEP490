@@ -1,4 +1,4 @@
-import { Space, TableProps, Tag } from "antd";
+import { Space, TableColumnsType, Tag } from "antd";
 import { useTitle } from "../../hooks/useTitle";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
@@ -103,7 +103,7 @@ export default function WorkerManagementPage() {
     });
   }
 
-  const workerListColumns: TableProps<Worker | any>["columns"] = [
+  const workerListColumns: TableColumnsType<Worker> = [
     {
       title: "Họ và Tên",
       dataIndex: "Fullname",

@@ -52,7 +52,7 @@ export default function MySider() {
             <FundOutlined />,
           ),
           getItem(
-            "Leader",
+            "Trưởng nhóm",
             "/leaders",
             () => navigate("/leaders"),
             <SolutionOutlined />,

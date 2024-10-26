@@ -8,13 +8,11 @@ import { products, requests } from "../../../../constants/testData";
 import { combineArraysLoose, formatCurrency } from "../../../utils/helpers";
 import { Request } from "../../../models/request";
 import { CheckSquareOutlined } from "@ant-design/icons";
+import { ArrayElement } from "../../../utils/types";
 
 export default function RequestProductList() {
-  const [data, setData] = useState<
-    Request["RequestDetails"] & Partial<Product>[]
-  >([]);
+  const [data, setData] = useState<RequestProduct[]>([]);
   // const [page, setPage] = useState(1);
-  console.log(data);
 
   const loadMoreData = useCallback(async () => {
     // await fetch(
@@ -32,7 +30,7 @@ export default function RequestProductList() {
     await sleep(1000); // Example dela
     setData((prev) =>
       prev?.concat(
-        combineArraysLoose(requests[0].RequestDetails, products, ["ProductId"]),
+        combineArraysLoose(requests[1].RequestDetails, products, ["ProductId"]),
       ),
     );
     // setPage((prev) => prev++);
@@ -63,34 +61,54 @@ export default function RequestProductList() {
       >
         <div>
           <List
+            itemLayout="vertical"
             dataSource={data}
-            renderItem={(item: any) => (
-              <List.Item key={item.ProductId}>
+            renderItem={(item) => (
+              <List.Item
+                key={item.ProductId}
+                extra={
+                  <Space size={20}>
+                    <div>
+                      <div>
+                        <span>Giá gốc: </span>
+                        {formatCurrency(item.ProductPrices?.PriceByDate)}
+                      </div>
+                      <div className="font-bold">
+                        <span>Tổng: </span>
+                        {item.ProductPrices?.PriceByDate
+                          ? formatCurrency(
+                              item.ProductPrices?.PriceByDate * item.Quantity,
+                            )
+                          : "N/A"}
+                      </div>
+                    </div>
+                  </Space>
+                }
+              >
                 <List.Item.Meta
                   avatar={
                     <Avatar size={50} src={item.ImageUrl} shape="square" />
                   }
                   title={
                     <div>
-                      <div>{item.Name}</div>
+                      <Space>
+                        <div>{item.Name}</div>
+                        <div>
+                          {item.isCustomerPaying ? (
+                            <CheckSquareOutlined />
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      </Space>
                       <div>Số lượng: {item.Quantity}</div>
                     </div>
                   }
-                  description={requests[0].Conclusion}
                 />
-                <Space size={20}>
-                  <div>
-                    {item.isCustomerPaying ? <></> : <CheckSquareOutlined />}
-                  </div>
-                  <div>
-                    <div>{formatCurrency(item.ProductPrices?.PriceByDate)}</div>
-                    <div className="font-bold">
-                      {formatCurrency(
-                        item.ProductPrices?.PriceByDate * item.Quantity,
-                      )}
-                    </div>
-                  </div>
-                </Space>
+                <div>
+                  <span className="font-semibold">Lý do: </span>
+                  {requests[0].Conclusion}
+                </div>
               </List.Item>
             )}
           />
@@ -99,3 +117,6 @@ export default function RequestProductList() {
     </div>
   );
 }
+
+type RequestProduct = ArrayElement<Request["RequestDetails"]> &
+  Partial<Product>;

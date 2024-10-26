@@ -2,7 +2,7 @@ import { WarningOutlined } from "@ant-design/icons";
 import { Form } from "../../components/form";
 import { Modal } from "../../components/modals";
 import { useTitle } from "../../hooks/useTitle";
-import { Space, TableProps, Tag } from "antd";
+import { Space, TableColumnsType, Tag } from "antd";
 import { Avatar } from "../../components/avatar";
 import { statusGenerator } from "../../utils/generators/status";
 import ProductManagementDropdown from "../../ui/manager_ui/ProductManagementPage/ProductManagementDropdown";
@@ -68,7 +68,7 @@ export default function ProductManagementPage() {
     });
   }
 
-  const productListColumns: TableProps<Product | any>["columns"] = [
+  const productListColumns: TableColumnsType<Product> = [
     {
       title: "Tên sản phẩm",
       dataIndex: "Name",

@@ -12,16 +12,16 @@ export type User = {
 };
 
 export type Leader = User & {
-  LeaderId: string;
+  LeaderId?: string;
   ApartmentAreaName?: string;
 };
 
 export type Worker = User & {
-  WorkerId: string;
-  LeaderId: string;
+  WorkerId?: string;
+  LeaderId?: string;
 };
 
 export type Customer = User & {
-  CustomerId: string;
-  RoomId: string;
+  CustomerId?: string;
+  RoomId?: string;
 };

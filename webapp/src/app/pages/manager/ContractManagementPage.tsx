@@ -1,6 +1,6 @@
 import { Form } from "../../components/form";
 import { useTitle } from "../../hooks/useTitle";
-import { Space, TableProps } from "antd";
+import { Space, TableColumnsType } from "antd";
 import { Contract } from "../../models/contract";
 import { contractStatusGenerator } from "../../utils/generators/contractStatus";
 import { Input } from "../../components/inputs";
@@ -24,7 +24,7 @@ export default function ContractManagementPage() {
     console.log(values);
   };
 
-  const contractListColumns: TableProps<Contract | any>["columns"] = [
+  const contractListColumns: TableColumnsType<Contract> = [
     {
       title: "Hợp đồng",
       render: (_, { ContractId, ServicePackageId }) => (

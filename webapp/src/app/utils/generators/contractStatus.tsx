@@ -1,7 +1,8 @@
 import { Tag } from "antd";
+import { isNonValue } from "../helpers";
 
 export function contractStatusGenerator(remaining?: number) {
-  if (!remaining) {
+  if (isNonValue(remaining)) {
     return <Tag>Unknown</Tag>;
   }
 

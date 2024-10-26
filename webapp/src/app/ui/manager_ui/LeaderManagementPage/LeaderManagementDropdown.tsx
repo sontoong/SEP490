@@ -44,8 +44,12 @@ const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
         </div>
       ),
       content: (
-        <Space direction="horizontal" className="w-full">
-          <Space direction="vertical" size={5}>
+        <Space
+          direction="horizontal"
+          size={25}
+          className="w-full pb-5 pr-10 text-sm"
+        >
+          <Space direction="vertical" size={10}>
             <Avatar src={record.AvatarUrl} size={70} />
             <div>
               <strong>Họ và Tên:</strong> {record.Fullname}
@@ -58,7 +62,7 @@ const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
           <Divider type="vertical" className="h-[150px] bg-black" />
           <Space direction="vertical" size={15}>
             <div className="text-lg font-bold uppercase">Thông tin cá nhân</div>
-            <Space direction="vertical" size={5}>
+            <Space direction="vertical" size={10}>
               <div>
                 <Space direction="horizontal" size={3}>
                   <PhoneFilled />

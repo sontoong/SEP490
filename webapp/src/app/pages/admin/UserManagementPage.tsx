@@ -1,4 +1,4 @@
-import { Space, TableProps, Tag } from "antd";
+import { Space, TableColumnsType, Tag } from "antd";
 import { Avatar } from "../../components/avatar";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
@@ -103,9 +103,7 @@ export default function UserManagementPage() {
     });
   }
 
-  const userListColumns: TableProps<
-    Leader | Customer | Worker | any
-  >["columns"] = [
+  const userListColumns: TableColumnsType<Leader | Customer | Worker> = [
     {
       title: "Tên",
       dataIndex: "Fullname",

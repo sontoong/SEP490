@@ -132,7 +132,7 @@ export default function RequestDetailsPage() {
       <Space className="flex justify-between text-sm">
         <div className="font-bold">Tổng giá: </div>
         <div className="font-bold">
-          {formatCurrency(request?.PriceRequests[0].PriceByDate)}
+          {formatCurrency(request?.TotalPrice)}
         </div>
       </Space>
     </Space>

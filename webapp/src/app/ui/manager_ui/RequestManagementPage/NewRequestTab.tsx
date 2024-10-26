@@ -1,5 +1,5 @@
 import { Table } from "../../../components/table";
-import { TableProps } from "antd";
+import { TableColumnsType } from "antd";
 import { Request } from "../../../models/request";
 import {
   requestStatusGenerator,
@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function NewRequestTab(props: NewRequestTabProps) {
   const navigate = useNavigate();
-  const contractListColumns: TableProps<Request | any>["columns"] = [
+  const contractListColumns: TableColumnsType<Request> = [
     {
       title: "Khách hàng",
       render: (_, { CustomerId }) => (

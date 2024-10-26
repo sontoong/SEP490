@@ -40,14 +40,18 @@ const ContractManagementDropdown = ({ record }: { record: Customer }) => {
         </div>
       ),
       content: (
-        <Space direction="horizontal" className="w-full">
-          <Space direction="vertical" size={5}>
+        <Space
+          direction="horizontal"
+          size={25}
+          className="h-fit w-full pb-5 pr-10 text-sm"
+        >
+          <Space direction="vertical" size={10}>
             <Avatar src={record.AvatarUrl} size={70} />
             <div>
               <strong>Họ và Tên:</strong> {record.Fullname}
             </div>
             <div>
-              <strong>Leader đã nhận:</strong>{" "}
+              <strong>Leader đã nhận: </strong>
               {record.RoomId ? record.RoomId : "N/A"}
             </div>
             <div>
@@ -57,10 +61,10 @@ const ContractManagementDropdown = ({ record }: { record: Customer }) => {
               <strong>Phòng:</strong> {record.RoomId ? record.RoomId : "N/A"}
             </div>
           </Space>
-          <Divider type="vertical" className="h-[150px] bg-black" />
+          <Divider type="vertical" className="h-[250px] bg-black" />
           <Space direction="vertical" size={15}>
             <div className="text-lg font-bold uppercase">Thông tin cá nhân</div>
-            <Space direction="vertical" size={5}>
+            <Space direction="vertical" size={10}>
               <div>
                 <Space direction="horizontal" size={3}>
                   <PhoneFilled />

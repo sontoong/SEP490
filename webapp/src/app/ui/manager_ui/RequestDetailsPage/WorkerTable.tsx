@@ -1,4 +1,4 @@
-import { Space, TableProps } from "antd";
+import { Space, TableColumnsType } from "antd";
 import { Table } from "../../../components/table";
 import { Worker } from "../../../models/user";
 import { Avatar } from "../../../components/avatar";
@@ -6,7 +6,7 @@ import { workers } from "../../../../constants/testData";
 import { StarFilled } from "@ant-design/icons";
 
 export default function WorkerTable() {
-  const contractListColumns: TableProps<Worker | any>["columns"] = [
+  const contractListColumns: TableColumnsType<Worker> = [
     {
       title: "Họ và Tên",
       dataIndex: "Fullname",

@@ -1,6 +1,9 @@
 import { ConfigProvider, Table, TableProps } from "antd";
 
-function CustomTable({ fontSize, ...rest }: CustomTableProps) {
+function CustomTable<T extends object>({
+  fontSize,
+  ...rest
+}: CustomTableProps<T>) {
   return (
     <ConfigProvider
       theme={{
@@ -15,13 +18,13 @@ function CustomTable({ fontSize, ...rest }: CustomTableProps) {
         },
       }}
     >
-      <Table {...rest} />
+      <Table<T> {...rest} />
     </ConfigProvider>
   );
 }
 
 export default CustomTable;
 
-type CustomTableProps = TableProps & {
+type CustomTableProps<T> = TableProps<T> & {
   fontSize?: number;
 };

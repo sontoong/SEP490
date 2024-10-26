@@ -1,4 +1,4 @@
-import { Space, TableProps, Tag } from "antd";
+import { Space, TableColumnsType, Tag } from "antd";
 import { Avatar } from "../../components/avatar";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
@@ -6,7 +6,7 @@ import { Table } from "../../components/table";
 import { useTitle } from "../../hooks/useTitle";
 import { statusGenerator } from "../../utils/generators/status";
 
-import { users } from "../../../constants/testData";
+import { leaders } from "../../../constants/testData";
 import { Leader } from "../../models/user";
 import LeaderManagementDropdown from "../../ui/manager_ui/LeaderManagementPage/LeaderManagementDropdown";
 import { Modal } from "../../components/modals";
@@ -15,7 +15,7 @@ import { WarningOutlined } from "@ant-design/icons";
 export default function LeaderManagementPage() {
   useTitle({
     tabTitle: "Leaders - EWMH",
-    paths: [{ title: "Danh sách Leader", path: "/leaders" }],
+    paths: [{ title: "Danh sách trưởng nhóm", path: "/leaders" }],
   });
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();
@@ -104,7 +104,7 @@ export default function LeaderManagementPage() {
     });
   }
 
-  const leaderListColumns: TableProps<Leader | any>["columns"] = [
+  const leaderListColumns: TableColumnsType<Leader> = [
     {
       title: "Họ và Tên",
       dataIndex: "Fullname",
@@ -191,7 +191,7 @@ export default function LeaderManagementPage() {
         </div>
         <Table
           columns={leaderListColumns} //weird lib bug
-          dataSource={users}
+          dataSource={leaders}
           rowKey={(record) => record.AccountId}
         />
       </Space>

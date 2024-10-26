@@ -1,5 +1,5 @@
-export function roleNameGenerator(isDisabled?: string) {
-  switch (isDisabled) {
+export function roleNameGenerator(roleId?: string) {
+  switch (roleId) {
     case "1":
       return "Quản trị viên";
     case "2":

@@ -1,5 +1,6 @@
 import { ApartmentArea } from "../app/models/apartmentArea";
 import { Contract } from "../app/models/contract";
+import { Order } from "../app/models/order";
 import { Product } from "../app/models/product";
 import { Request } from "../app/models/request";
 import { ServicePackage } from "../app/models/service";
@@ -1099,5 +1100,258 @@ export const requests: Request[] = [
       Rate: 4,
       Status: false,
     },
+  },
+];
+
+export const orders: Order[] = [
+  {
+    OrderId: "ORD123456",
+    CustomerId: "CST001",
+    PurchaseTime: "2024-10-19T14:35:00Z",
+    Status: true,
+    FileUrl: "https://example.com/files/order1.pdf",
+    OrderCode: "OC1234",
+    OrderDetails: [
+      {
+        OrderId: "ORD123456",
+        ProductId: "PROD001",
+        Quantity: 2,
+        Price: 100,
+        TotalPrice: 200,
+      },
+      {
+        OrderId: "ORD123456",
+        ProductId: "PROD002",
+        Quantity: 1,
+        Price: 150,
+        TotalPrice: 150,
+      },
+    ],
+    WarrantyCards: [
+      {
+        WarrantyCardId: "WAR123",
+        OrderId: "ORD123456",
+        ProductId: "PROD001",
+        StartDate: "2024-10-19",
+        ExpireDate: "2025-10-19",
+      },
+    ],
+  },
+  {
+    OrderId: "ORD789101",
+    CustomerId: "CST002",
+    PurchaseTime: "2024-09-25T09:15:00Z",
+    Status: false,
+    FileUrl: "https://example.com/files/order2.pdf",
+    OrderCode: "OC5678",
+    OrderDetails: [
+      {
+        OrderId: "ORD789101",
+        ProductId: "PROD003",
+        Quantity: 3,
+        Price: 50,
+        TotalPrice: 150,
+      },
+    ],
+    WarrantyCards: [],
+  },
+  {
+    OrderId: "ORD456789",
+    CustomerId: "CST003",
+    PurchaseTime: "2024-08-12T17:50:00Z",
+    Status: true,
+    FileUrl: "https://example.com/files/order3.pdf",
+    OrderCode: "OC9101",
+    OrderDetails: [
+      {
+        OrderId: "ORD456789",
+        ProductId: "PROD004",
+        Quantity: 5,
+        Price: 25,
+        TotalPrice: 125,
+      },
+      {
+        OrderId: "ORD456789",
+        ProductId: "PROD005",
+        Quantity: 2,
+        Price: 100,
+        TotalPrice: 200,
+      },
+    ],
+    WarrantyCards: [
+      {
+        WarrantyCardId: "WAR456",
+        OrderId: "ORD456789",
+        ProductId: "PROD005",
+        StartDate: "2024-08-12",
+        ExpireDate: "2025-08-12",
+      },
+    ],
+  },
+  {
+    OrderId: "ORD654321",
+    CustomerId: "CST004",
+    PurchaseTime: "2024-07-01T12:20:00Z",
+    Status: true,
+    FileUrl: "https://example.com/files/order4.pdf",
+    OrderCode: "OC1213",
+    OrderDetails: [
+      {
+        OrderId: "ORD654321",
+        ProductId: "PROD006",
+        Quantity: 1,
+        Price: 500,
+        TotalPrice: 500,
+      },
+    ],
+    WarrantyCards: [
+      {
+        WarrantyCardId: "WAR789",
+        OrderId: "ORD654321",
+        ProductId: "PROD006",
+        StartDate: "2024-07-01",
+        ExpireDate: "2027-07-01",
+      },
+    ],
+  },
+  {
+    OrderId: "ORD998877",
+    CustomerId: "CST005",
+    PurchaseTime: "2024-06-15T10:45:00Z",
+    Status: false,
+    FileUrl: "https://example.com/files/order5.pdf",
+    OrderCode: "OC1415",
+    OrderDetails: [
+      {
+        OrderId: "ORD998877",
+        ProductId: "PROD007",
+        Quantity: 4,
+        Price: 75,
+        TotalPrice: 300,
+      },
+    ],
+    WarrantyCards: [],
+  },
+  {
+    OrderId: "ORD334455",
+    CustomerId: "CST006",
+    PurchaseTime: "2024-05-10T15:10:00Z",
+    Status: true,
+    FileUrl: "https://example.com/files/order6.pdf",
+    OrderCode: "OC1617",
+    OrderDetails: [
+      {
+        OrderId: "ORD334455",
+        ProductId: "PROD008",
+        Quantity: 2,
+        Price: 200,
+        TotalPrice: 400,
+      },
+    ],
+    WarrantyCards: [
+      {
+        WarrantyCardId: "WAR234",
+        OrderId: "ORD334455",
+        ProductId: "PROD008",
+        StartDate: "2024-05-10",
+        ExpireDate: "2026-05-10",
+      },
+    ],
+  },
+  {
+    OrderId: "ORD667788",
+    CustomerId: "CST007",
+    PurchaseTime: "2024-04-05T11:25:00Z",
+    Status: true,
+    FileUrl: "https://example.com/files/order7.pdf",
+    OrderCode: "OC1819",
+    OrderDetails: [
+      {
+        OrderId: "ORD667788",
+        ProductId: "PROD009",
+        Quantity: 3,
+        Price: 90,
+        TotalPrice: 270,
+      },
+    ],
+    WarrantyCards: [
+      {
+        WarrantyCardId: "WAR345",
+        OrderId: "ORD667788",
+        ProductId: "PROD009",
+        StartDate: "2024-04-05",
+        ExpireDate: "2025-04-05",
+      },
+    ],
+  },
+  {
+    OrderId: "ORD556677",
+    CustomerId: "CST008",
+    PurchaseTime: "2024-03-20T08:00:00Z",
+    Status: true,
+    FileUrl: "https://example.com/files/order8.pdf",
+    OrderCode: "OC2021",
+    OrderDetails: [
+      {
+        OrderId: "ORD556677",
+        ProductId: "PROD010",
+        Quantity: 1,
+        Price: 1000,
+        TotalPrice: 1000,
+      },
+    ],
+    WarrantyCards: [
+      {
+        WarrantyCardId: "WAR456",
+        OrderId: "ORD556677",
+        ProductId: "PROD010",
+        StartDate: "2024-03-20",
+        ExpireDate: "2026-03-20",
+      },
+    ],
+  },
+  {
+    OrderId: "ORD445566",
+    CustomerId: "CST009",
+    PurchaseTime: "2024-02-11T13:45:00Z",
+    Status: false,
+    FileUrl: "https://example.com/files/order9.pdf",
+    OrderCode: "OC2223",
+    OrderDetails: [
+      {
+        OrderId: "ORD445566",
+        ProductId: "PROD011",
+        Quantity: 6,
+        Price: 40,
+        TotalPrice: 240,
+      },
+    ],
+    WarrantyCards: [],
+  },
+  {
+    OrderId: "ORD778899",
+    CustomerId: "CST010",
+    PurchaseTime: "2024-01-29T16:30:00Z",
+    Status: true,
+    FileUrl: "https://example.com/files/order10.pdf",
+    OrderCode: "OC2425",
+    OrderDetails: [
+      {
+        OrderId: "ORD778899",
+        ProductId: "PROD012",
+        Quantity: 2,
+        Price: 600,
+        TotalPrice: 1200,
+      },
+    ],
+    WarrantyCards: [
+      {
+        WarrantyCardId: "WAR567",
+        OrderId: "ORD778899",
+        ProductId: "PROD012",
+        StartDate: "2024-01-29",
+        ExpireDate: "2025-01-29",
+      },
+    ],
   },
 ];

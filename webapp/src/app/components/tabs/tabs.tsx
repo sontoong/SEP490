@@ -6,6 +6,7 @@ function BannerTabs(props: CustomTabsProps) {
       theme={{
         token: {
           colorBorderSecondary: "#00000030",
+          fontSize: 18,
         },
         components: {
           Tabs: {

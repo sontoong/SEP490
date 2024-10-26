@@ -1,4 +1,4 @@
-import { Space, TableProps, Tag } from "antd";
+import { Space, TableColumnsType, Tag } from "antd";
 import { useTitle } from "../../hooks/useTitle";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
@@ -68,7 +68,7 @@ export default function ServiceManagementPage() {
     });
   }
 
-  const serviceListColumns: TableProps<ServicePackage | any>["columns"] = [
+  const serviceListColumns: TableColumnsType<ServicePackage> = [
     {
       title: "Gói dịch vụ",
       dataIndex: "Name",

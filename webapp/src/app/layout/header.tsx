@@ -34,33 +34,15 @@ export default function CustomHeader() {
     switch (state.currentUser.Role) {
       case ROLE.admin:
         return [
-          generateItemProfile(
-            "Đăng xuất",
-            "",
-            <LogoutOutlined />,
-            logOut,
-            undefined,
-          ),
+          generateItemProfile("Đăng xuất", "", <LogoutOutlined />, logOut),
         ];
       case ROLE.manager:
         return [
-          generateItemProfile(
-            "Đăng xuất",
-            "",
-            <LogoutOutlined />,
-            logOut,
-            undefined,
-          ),
+          generateItemProfile("Đăng xuất", "", <LogoutOutlined />, logOut),
         ];
       default:
         return [
-          generateItemProfile(
-            "Đăng xuất",
-            "",
-            <LogoutOutlined />,
-            logOut,
-            undefined,
-          ),
+          generateItemProfile("Đăng xuất", "", <LogoutOutlined />, logOut),
         ];
     }
   }

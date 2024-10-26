@@ -2,8 +2,8 @@ services:
   nginx:
     container_name: nginx
     depends_on:
-      # - api
       - webapp
+      - api
     restart: always
     build: 
       context: ./nginx
@@ -17,8 +17,6 @@ services:
       - /etc/ssl/cloudflare.crt:/etc/ssl/cloudflare.crt
 
   webapp:
-    # depends_on:
-    #   - api
     restart: always
     image: "${DOCKER_REPO:?error}-webapp:latest"
     container_name: webapp
@@ -31,11 +29,26 @@ services:
     ports:
       - "3000:3000"
 
-  # api:
-  #   image: "${DOCKER_REPO:?error}-backend:latest"
-  #   container_name: webapp
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - '8000:8000'
+  api0:
+    image: "hasamu/ewmh:api.gateway"
+    container_name: api0
+    ports:
+      - '8000:8000'
+
+  api1:
+    image: "hasamu/ewmh:users.api"
+    container_name: api1
+    ports:
+      - '8001:8001'
+
+  api2:
+    image: "hasamu/ewmh:sales.api"
+    container_name: api2
+    ports:
+      - '8002:8002'
+
+  api3:
+    image: "hasamu/ewmh:requests.api"
+    container_name: api3
+    ports:
+      - '8003:8003'

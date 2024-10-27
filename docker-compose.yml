@@ -36,22 +36,22 @@ services:
     image: "hasamu/ewmh:api.gateway"
     container_name: api0
     ports:
-      - "9000:8080"
+      - "8000:8080"
 
   api1:
     image: "hasamu/ewmh:users.api"
     container_name: api1
     ports:
-      - "9001:8080"
+      - "8001:8080"
 
   api2:
     image: "hasamu/ewmh:sales.api"
     container_name: api2
     ports:
-      - "9002:8080"
+      - "8002:8080"
 
   api3:
     image: "hasamu/ewmh:requests.api"
     container_name: api3
     ports:
-      - "9003:8080"
+      - "8003:8080"

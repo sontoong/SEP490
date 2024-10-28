@@ -1,14 +1,25 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import agent from "../../utils/agent";
+import agent from "../../services/agent";
 import { AxiosError } from "axios";
 import { User } from "../../models/user";
-import { jwtDecode } from "jwt-decode";
+// import { jwtDecode } from "jwt-decode";
 import { excludedActionsPending } from "./specialUISlice";
 
 const token = localStorage.getItem("access_token");
 let initUser = {};
 if (token && token !== "undefined") {
-  initUser = jwtDecode(token);
+  // initUser = jwtDecode(token);
+  initUser = {
+    Role: "2",
+    AccountId: "1",
+    AvatarUrl: "",
+    DateOfBirth: "",
+    DisabledReason: "",
+    Email: "admin@gmail.com",
+    Fullname: "abc",
+    IsDisabled: false,
+    PhoneNumber: "13333333333",
+  };
 } else {
   localStorage.clear();
 }

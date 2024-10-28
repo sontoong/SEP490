@@ -1,7 +1,7 @@
 import { RouterProvider } from "react-router-dom";
 import { router } from "./app/routes/route";
 import { App, ConfigProvider } from "antd";
-import { validateMessages } from "./app/utils/validate-messages";
+import { validateMessages } from "./constants/validate-messages";
 import viVN from "antd/locale/vi_VN";
 import dayjs from "dayjs";
 
@@ -19,7 +19,9 @@ function AppWrapper() {
     <ConfigProvider
       theme={{
         token: {
-          colorPrimary: "#004AAD",
+          colorPrimary: "#FF7A00",
+          fontFamily:
+            "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
         },
       }}
       form={{ validateMessages }}

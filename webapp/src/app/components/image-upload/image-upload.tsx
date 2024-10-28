@@ -1,15 +1,17 @@
 import { App, GetProp, UploadFile, UploadProps } from "antd";
+import { v4 as uuidv4 } from "uuid";
 import { UploadImg } from "../inputs/upload-img";
 
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
-
-export default function CustomUploadImage(props: {
-  images: UploadFile[];
-  setImages: React.Dispatch<React.SetStateAction<UploadFile[]>>;
-  maxCount?: UploadProps['maxCount'] ;
-}) {
+export default function CustomUploadImage(props: UploadImageProps) {
   const { message } = App.useApp();
   const { images, setImages, maxCount = 1 } = props;
+
+  const imagesWithUid = images.map((image) => {
+    return {
+      ...image,
+      uid: uuidv4(),
+    };
+  });
 
   const onChange: UploadProps["onChange"] = ({ fileList }) => {
     setImages(fileList);
@@ -31,9 +33,17 @@ export default function CustomUploadImage(props: {
     <UploadImg
       listType="picture-card"
       maxCount={maxCount}
-      fileList={images}
+      fileList={imagesWithUid}
       onChange={onChange}
       uploadConditions={uploadConditions}
     />
   );
 }
+
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+export type UploadImage = Omit<UploadFile, "uid">;
+type UploadImageProps = {
+  images: UploadImage[];
+  setImages: React.Dispatch<React.SetStateAction<UploadImage[]>>;
+  maxCount?: UploadProps["maxCount"];
+};

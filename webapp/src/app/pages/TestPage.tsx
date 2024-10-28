@@ -1,5 +1,16 @@
-import { Envs } from "../utils/env";
+// import { Envs } from "../utils/env";
+
+import { useState } from "react";
+import { TextEditor } from "../components/rte";
+import { Input } from "../components/inputs";
 
 export default function TestPage() {
-  return <div>{Envs.api}</div>;
+  const [text, setText] = useState<string>();
+
+  return (
+    <>
+      <TextEditor value={text} onChange={setText} />
+      <Input.TextArea />
+    </>
+  );
 }

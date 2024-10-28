@@ -30,7 +30,6 @@ function PrimaryButtonBoldText({ text, bgColor, ...rest }: CustomButtonProps) {
         components: {
           Button: {
             colorPrimary: bgColor ?? token.colorPrimary,
-            algorithm: true,
           },
         },
       }}
@@ -46,7 +45,7 @@ PrimaryButton.BoldText = PrimaryButtonBoldText;
 
 export default PrimaryButton;
 
-type CustomButtonProps = ButtonProps & {
+type CustomButtonProps = Omit<ButtonProps, "children"> & {
   text?: string;
   bgColor?: string;
 };

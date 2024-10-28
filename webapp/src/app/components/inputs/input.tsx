@@ -1,11 +1,11 @@
+import { SearchOutlined } from "@ant-design/icons";
 import { ConfigProvider, Input, InputProps, theme } from "antd";
-import { TextAreaProps } from "antd/es/input";
-
+import { SearchProps, TextAreaProps } from "antd/es/input";
 function CustomInput({
   colorBgContainer,
   colorTextPlaceholder,
   ...rest
-}: TCustomInput) {
+}: TCustomInputProps) {
   const { token } = theme.useToken();
 
   return (
@@ -18,28 +18,42 @@ function CustomInput({
         },
       }}
     >
-      <Input size="large" {...rest} />
+      <Input {...rest} />
     </ConfigProvider>
   );
 }
 
-function CustomInputPassword(props: TCustomInput) {
-  return <Input.Password size="large" {...props} />;
+function CustomInputPassword(props: TCustomInputProps) {
+  return <Input.Password {...props} />;
 }
 
-function CustomInputTextArea(props: CustomTextArea) {
+function CustomInputTextArea(props: TCustomTextAreaProps) {
   return <Input.TextArea {...props} style={{ height: 120, resize: "none" }} />;
+}
+
+function SearchInput(props: TCustomSearchProps) {
+  return (
+    <Input.Search
+      size="large"
+      allowClear
+      enterButton={<SearchOutlined />}
+      {...props}
+    />
+  );
 }
 
 CustomInput.Password = CustomInputPassword;
 CustomInput.OTP = Input.OTP;
 CustomInput.TextArea = CustomInputTextArea;
+CustomInput.Search = SearchInput;
 
 export default CustomInput;
 
-type TCustomInput = Omit<InputProps, "style"> & {
+type TCustomInputProps = Omit<InputProps, "style"> & {
   colorBgContainer?: string;
   colorTextPlaceholder?: string;
 };
 
-type CustomTextArea = Omit<TextAreaProps, "style">;
+type TCustomTextAreaProps = Omit<TextAreaProps, "style">;
+
+type TCustomSearchProps = Omit<SearchProps, "style">;

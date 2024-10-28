@@ -14,7 +14,6 @@ function CustomDatePicker(props: CustomDatePickerProps) {
       allowClear={false}
       value={value}
       format={dateFormat}
-      size="large"
     />
   );
 }

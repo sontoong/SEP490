@@ -7,8 +7,8 @@ function OutlineButton({ text, ...rest }: CustomButtonProps) {
         components: {
           Button: {
             algorithm: true,
-            defaultColor: "#004aad",
-            defaultBorderColor: "#004aad",
+            defaultColor: "#FF7A00",
+            defaultBorderColor: "#FF7A00",
           },
         },
       }}
@@ -27,8 +27,8 @@ function OutlineButtonBoldText({ text, ...rest }: CustomButtonProps) {
         components: {
           Button: {
             algorithm: true,
-            defaultColor: "#004aad",
-            defaultBorderColor: "#004aad",
+            defaultColor: "#FF7A00",
+            defaultBorderColor: "#FF7A00",
           },
         },
       }}

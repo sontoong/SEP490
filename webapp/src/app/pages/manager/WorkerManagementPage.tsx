@@ -176,6 +176,7 @@ export default function WorkerManagementPage() {
             initialValues={initialValuesSearch}
             name="SearchForm"
             onFinish={handleSearchSubmit}
+            className="w-1/2"
           >
             <Form.Item
               noStyle
@@ -197,7 +198,7 @@ export default function WorkerManagementPage() {
           </Form>
         </div>
         <Table
-          columns={workerListColumns} //weird lib bug
+          columns={workerListColumns}
           dataSource={workers}
           rowKey={(record) => record.AccountId}
         />

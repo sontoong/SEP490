@@ -11,6 +11,7 @@ import { Input } from "../../components/inputs";
 import { Table } from "../../components/table";
 import { products } from "../../../constants/testData";
 import { Product } from "../../models/product";
+import { formatCurrency } from "../../utils/helpers";
 
 export default function ProductManagementPage() {
   useTitle({
@@ -84,6 +85,9 @@ export default function ProductManagementPage() {
     {
       title: "Giá hiện tại",
       dataIndex: ["ProductPrices", "PriceByDate"],
+      render: (value) => {
+        return formatCurrency(value);
+      },
     },
     {
       title: "Số lượng",
@@ -137,6 +141,7 @@ export default function ProductManagementPage() {
             initialValues={initialValuesSearch}
             name="SearchForm"
             onFinish={handleSearchSubmit}
+            className="w-1/2"
           >
             <Form.Item
               noStyle
@@ -158,7 +163,7 @@ export default function ProductManagementPage() {
           </Form>
         </div>
         <Table
-          columns={productListColumns} //weird lib bug
+          columns={productListColumns}
           dataSource={products}
           rowKey={(record) => record.ProductId}
         />

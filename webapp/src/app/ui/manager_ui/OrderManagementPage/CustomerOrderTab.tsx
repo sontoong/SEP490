@@ -1,23 +1,14 @@
 import { Table } from "../../../components/table";
-import { Space, TableColumnsType } from "antd";
-import { formatCurrency, formatDateToLocal } from "../../../utils/helpers";
+import { TableColumnsType } from "antd";
 import {
-  CalendarFilled,
-  EyeOutlined,
-  MailFilled,
-  PhoneFilled,
-  UserOutlined,
-} from "@ant-design/icons";
+  calculateDateToNow,
+  formatCurrency,
+  formatDateToLocal,
+} from "../../../utils/helpers";
 import { Order } from "../../../models/order";
-import { Modal } from "../../../components/modals";
-import { Avatar } from "../../../components/avatar";
-import { customers, orders } from "../../../../constants/testData";
-import { Divider } from "../../../components/divider";
-import { roleNameGenerator } from "../../../utils/generators/roleName";
+import { ViewDetailButton } from "./ViewOrderDetailModal";
 
 export default function CustomerOrderTab(props: CustomerOrderTabProps) {
-  const [modal, contextHolder] = Modal.useModal();
-
   const contractListColumns: TableColumnsType<Order> = [
     {
       title: "ID",
@@ -30,9 +21,18 @@ export default function CustomerOrderTab(props: CustomerOrderTabProps) {
       dataIndex: "CustomerId",
     },
     {
-      title: "Đặt vào",
+      title: "Ngày đặt",
       dataIndex: "PurchaseTime",
       render: (value) => <div>{formatDateToLocal(value)}</div>,
+      sorter: (a, b) =>
+        (calculateDateToNow({
+          time: a.PurchaseTime,
+          format: false,
+        }) as number) -
+        (calculateDateToNow({
+          time: b.PurchaseTime,
+          format: false,
+        }) as number),
     },
     {
       title: "Tổng giá",
@@ -47,18 +47,16 @@ export default function CustomerOrderTab(props: CustomerOrderTabProps) {
     {
       title: "",
       key: "actions",
-      render: (_, { OrderId }) =>
-        ViewDetailButton({ OrderId: OrderId, modal: modal }),
+      render: (_, { OrderId }) => <ViewDetailButton OrderId={OrderId} />,
     },
   ];
   return (
     <>
       <Table
-        columns={contractListColumns} //weird lib bug
+        columns={contractListColumns}
         dataSource={props.orders}
         rowKey={(record) => record.OrderId}
       />
-      {contextHolder}
     </>
   );
 }
@@ -66,69 +64,3 @@ export default function CustomerOrderTab(props: CustomerOrderTabProps) {
 type CustomerOrderTabProps = {
   orders: Order[];
 };
-
-function ViewDetailButton({ modal, OrderId }: { modal: any; OrderId: string }) {
-  const record = orders.find((order) => order.OrderId === OrderId);
-  const customer = customers.find(
-    (customer) => customer.CustomerId === record?.CustomerId,
-  );
-  console.log(customer);
-
-  function handleViewDetail() {
-    modal.info({
-      icon: <UserOutlined />,
-      width: "fit-content",
-      title: (
-        <div className="text-sm uppercase text-secondary">
-          Chi tiết đơn hàng
-        </div>
-      ),
-      content: (
-        <Space
-          direction="horizontal"
-          size={25}
-          className="w-full pb-5 pr-10 text-sm"
-        >
-          <Space direction="vertical" size={10}>
-            <Avatar src={customer?.AvatarUrl} size={70} />
-            <div>
-              <strong>Họ và Tên:</strong> {customer?.Fullname}
-            </div>
-            <div>
-              <strong>Vai trò:</strong> {roleNameGenerator(customer?.Role)}
-            </div>
-          </Space>
-          <Divider type="vertical" className="h-[150px] bg-black" />
-          <Space direction="vertical" size={15}>
-            <div className="text-lg font-bold uppercase">Thông tin cá nhân</div>
-            <Space direction="vertical" size={10}>
-              <div>
-                <Space direction="horizontal" size={3}>
-                  <PhoneFilled />
-                  <strong>SĐT:</strong>
-                  <span>{customer?.Fullname}</span>
-                </Space>
-              </div>
-              <div>
-                <Space direction="horizontal" size={3}>
-                  <CalendarFilled />
-                  <strong>Ngày sinh:</strong>
-                  <span>{customer?.DateOfBirth}</span>
-                </Space>
-              </div>
-              <div>
-                <Space direction="horizontal" size={3}>
-                  <MailFilled />
-                  <strong>Email:</strong>
-                  <span>{customer?.Email}</span>
-                </Space>
-              </div>
-            </Space>
-          </Space>
-        </Space>
-      ),
-      onOk() {},
-    });
-  }
-  return <EyeOutlined onClick={() => handleViewDetail()} />;
-}

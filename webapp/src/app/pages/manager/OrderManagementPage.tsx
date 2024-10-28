@@ -1,9 +1,11 @@
-import { Space, Tabs, TabsProps } from "antd";
-import { Form } from "../../components/form";
-import { useTitle } from "../../hooks/useTitle";
+import { Space, TabsProps } from "antd";
 import { orders } from "../../../constants/testData";
+import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
+import { Tabs } from "../../components/tabs";
+import { useTitle } from "../../hooks/useTitle";
 import CustomerOrderTab from "../../ui/manager_ui/OrderManagementPage/CustomerOrderTab";
+import RequestOrderTab from "../../ui/manager_ui/OrderManagementPage/RequestOrderTab";
 
 export default function OrderManagementPage() {
   useTitle({
@@ -29,7 +31,7 @@ export default function OrderManagementPage() {
     {
       key: "2",
       label: "Đơn hàng của yêu cầu",
-      children: <CustomerOrderTab orders={orders} />,
+      children: <RequestOrderTab orders={orders} />,
     },
   ];
 
@@ -42,6 +44,7 @@ export default function OrderManagementPage() {
             initialValues={initialValuesSearch}
             name="SearchForm"
             onFinish={handleSearchSubmit}
+            className="w-1/2"
           >
             <Form.Item
               noStyle

@@ -217,12 +217,12 @@ export function isNonValue(value: unknown): value is undefined | null {
 }
 
 export function combineArraysLoose<T extends object, U extends object>(
-  array1: T[],
-  array2: U[],
+  array1: T[] = [],
+  array2: U[] = [],
   fields: UserDefinedKeys<T & U>[],
 ): (T & Partial<U>)[] {
-  // console.log("arr1: ", array1);
-  // console.log("arr2: ", array2);
+  console.log("arr1: ", array1);
+  console.log("arr2: ", array2);
   return array1.map((item1) => {
     const match = array2.find((item2) => {
       return fields.every((field) => {

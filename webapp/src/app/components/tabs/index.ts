@@ -1,1 +1,1 @@
-export { default as BannerTabs } from "./tabs";
+export { default as Tabs } from "./tabs";

@@ -169,6 +169,7 @@ export default function LeaderManagementPage() {
             initialValues={initialValuesSearch}
             name="SearchForm"
             onFinish={handleSearchSubmit}
+            className="w-1/2"
           >
             <Form.Item
               noStyle
@@ -190,7 +191,7 @@ export default function LeaderManagementPage() {
           </Form>
         </div>
         <Table
-          columns={leaderListColumns} //weird lib bug
+          columns={leaderListColumns}
           dataSource={leaders}
           rowKey={(record) => record.AccountId}
         />

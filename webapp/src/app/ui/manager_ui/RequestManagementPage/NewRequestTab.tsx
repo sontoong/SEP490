@@ -50,7 +50,7 @@ export default function NewRequestTab(props: NewRequestTabProps) {
   ];
   return (
     <Table
-      columns={contractListColumns} //weird lib bug
+      columns={contractListColumns}
       dataSource={props.requests}
       rowKey={(record) => record.RequestId}
     />

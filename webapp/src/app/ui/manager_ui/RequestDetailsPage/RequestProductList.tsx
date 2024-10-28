@@ -2,13 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 import { Product } from "../../../models/product";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Skeleton } from "../../../components/skeletons";
-import { List, Space } from "antd";
+import { Space } from "antd";
 import { Avatar } from "../../../components/avatar";
 import { products, requests } from "../../../../constants/testData";
 import { combineArraysLoose, formatCurrency } from "../../../utils/helpers";
 import { Request } from "../../../models/request";
-import { CheckSquareOutlined } from "@ant-design/icons";
 import { ArrayElement } from "../../../utils/types";
+import { List } from "../../../components/list";
+import { CheckCircleTwoTone } from "@ant-design/icons";
 
 export default function RequestProductList() {
   const [data, setData] = useState<RequestProduct[]>([]);
@@ -61,6 +62,7 @@ export default function RequestProductList() {
       >
         <div>
           <List
+            fontSize={18}
             itemLayout="vertical"
             dataSource={data}
             renderItem={(item) => (
@@ -95,7 +97,7 @@ export default function RequestProductList() {
                         <div>{item.Name}</div>
                         <div>
                           {item.isCustomerPaying ? (
-                            <CheckSquareOutlined />
+                            <CheckCircleTwoTone twoToneColor="#52c41a" />
                           ) : (
                             <></>
                           )}

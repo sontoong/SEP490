@@ -200,6 +200,7 @@ export default function UserManagementPage() {
             initialValues={initialValuesSearch}
             name="SearchForm"
             onFinish={handleSearchSubmit}
+            className="w-1/2"
           >
             <Form.Item
               noStyle
@@ -221,7 +222,7 @@ export default function UserManagementPage() {
           </Form>
         </div>
         <Table
-          columns={userListColumns} //weird lib bug
+          columns={userListColumns}
           dataSource={users}
           rowKey={(record) => record.AccountId}
         />

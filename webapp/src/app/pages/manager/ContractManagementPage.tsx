@@ -98,6 +98,7 @@ export default function ContractManagementPage() {
             initialValues={initialValuesSearch}
             name="SearchForm"
             onFinish={handleSearchSubmit}
+            className="w-1/2"
           >
             <Form.Item
               noStyle
@@ -119,7 +120,7 @@ export default function ContractManagementPage() {
           </Form>
         </div>
         <Table
-          columns={contractListColumns} //weird lib bug
+          columns={contractListColumns}
           dataSource={contracts}
           rowKey={(record) => record.ContractId}
         />

@@ -1,12 +1,27 @@
 import { ConfigProvider, Tabs, TabsProps } from "antd";
 
+function CustomTabs(props: CustomTabsProps) {
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Tabs: {
+            titleFontSize: 17,
+          },
+        },
+      }}
+    >
+      <Tabs {...props} />
+    </ConfigProvider>
+  );
+}
+
 function BannerTabs(props: CustomTabsProps) {
   return (
     <ConfigProvider
       theme={{
         token: {
           colorBorderSecondary: "#00000030",
-          fontSize: 18,
         },
         components: {
           Tabs: {
@@ -27,6 +42,8 @@ function BannerTabs(props: CustomTabsProps) {
   );
 }
 
-export default BannerTabs;
+CustomTabs.Banner = BannerTabs;
+
+export default CustomTabs;
 
 type CustomTabsProps = TabsProps;

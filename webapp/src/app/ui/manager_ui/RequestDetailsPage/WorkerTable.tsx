@@ -32,7 +32,7 @@ export default function WorkerTable() {
   ];
   return (
     <Table
-      columns={contractListColumns} //weird lib bug
+      columns={contractListColumns}
       dataSource={workers}
       rowKey={(record) => record.AccountId}
       pagination={false}

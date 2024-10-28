@@ -11,6 +11,7 @@ import { servicePackages } from "../../../constants/testData";
 import { ServicePackage } from "../../models/service";
 import ServiceManagementDropdown from "../../ui/manager_ui/ServiceManagementPage/ServiceManagementDropdown";
 import CreateNewServicePackageModalButton from "../../ui/manager_ui/ServiceManagementPage/CreateNewServiceModalButton";
+import { formatCurrency } from "../../utils/helpers";
 
 export default function ServiceManagementPage() {
   useTitle({
@@ -89,6 +90,9 @@ export default function ServiceManagementPage() {
     {
       title: "Giá",
       dataIndex: ["ServicePackagePrices", "PriceByDate"],
+      render: (value) => {
+        return formatCurrency(value);
+      },
     },
     {
       title: "Trạng thái",
@@ -137,6 +141,7 @@ export default function ServiceManagementPage() {
             initialValues={initialValuesSearch}
             name="SearchForm"
             onFinish={handleSearchSubmit}
+            className="w-1/2"
           >
             <Form.Item
               noStyle
@@ -158,7 +163,7 @@ export default function ServiceManagementPage() {
           </Form>
         </div>
         <Table
-          columns={serviceListColumns} //weird lib bug
+          columns={serviceListColumns}
           dataSource={servicePackages}
           rowKey={(record) => record.ServicePackageId}
         />

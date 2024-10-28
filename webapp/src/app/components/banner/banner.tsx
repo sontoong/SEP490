@@ -1,6 +1,6 @@
 import { TabsProps, Typography } from "antd";
 import { defaultImage } from "../../../constants/images";
-import { BannerTabs } from "../tabs";
+import { Tabs } from "../tabs";
 import { ensureBase64Avatar } from "../../utils/helpers";
 
 const { Title, Paragraph } = Typography;
@@ -54,7 +54,7 @@ const BannerContainer = ({
         </Paragraph>
       </div>
       {tabPane ? (
-        <BannerTabs
+        <Tabs.Banner
           onChange={tabPane.onTabPaneChange}
           type="card"
           items={tabPane.tabPaneItems}

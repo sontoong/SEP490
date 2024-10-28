@@ -1,9 +1,10 @@
-import { Space, Tabs, TabsProps } from "antd";
-import { Form } from "../../components/form";
-import { useTitle } from "../../hooks/useTitle";
-import { Input } from "../../components/inputs";
-import NewRequestTab from "../../ui/manager_ui/RequestManagementPage/NewRequestTab";
+import { Space, TabsProps } from "antd";
 import { requests } from "../../../constants/testData";
+import { Form } from "../../components/form";
+import { Input } from "../../components/inputs";
+import { Tabs } from "../../components/tabs";
+import { useTitle } from "../../hooks/useTitle";
+import NewRequestTab from "../../ui/manager_ui/RequestManagementPage/NewRequestTab";
 
 export default function RequestManagementPage() {
   useTitle({
@@ -68,6 +69,7 @@ export default function RequestManagementPage() {
             initialValues={initialValuesSearch}
             name="SearchForm"
             onFinish={handleSearchSubmit}
+            className="w-1/2"
           >
             <Form.Item
               noStyle

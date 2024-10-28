@@ -1114,14 +1114,14 @@ export const orders: Order[] = [
     OrderDetails: [
       {
         OrderId: "ORD123456",
-        ProductId: "PROD001",
+        ProductId: "1",
         Quantity: 2,
         Price: 100,
         TotalPrice: 200,
       },
       {
         OrderId: "ORD123456",
-        ProductId: "PROD002",
+        ProductId: "2",
         Quantity: 1,
         Price: 150,
         TotalPrice: 150,
@@ -1131,7 +1131,7 @@ export const orders: Order[] = [
       {
         WarrantyCardId: "WAR123",
         OrderId: "ORD123456",
-        ProductId: "PROD001",
+        ProductId: "1",
         StartDate: "2024-10-19",
         ExpireDate: "2025-10-19",
       },
@@ -1172,7 +1172,7 @@ export const orders: Order[] = [
       },
       {
         OrderId: "ORD456789",
-        ProductId: "PROD005",
+        ProductId: "5",
         Quantity: 2,
         Price: 100,
         TotalPrice: 200,

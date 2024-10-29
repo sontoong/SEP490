@@ -65,7 +65,7 @@ export default function CreateNewServicePackageModalButton() {
           <Form
             form={createNewServicePackageForm}
             initialValues={initialValuesCreateNewService}
-            name="UpdateServiceForm"
+            name="CreateNewServiceForm"
             onFinish={handleCreateNewServiceSubmit}
           >
             {dom}

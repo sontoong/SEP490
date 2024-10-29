@@ -37,8 +37,10 @@ export function ViewDetailButton({ OrderId }: { OrderId: string }) {
         open={isModalVisible}
         footer={[
           <PrimaryButton
+            key="close"
             text="Đóng"
             onClick={() => setIsModalVisible(false)}
+            size="middle"
           />,
         ]}
         closeIcon={null}

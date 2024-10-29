@@ -45,7 +45,7 @@ export default function RequestOrderTab(props: CustomerOrderTabProps) {
       },
     },
     {
-      title: "Leader",
+      title: "Trưởng nhóm",
       dataIndex: "CustomerId",
     },
     {

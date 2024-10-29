@@ -133,7 +133,7 @@ export default function UserManagementPage() {
           value: "2",
         },
         {
-          text: "Leader",
+          text: "Trưởng nhóm",
           value: "3",
         },
         {

@@ -5,7 +5,7 @@ export function roleNameGenerator(roleId?: string) {
     case "2":
       return "Quản lý";
     case "3":
-      return "Leader";
+      return "Trưởng nhóm";
     case "4":
       return "Nhân viên";
     case "5":

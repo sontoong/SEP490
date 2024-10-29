@@ -175,7 +175,7 @@ export default function CreateNewAccountModalButton() {
                 {
                   icon: <SolutionOutlined />,
                   enName: "Team Leader",
-                  vnName: "Leader",
+                  vnName: "Trưởng nhóm",
                   value: "3",
                 },
                 {

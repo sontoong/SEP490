@@ -1,8 +1,10 @@
 import { ApartmentArea } from "../app/models/apartmentArea";
 import { Contract } from "../app/models/contract";
+import { Feedback } from "../app/models/feedback";
 import { Order } from "../app/models/order";
 import { Product } from "../app/models/product";
 import { Request } from "../app/models/request";
+import { Room } from "../app/models/room";
 import { ServicePackage } from "../app/models/service";
 import { Customer, Leader, Worker } from "../app/models/user";
 
@@ -158,43 +160,47 @@ export const workers = users.filter((user) => user.Role === "4") as Worker[];
 export const apartmentAreas: ApartmentArea[] = [
   {
     AreaId: "A001",
-    LeaderId: "L001",
+    LeaderId: "LDR001",
     Name: "Sunrise Apartments",
     Description:
       "A modern apartment complex located near the city center with excellent amenities.",
     Address: "123 Sunset Blvd, New York, NY",
     ManagementCompany: "Urban Living Co.",
     AvatarUrl: "https://example.com/avatars/sunrise.jpg",
+    Status: true,
   },
   {
     AreaId: "A002",
-    LeaderId: "L002",
+    LeaderId: "LDR002",
     Name: "Greenwood Estates",
     Description:
       "A serene residential area surrounded by greenery, perfect for families.",
     Address: "456 Oakwood Drive, Los Angeles, CA",
     ManagementCompany: "Green Management Ltd.",
     AvatarUrl: "https://example.com/avatars/greenwood.jpg",
+    Status: true,
   },
   {
     AreaId: "A003",
-    LeaderId: "L003",
+    LeaderId: "LDR003",
     Name: "Oceanview Towers",
     Description:
       "Luxury apartments offering stunning views of the ocean, with premium facilities.",
     Address: "789 Seaside Ave, Miami, FL",
     ManagementCompany: "Seaside Properties LLC",
     AvatarUrl: "https://example.com/avatars/oceanview.jpg",
+    Status: true,
   },
   {
     AreaId: "A004",
-    LeaderId: "L004",
+    LeaderId: "LDR004",
     Name: "Downtown Heights",
     Description:
       "High-rise apartments located in the heart of the city, close to major attractions.",
     Address: "101 Main Street, Chicago, IL",
     ManagementCompany: "Skyline Realty Group",
     AvatarUrl: "https://example.com/avatars/downtown.jpg",
+    Status: false,
   },
 ];
 
@@ -998,7 +1004,7 @@ export const requests: Request[] = [
   {
     RequestId: "7460c544-7fa5-47bb-93ff-4d3e9e65c7df",
     LeaderId: "33a5c7e6-dc40-40a8-b54b-9cd16ba9e7c0",
-    CustomerId: "b00dab1e-e437-4fba-982c-89847dde7195",
+    CustomerId: "CST001",
     Start: "2024-09-10T14:55:24",
     End: "2024-09-22T00:25:08",
     CustomerProblem: "Company capital discussion case team lay music.",
@@ -1353,5 +1359,132 @@ export const orders: Order[] = [
         ExpireDate: "2025-01-29",
       },
     ],
+  },
+];
+
+export const feedbacks: Feedback[] = [
+  {
+    FeedbackId: "FB1",
+    Content:
+      "This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1This is feedback 1",
+    Rate: 4,
+    Status: true,
+    RequestId: "7460c544-7fa5-47bb-93ff-4d3e9e65c7df",
+  },
+  {
+    FeedbackId: "FB2",
+    Content: "This is feedback 2",
+    Rate: 3,
+    Status: false,
+    RequestId: "7460c544-7fa5-47bb-93ff-4d3e9e65c7df",
+  },
+  {
+    FeedbackId: "FB3",
+    Content: "This is feedback 3",
+    Rate: 5,
+    Status: true,
+    RequestId: "7460c544-7fa5-47bb-93ff-4d3e9e65c7df",
+  },
+  {
+    FeedbackId: "FB4",
+    Content: "This is feedback 4",
+    Rate: 2,
+    Status: false,
+    RequestId: "7460c544-7fa5-47bb-93ff-4d3e9e65c7df",
+  },
+  {
+    FeedbackId: "FB5",
+    Content: "This is feedback 5",
+    Rate: 4,
+    Status: true,
+    RequestId: "7460c544-7fa5-47bb-93ff-4d3e9e65c7df",
+  },
+  {
+    FeedbackId: "FB6",
+    Content: "This is feedback 6",
+    Rate: 3,
+    Status: false,
+    RequestId: "7460c544-7fa5-47bb-93ff-4d3e9e65c7df",
+  },
+  {
+    FeedbackId: "FB7",
+    Content: "This is feedback 7",
+    Rate: 5,
+    Status: true,
+    RequestId: "7460c544-7fa5-47bb-93ff-4d3e9e65c7df",
+  },
+  {
+    FeedbackId: "FB8",
+    Content: "This is feedback 8",
+    Rate: 2,
+    Status: false,
+    RequestId: "7460c544-7fa5-47bb-93ff-4d3e9e65c7df",
+  },
+  {
+    FeedbackId: "FB9",
+    Content: "This is feedback 9",
+    Rate: 4,
+    Status: true,
+    RequestId: "7460c544-7fa5-47bb-93ff-4d3e9e65c7df",
+  },
+  {
+    FeedbackId: "FB10",
+    Content: "This is feedback 10",
+    Rate: 3,
+    Status: false,
+    RequestId: "7460c544-7fa5-47bb-93ff-4d3e9e65c7df",
+  },
+];
+
+export const rooms: Room[] = [
+  {
+    RoomId: "R001",
+    AreaId: "1",
+    CustomerId: "C1001",
+  },
+  {
+    RoomId: "R002",
+    AreaId: "2",
+    CustomerId: "C1002",
+  },
+  {
+    RoomId: "R003",
+    AreaId: "3",
+    CustomerId: "C1003",
+  },
+  {
+    RoomId: "R004",
+    AreaId: "4",
+    CustomerId: "C1004",
+  },
+  {
+    RoomId: "R005",
+    AreaId: "5",
+    CustomerId: "C1005",
+  },
+  {
+    RoomId: "R006",
+    AreaId: "6",
+    CustomerId: "C1006",
+  },
+  {
+    RoomId: "R007",
+    AreaId: "7",
+    CustomerId: "C1007",
+  },
+  {
+    RoomId: "R008",
+    AreaId: "8",
+    CustomerId: "C1008",
+  },
+  {
+    RoomId: "R009",
+    AreaId: "9",
+    CustomerId: "C1009",
+  },
+  {
+    RoomId: "R010",
+    AreaId: "10",
+    CustomerId: "C1010",
   },
 ];

@@ -81,7 +81,7 @@ const ProductManagementDropdown = ({ record }: { record: Product }) => {
       <UpdateProductModal
         open={isChangeLeaderModalOpen}
         setIsModalOpen={setIsChangeLeaderModalOpen}
-        record={record}
+        product={record}
       />
       {contextHolder}
     </>

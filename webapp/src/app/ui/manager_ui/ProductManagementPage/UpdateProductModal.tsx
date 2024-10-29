@@ -13,7 +13,7 @@ import { TextEditor } from "../../../components/rte";
 export default function UpdateProductModal({
   open = false,
   setIsModalOpen,
-  record,
+  product,
 }: UpdateProductModalProps) {
   const [updateProductForm] = Form.useForm();
   const [images, setImages] = useState<UploadImage[]>([]);
@@ -30,23 +30,23 @@ export default function UpdateProductModal({
 
   useEffect(() => {
     updateProductForm.setFieldsValue({
-      Name: record.Name,
-      Description: record.Description,
+      Name: product.Name,
+      Description: product.Description,
       ProductPrices: {
-        PriceByDate: record.ProductPrices.PriceByDate,
+        PriceByDate: product.ProductPrices.PriceByDate,
       },
-      In_Of_stock: record.In_Of_stock,
-      WarrantyMonths: record.WarrantyMonths,
+      In_Of_stock: product.In_Of_stock,
+      WarrantyMonths: product.WarrantyMonths,
     });
-    if (record.ImageUrl) {
+    if (product.ImageUrl) {
       setImages([
         {
           name: "",
-          url: ensureBase64Avatar(record.ImageUrl),
+          url: ensureBase64Avatar(product.ImageUrl),
         },
       ]);
     }
-  }, [record, record.ImageUrl, updateProductForm, open]);
+  }, [product, product.ImageUrl, updateProductForm, open]);
 
   const handleOk = () => {
     updateProductForm.submit();
@@ -161,5 +161,5 @@ export default function UpdateProductModal({
 type UpdateProductModalProps = {
   open?: boolean;
   setIsModalOpen?: any;
-  record: Product;
+  product: Product;
 };

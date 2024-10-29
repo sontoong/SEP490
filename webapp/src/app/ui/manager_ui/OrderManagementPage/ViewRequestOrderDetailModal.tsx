@@ -40,8 +40,10 @@ export function ViewRequestOrderDetailModal({
         open={isModalVisible}
         footer={[
           <PrimaryButton
+            key="close"
             text="Đóng"
             onClick={() => setIsModalVisible(false)}
+            size="middle"
           />,
         ]}
         closeIcon={null}

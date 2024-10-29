@@ -6,4 +6,5 @@ export type ApartmentArea = {
   Address: string;
   ManagementCompany: string;
   AvatarUrl: string;
+  Status: boolean;
 };

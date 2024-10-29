@@ -28,14 +28,13 @@ export default function RequestDetailsPage() {
     (value) => value.AccountId === request?.CustomerId,
   );
 
-  const totalPrice = request?.RequestDetails.map((product) => {
-    if (product.isCustomerPaying) {
-      return 100 * product.Quantity;
-    } else {
-      return 0;
-    }
-  }).reduce((a, b) => a + b, 0);
-  console.log(totalPrice);
+  // const totalPrice = request?.RequestDetails.map((product) => {
+  //   if (product.isCustomerPaying) {
+  //     return 100 * product.Quantity;
+  //   } else {
+  //     return 0;
+  //   }
+  // }).reduce((a, b) => a + b, 0);
 
   return (
     <Space direction="vertical" size={20} className="w-full">
@@ -131,9 +130,7 @@ export default function RequestDetailsPage() {
       </Space>
       <Space className="flex justify-between text-sm">
         <div className="font-bold">Tổng giá: </div>
-        <div className="font-bold">
-          {formatCurrency(request?.TotalPrice)}
-        </div>
+        <div className="font-bold">{formatCurrency(request?.TotalPrice)}</div>
       </Space>
     </Space>
   );

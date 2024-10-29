@@ -11,12 +11,17 @@ export default function MyContent({ children }: { children: React.ReactNode }) {
   return (
     <Content style={{ margin: "24px 20px 20px", overflow: "initial" }}>
       {paths && paths.length > 1 && (
-        <Breadcrumb
-          items={paths.map((path) => ({ title: path.title, path: path.path }))}
-        />
+        <div className="pb-3">
+          <Breadcrumb
+            items={paths.map((path) => ({
+              title: path.title,
+              path: path.path,
+            }))}
+          />
+        </div>
       )}
       {currentPath.title && (
-        <div className="pb-5 text-5xl font-semibold text-primary">
+        <div className="pb-10 text-5xl font-semibold text-primary">
           {currentPath.title}
         </div>
       )}

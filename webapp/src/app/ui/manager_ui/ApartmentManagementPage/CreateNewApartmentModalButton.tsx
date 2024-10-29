@@ -32,7 +32,7 @@ export default function CreateNewApartmentModalButton() {
     Address: "",
     ManagementCompany: "",
     Description: "",
-    LeaderId: "",
+    LeaderId: null,
   };
 
   const showModal = () => {
@@ -140,7 +140,7 @@ export default function CreateNewApartmentModalButton() {
           <Space direction="vertical" className="w-full">
             <Form.Item
               name="LeaderId"
-              label={<div className="text-sm text-secondary">Leader</div>}
+              label={<div className="text-sm text-secondary">Trưởng nhóm</div>}
               rules={[
                 {
                   required: true,

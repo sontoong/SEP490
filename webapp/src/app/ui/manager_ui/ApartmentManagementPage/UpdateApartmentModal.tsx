@@ -31,7 +31,7 @@ export default function UpdateApartmentModal({
     Address: "",
     ManagementCompany: "",
     Description: "",
-    LeaderId: "",
+    LeaderId: null,
   };
 
   useEffect(() => {
@@ -157,7 +157,7 @@ export default function UpdateApartmentModal({
           <Space direction="vertical" className="w-full">
             <Form.Item
               name="LeaderId"
-              label={<div className="text-sm text-secondary">Leader</div>}
+              label={<div className="text-sm text-secondary">Trưởng nhóm</div>}
               rules={[
                 {
                   required: true,

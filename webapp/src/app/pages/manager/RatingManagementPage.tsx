@@ -35,7 +35,7 @@ export default function RatingManagementPage() {
         <div className="flex items-center whitespace-nowrap text-sm">
           <span>Bạn có muốn đổi trạng thái thành</span>
           <Tag color="volcano" className="mx-1">
-            Vô hiệu hóa
+            Chưa duyệt
           </Tag>
           <span>?</span>
         </div>
@@ -59,7 +59,7 @@ export default function RatingManagementPage() {
         <div className="flex items-center whitespace-nowrap text-sm">
           <span>Bạn có muốn đổi trạng thái thành</span>
           <Tag color="green" className="mx-1">
-            Đang hoạt động
+            Đã duyệt
           </Tag>
           <span>?</span>
         </div>
@@ -108,7 +108,7 @@ export default function RatingManagementPage() {
             onClick={() =>
               Status ? handleConfirmLock() : handleConfirmUnlock()
             }
-            className="cursor-pointer"
+            className="w-fit cursor-pointer"
           >
             {feedbackStatusGenerator(Status)}
           </div>

@@ -11,6 +11,7 @@ import {
   WechatOutlined,
   LikeOutlined,
   HomeOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { ConfigProvider, Layout, Menu, MenuProps } from "antd";
 import React, { useEffect, useState } from "react";
@@ -105,6 +106,12 @@ export default function MySider() {
             "/apartments",
             () => navigate("/apartments"),
             <HomeOutlined />,
+          ),
+          getItem(
+            "Chờ duyệt",
+            "/customer-verify",
+            () => navigate("/customer-verify"),
+            <UserOutlined />,
           ),
         ];
       default:

@@ -33,6 +33,7 @@ import ChatPage from "../pages/manager/ChatPage";
 import RatingManagementPage from "../pages/manager/RatingManagementPage";
 import ApartmentManagementPage from "../pages/manager/ApartmentManagementPage";
 import RequestDetailsPage from "../pages/manager/RequestDetailsPage";
+import VerifyCustomerPage from "../pages/manager/VerifyCustomerPage";
 
 //other page
 import NotFoundPage from "../pages/404Page";
@@ -207,6 +208,18 @@ export const router = createBrowserRouter([
             <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
               <ManagerLayout>
                 <ApartmentManagementPage />
+              </ManagerLayout>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "customer-verify",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <VerifyCustomerPage />
               </ManagerLayout>
             </PrivateRoute>
           </Suspense>

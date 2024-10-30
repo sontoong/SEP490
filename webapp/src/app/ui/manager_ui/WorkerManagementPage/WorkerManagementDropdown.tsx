@@ -66,7 +66,7 @@ const WorkerManagementDropdown = ({ record }: { record: Worker }) => {
                   <Space direction="horizontal" size={3}>
                     <PhoneFilled />
                     <strong>SĐT:</strong>
-                    <span>{record.Fullname}</span>
+                    <span>{record.PhoneNumber}</span>
                   </Space>
                 </div>
                 <div>

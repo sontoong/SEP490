@@ -4,11 +4,12 @@ import { useTitle } from "../../hooks/useTitle";
 import { feedbacks } from "../../../constants/testData";
 import { Table } from "../../components/table";
 import { Modal } from "../../components/modals";
-import { WarningOutlined } from "@ant-design/icons";
+import { StarOutlined, UserOutlined, WarningOutlined } from "@ant-design/icons";
 import { Avatar } from "../../components/avatar";
 import { Feedback } from "../../models/feedback";
 import { feedbackStatusGenerator } from "../../utils/generators/feedbackStatus";
 import RatingManagementDropdown from "../../ui/manager_ui/RatingManagementPage/RatingManagementDropdown";
+import { Card } from "../../components/card";
 
 const { Paragraph } = Typography;
 
@@ -136,6 +137,24 @@ export default function RatingManagementPage() {
   return (
     <>
       <Space direction="vertical" size={20} className="w-full">
+        <Space>
+          <Card style={{ width: 300 }} title="Số lượng người đánh giá">
+            <Space className="text-2xl">
+              <span>50</span>
+              <span>
+                <UserOutlined />
+              </span>
+            </Space>
+          </Card>
+          <Card style={{ width: 300 }} title="Trung bình số sao">
+            <Space className="text-2xl">
+              <span>3,7</span>
+              <span>
+                <StarOutlined />
+              </span>
+            </Space>
+          </Card>
+        </Space>
         <Table
           columns={feedbackListColumns}
           dataSource={feedbacks}

@@ -2,7 +2,15 @@ import { Card, CardProps, Typography } from "antd";
 
 const { Title, Paragraph } = Typography;
 
-const CustomCard = ({ title, description, ...rest }: CustomCardProps) => {
+const CustomCard = (props: CardProps) => {
+  return <Card {...props} />;
+};
+
+const CustomCardText = ({
+  title,
+  description,
+  ...rest
+}: CustomCardTextProps) => {
   return (
     <Card {...rest}>
       <Title level={2} className="mt-0" ellipsis={{ rows: 2 }}>
@@ -15,9 +23,11 @@ const CustomCard = ({ title, description, ...rest }: CustomCardProps) => {
   );
 };
 
+CustomCard.Text = CustomCardText;
+
 export default CustomCard;
 
-type CustomCardProps = CardProps & {
+type CustomCardTextProps = CardProps & {
   title?: string;
   description?: string;
 };

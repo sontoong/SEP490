@@ -28,7 +28,10 @@ jobs:
           docker compose -f docker-compose.yml push
         env:
           DOCKER_REPO: ${{secrets.DOCKER_REPOSITORY}}
-          API_END_POINT: ${{secrets.API_END_POINT}}
+          API_END_POINT_1: ${{secrets.API_END_POINT_1}}
+          API_END_POINT_2: ${{secrets.API_END_POINT_2}}
+          API_END_POINT_3: ${{secrets.API_END_POINT_3}}
+          CHAT_END_POINT: ${{secrets.CHAT_END_POINT}}
 
   deploy:
     name: Deploy to VPS
@@ -39,12 +42,15 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         env:
           DOCKER_REPO: ${{secrets.DOCKER_REPOSITORY}}
-          API_END_POINT: ${{secrets.API_END_POINT}}
+          API_END_POINT_1: ${{secrets.API_END_POINT_1}}
+          API_END_POINT_2: ${{secrets.API_END_POINT_2}}
+          API_END_POINT_3: ${{secrets.API_END_POINT_3}}
+          CHAT_END_POINT: ${{secrets.CHAT_END_POINT}}
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: DOCKER_REPO,API_END_POINT
+          envs: DOCKER_REPO,API_END_POINT_1,API_END_POINT_2,API_END_POINT_3,CHAT_END_POINT
           script_stop: true
           script: |
             set -e

@@ -41,7 +41,8 @@ export function UploadImg(
     setPreviewImage(file.url || (file.preview as string));
     setPreviewOpen(true);
     setPreviewTitle(
-      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1),
+      file.name ||
+        file.url!.substring(file.url!.lastIndexOf("/") + 1).split("?")[0],
     );
   };
 

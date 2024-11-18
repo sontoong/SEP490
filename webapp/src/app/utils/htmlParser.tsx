@@ -6,7 +6,10 @@ import parse, {
 } from "html-react-parser";
 import DOMPurify from "dompurify";
 
-export default function htmlParse(html: string, opts?: HTMLReactParserOptions) {
+export default function htmlParse(
+  html: string = "",
+  opts?: HTMLReactParserOptions,
+) {
   return parse(DOMPurify.sanitize(html), {
     ...{
       replace: (domNode) => replaceNode(domNode, opts),

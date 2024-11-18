@@ -5,25 +5,38 @@ import { PrimaryButton } from "../../components/buttons";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
 import { useAuth } from "../../hooks/useAuth";
-import { LoginParams } from "../../redux/slice/authSlice";
+import { ResetPasswordParams } from "../../redux/slice/authSlice";
 import LoginBackground from "../../../assets/images/login_background.png";
 import { ScreenCard } from "../../components/card";
 import { useTitle } from "../../hooks/useTitle";
+import { useQueryParam } from "../../hooks/useQueryParam";
+import { useEffect } from "react";
 
 export default function LoginPage() {
   useTitle({ tabTitle: "Change Password - EWMH" });
   const navigate = useNavigate();
-  const { state: stateAuth, handleLogin } = useAuth();
-
+  const { state: stateAuth, handleResetPassword } = useAuth();
   const [form] = Form.useForm();
+  const token = useQueryParam("token");
 
-  const initialValues: LoginParams = {
-    email: "",
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate, token]);
+
+  const initialValues: ResetPasswordParams = {
+    token: "",
     password: "",
   };
 
-  const handleSubmit = async (values: LoginParams) => {
-    handleLogin(values, navigate);
+  const handleSubmit = async (values: ResetPasswordParams) => {
+    if (token) {
+      handleResetPassword({
+        values: { password: values.password, token: token },
+        callBackFn: () => navigate("/login"),
+      });
+    }
   };
 
   return (
@@ -39,11 +52,11 @@ export default function LoginPage() {
               <Form
                 form={form}
                 initialValues={initialValues}
-                name="LoginPage"
+                name="ChangePasswordForm"
                 onFinish={handleSubmit}
               >
                 <Form.Item
-                  name="newPassword"
+                  name="password"
                   label={
                     <Space>
                       <LockOutlined />
@@ -55,28 +68,42 @@ export default function LoginPage() {
                       type: "string",
                       required: true,
                       whitespace: true,
+                      message: "Vui lòng nhập mật khẩu",
                     },
                   ]}
                 >
-                  <Input.Password placeholder="Nhập mật khẩu" />
+                  <Input.Password placeholder="Nhập mật khẩu mới" />
                 </Form.Item>
                 <Form.Item
-                  name="password"
+                  name="confirm"
                   label={
                     <Space>
                       <LockOutlined />
-                      <span>Xác nhận mật khẩu</span>
+                      <span>Nhập lại mật khẩu</span>
                     </Space>
                   }
+                  dependencies={["password"]}
+                  hasFeedback
                   rules={[
                     {
                       type: "string",
                       required: true,
                       whitespace: true,
+                      message: "Vui lòng nhập lại mật khẩu",
                     },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue("password") === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(
+                          new Error("Mật khẩu bạn nhập không khớp"),
+                        );
+                      },
+                    }),
                   ]}
                 >
-                  <Input.Password placeholder="Nhập lại mật khẩu" />
+                  <Input.Password placeholder="Nhập lại mật khẩu mới" />
                 </Form.Item>
               </Form>
               <Link to="/login">

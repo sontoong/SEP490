@@ -11,6 +11,7 @@ import { User } from "../../../models/user";
 import { Avatar } from "../../../components/avatar";
 import { roleNameGenerator } from "../../../utils/generators/roleName";
 import { Dropdown } from "../../../components/dropdown";
+import { formatDateToLocal } from "../../../utils/helpers";
 
 const UserManagementDropdown = ({ record }: { record: User }) => {
   const [modal, contextHolder] = Modal.useModal();
@@ -30,7 +31,7 @@ const UserManagementDropdown = ({ record }: { record: User }) => {
       width: "fit-content",
       title: (
         <div className="text-sm uppercase text-secondary">
-          Thông tin của {record.Fullname}
+          Thông tin của {record.fullName}
         </div>
       ),
       content: (
@@ -40,12 +41,12 @@ const UserManagementDropdown = ({ record }: { record: User }) => {
           className="w-full pb-5 pr-10 text-sm"
         >
           <Space direction="vertical" size={10}>
-            <Avatar src={record.AvatarUrl} size={70} />
+            <Avatar src={record.avatarUrl} size={150} />
             <div>
-              <strong>Họ và Tên:</strong> {record.Fullname}
+              <strong>Họ và Tên:</strong> {record.fullName}
             </div>
             <div>
-              <strong>Vai trò:</strong> {roleNameGenerator(record.Role)}
+              <strong>Vai trò:</strong> {roleNameGenerator(record.role)}
             </div>
           </Space>
           <Divider type="vertical" className="h-[150px] bg-black" />
@@ -56,21 +57,21 @@ const UserManagementDropdown = ({ record }: { record: User }) => {
                 <Space direction="horizontal" size={3}>
                   <PhoneFilled />
                   <strong>SĐT:</strong>
-                  <span>{record.Fullname}</span>
+                  <span>{record.phoneNumber}</span>
                 </Space>
               </div>
               <div>
                 <Space direction="horizontal" size={3}>
                   <CalendarFilled />
                   <strong>Ngày sinh:</strong>
-                  <span>{record.DateOfBirth}</span>
+                  <span>{formatDateToLocal(record.dateOfBirth)}</span>
                 </Space>
               </div>
               <div>
                 <Space direction="horizontal" size={3}>
                   <MailFilled />
-                  <strong>Email:</strong>
-                  <span>{record.Email}</span>
+                  <strong>email:</strong>
+                  <span>{record.email}</span>
                 </Space>
               </div>
             </Space>

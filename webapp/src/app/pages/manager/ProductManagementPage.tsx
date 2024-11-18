@@ -9,9 +9,11 @@ import ProductManagementDropdown from "../../ui/manager_ui/ProductManagementPage
 import CreateNewProductModalButton from "../../ui/manager_ui/ProductManagementPage/CreateNewProductModalButton";
 import { Input } from "../../components/inputs";
 import { Table } from "../../components/table";
-import { products } from "../../../constants/testData";
 import { Product } from "../../models/product";
 import { formatCurrency } from "../../utils/helpers";
+import { useCallback, useEffect, useState } from "react";
+import { usePagination } from "../../hooks/usePagination";
+import { useProduct } from "../../hooks/useProduct";
 
 export default function ProductManagementPage() {
   useTitle({
@@ -20,16 +22,45 @@ export default function ProductManagementPage() {
   });
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();
+  const { state, handleGetAllProductPaginated, handleDisableProduct } =
+    useProduct();
+  const { currentPage, currentPageSize, setPageSize, goToPage } =
+    usePagination();
+  const [searchByName, setSearchByName] = useState<string>();
+  const [tableParams, setTableParams] = useState<TableParams>();
+
+  const fetchProducts = useCallback(() => {
+    handleGetAllProductPaginated({
+      PageIndex: currentPage,
+      Pagesize: currentPageSize,
+      SearchByName: searchByName,
+      IncreasingPrice: tableParams?.sorter?.priceByDate,
+      Status: tableParams?.filters?.status?.[0],
+    });
+  }, [
+    currentPage,
+    currentPageSize,
+    handleGetAllProductPaginated,
+    searchByName,
+    tableParams?.filters?.status,
+    tableParams?.sorter?.priceByDate,
+  ]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   const initialValuesSearch = {
     searchString: "",
   };
 
-  const handleSearchSubmit = (values: any) => {
-    console.log(values);
+  const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
+    setPageSize(8);
+    goToPage(1);
+    setSearchByName(searchString);
   };
 
-  function handleConfirmLock() {
+  function handleConfirmLock(productId: string) {
     modal.confirm({
       icon: <WarningOutlined />,
       width: "fit-content",
@@ -43,16 +74,15 @@ export default function ProductManagementPage() {
         </div>
       ),
       onOk: async () => {
-        const sleep = (ms: number) => {
-          return new Promise((resolve) => setTimeout(resolve, ms));
-        };
-
-        await sleep(1000); // Example delay
+        await handleDisableProduct({
+          values: { ProductId: productId, Status: true },
+        });
+        fetchProducts();
       },
     });
   }
 
-  function handleConfirmUnlock() {
+  function handleConfirmUnlock(productId: string) {
     modal.confirm({
       icon: <WarningOutlined />,
       width: "fit-content",
@@ -65,62 +95,68 @@ export default function ProductManagementPage() {
           <span>?</span>
         </div>
       ),
-      onOk() {},
+      onOk: async () => {
+        await handleDisableProduct({
+          values: { ProductId: productId, Status: false },
+        });
+        fetchProducts();
+      },
     });
   }
 
   const productListColumns: TableColumnsType<Product> = [
     {
       title: "Tên sản phẩm",
-      dataIndex: "Name",
-      render: (_, { ImageUrl, Name }) => (
+      dataIndex: "name",
+      render: (_, { name, imageUrl }) => (
         <Space direction="horizontal" size={15}>
-          <Avatar src={ImageUrl} size={60} shape="square" />
+          <Avatar src={imageUrl} size={60} shape="square" />
           <Space direction="vertical">
-            <div className="text-base font-bold">{Name}</div>
+            <div className="text-base font-bold">{name}</div>
           </Space>
         </Space>
       ),
     },
     {
       title: "Giá hiện tại",
-      dataIndex: ["ProductPrices", "PriceByDate"],
+      dataIndex: "priceByDate",
       render: (value) => {
         return formatCurrency(value);
       },
+      sorter: true,
+      sortDirections: ["descend"],
     },
     {
       title: "Số lượng",
-      dataIndex: "In_Of_stock",
-      sorter: (a, b) => a.In_Of_stock - b.In_Of_stock,
+      dataIndex: "inOfStock",
     },
     {
       title: "Trạng thái",
-      dataIndex: "Status",
-      render: (_, { Status }) => {
-        const isDisabled = !Status;
+      dataIndex: "status",
+      render: (_, { status, productId }) => {
         return (
           <div
             onClick={() =>
-              isDisabled ? handleConfirmUnlock() : handleConfirmLock()
+              status
+                ? handleConfirmUnlock(productId)
+                : handleConfirmLock(productId)
             }
-            className="cursor-pointer"
+            className="w-fit cursor-pointer"
           >
-            {statusGenerator(isDisabled)}
+            {statusGenerator(status)}
           </div>
         );
       },
       filters: [
         {
           text: "Đang hoạt động",
-          value: "true",
+          value: false,
         },
         {
           text: "Vô hiệu hóa",
-          value: "false",
+          value: true,
         },
       ],
-      onFilter: (value, record) => record.Status.toString() === value,
     },
     {
       title: "",
@@ -149,26 +185,58 @@ export default function ProductManagementPage() {
               rules={[
                 {
                   type: "string",
-                  required: true,
                   whitespace: true,
                   message: "",
                 },
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm"
+                placeholder="Tìm kiếm theo tên sản phẩm"
                 onSearch={() => searchForm.submit()}
+                onClear={() => {
+                  searchForm.setFieldValue("searchString", "");
+                  searchForm.submit();
+                }}
               />
             </Form.Item>
           </Form>
         </div>
         <Table
           columns={productListColumns}
-          dataSource={products}
-          rowKey={(record) => record.ProductId}
+          dataSource={state.currentProductList.products}
+          rowKey={(record) => record.productId}
+          loading={state.isFetching}
+          pagination={{
+            total: state.currentProductList.total,
+            pageSize: currentPageSize,
+            current: currentPage,
+            onChange: (pageIndex, pageSize) => {
+              goToPage(pageIndex);
+              setPageSize(pageSize);
+            },
+          }}
+          onChange={(_, filters, sorter) => {
+            setTableParams({
+              filters: filters,
+              sorter: {
+                priceByDate: Array.isArray(sorter)
+                  ? undefined
+                  : !(sorter.order === "descend"),
+              },
+            });
+          }}
         />
       </Space>
       {contextHolder}
     </>
   );
 }
+
+type TableParams = {
+  filters?: {
+    status?: boolean[];
+  };
+  sorter?: {
+    priceByDate?: boolean | undefined;
+  };
+};

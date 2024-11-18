@@ -3,36 +3,69 @@ import { Modal } from "../../../components/modals";
 import { Form } from "../../../components/form";
 import { InputSelect } from "../../../components/inputs";
 import { Leader } from "../../../models/user";
-import { leaders } from "../../../../constants/testData";
 import { EditOutlined, PhoneFilled } from "@ant-design/icons";
 import { Avatar } from "../../../components/avatar";
+import { useAccount } from "../../../hooks/useAccount";
+import { useEffect } from "react";
+import { AssignWorkerToLeaderParams } from "../../../redux/slice/accountSlice";
+import { useSpecialUI } from "../../../hooks/useSpecialUI";
+import { Skeleton } from "../../../components/skeletons";
 
 export default function ChangeLeaderModal({
   open = false,
   setIsModalOpen,
+  workerId,
+  leaderId,
+  callbackFn,
 }: ChangeLeaderModalProps) {
   const [changeLeaderForm] = Form.useForm();
+  const {
+    state: accountState,
+    handleAssignWorkerToLeader,
+    handleGetAllLeaderPaginatedExcluded,
+  } = useAccount();
+  const { state: specialUIState } = useSpecialUI();
 
-  const leaderId = Form.useWatch("leader", changeLeaderForm);
+  useEffect(() => {
+    if (open) {
+      handleGetAllLeaderPaginatedExcluded({ PageIndex: 1, Pagesize: 1000 });
+    }
+  }, [handleGetAllLeaderPaginatedExcluded, open, leaderId]);
 
-  const currentLeader = leaders.find(
-    (leader: Leader) => leader.LeaderId === leaderId,
-  );
+  const initialValuesChangeLeader: AssignWorkerToLeaderParams = {
+    workerId: "",
+    leaderId: "",
+  };
+
+  useEffect(() => {
+    if (open) {
+      changeLeaderForm.setFieldsValue({
+        workerId: workerId,
+        leaderId: leaderId,
+      });
+    }
+  }, [changeLeaderForm, leaderId, workerId, open]);
+
+  const handleChangeLeaderSubmit = (values: AssignWorkerToLeaderParams) => {
+    handleAssignWorkerToLeader({
+      values: {
+        leaderId: values.leaderId,
+        workerId: workerId,
+      },
+      callBackFn: () => {
+        setIsModalOpen(false);
+        if (callbackFn) {
+          callbackFn();
+        }
+      },
+    });
+  };
 
   const handleOk = () => {
     changeLeaderForm.submit();
   };
 
   const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const initialValuesChangeLeader = {
-    leader: "",
-  };
-
-  const handleChangeLeaderSubmit = (values: any) => {
-    console.log(values);
     setIsModalOpen(false);
   };
 
@@ -48,6 +81,8 @@ export default function ChangeLeaderModal({
       afterClose={changeLeaderForm.resetFields}
       onOk={handleOk}
       onCancel={handleCancel}
+      okButtonProps={{ loading: accountState.isSending }}
+      cancelButtonProps={{ disabled: accountState.isSending }}
       closeIcon={null}
       maskClosable={false}
       modalRender={(dom) => (
@@ -61,49 +96,78 @@ export default function ChangeLeaderModal({
         </Form>
       )}
     >
-      <Space direction="vertical" className="w-full">
-        <Form.Item
-          name="leader"
-          label={<div className="text-sm text-secondary">Leader</div>}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <InputSelect
-            className="w-full"
-            placeholder="Chọn leader"
-            options={leaders.map((leader: Leader) => ({
-              label: leader.Fullname,
-              value: leader.LeaderId,
-            }))}
-          />
-        </Form.Item>
-        {leaderId && (
-          <div className="rounded-lg border-2 border-solid border-secondary p-2">
-            <Space direction="vertical" className="text-sm">
-              <Avatar size={80} src={currentLeader?.AvatarUrl} />
-              <div className="text-lg font-bold">{currentLeader?.Fullname}</div>
-              <Space>
-                <div>
-                  <span className="font-bold">Email: </span>
-                  <span>{currentLeader?.Email}</span>
-                </div>
-                <div>
-                  <Space>
-                    <PhoneFilled />
-                    <span className="font-bold">SĐT: </span>
-                    <span className="whitespace-nowrap">
-                      {currentLeader?.PhoneNumber}
-                    </span>
-                  </Space>
-                </div>
+      <Form.Item
+        name="leaderId"
+        label={<div className="text-sm text-secondary">Leader</div>}
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+      >
+        <InputSelect
+          className="w-full"
+          placeholder="Chọn leader"
+          options={(accountState.currentLeaderList.users as Leader[]).map(
+            (leader) => ({
+              label: `${leader.fullName} - ${leader.email} ${leader.areaId ? `(${leader.name})` : ""}`,
+              value: leader.accountId,
+            }),
+          )}
+          loading={specialUIState.isLoading}
+          size="large"
+          allowClear
+        />
+      </Form.Item>
+      <Form.Item shouldUpdate={(prev, cur) => prev.leaderId !== cur.leaderId}>
+        {({ getFieldValue }) => {
+          const leaderIdForm = getFieldValue("leaderId");
+          const currentLeader = (
+            accountState.currentLeaderList.users as Leader[]
+          ).find((leader) => leader.accountId === leaderIdForm) as Leader;
+
+          return leaderIdForm ? (
+            <div className="rounded-lg border-2 border-solid border-secondary p-2">
+              <Space direction="vertical" className="text-sm">
+                <Avatar
+                  size={80}
+                  src={currentLeader?.avatarUrl}
+                  loading={specialUIState.isLoading}
+                />
+                {specialUIState.isLoading ? (
+                  <Skeleton
+                    title={{ width: 200 }}
+                    paragraph={{ rows: 1, width: 400 }}
+                  />
+                ) : (
+                  <>
+                    <div className="text-lg font-bold">
+                      {currentLeader?.fullName}
+                    </div>
+                    <Space>
+                      <div>
+                        <span className="font-bold">email: </span>
+                        <span>{currentLeader?.email}</span>
+                      </div>
+                      <div>
+                        <Space>
+                          <PhoneFilled />
+                          <span className="font-bold">SĐT: </span>
+                          <span className="whitespace-nowrap">
+                            {currentLeader?.phoneNumber}
+                          </span>
+                        </Space>
+                      </div>
+                    </Space>
+                  </>
+                )}
               </Space>
-            </Space>
-          </div>
-        )}
-      </Space>
+            </div>
+          ) : (
+            <></>
+          );
+        }}
+      </Form.Item>
     </Modal>
   );
 }
@@ -111,4 +175,7 @@ export default function ChangeLeaderModal({
 type ChangeLeaderModalProps = {
   open?: boolean;
   setIsModalOpen?: any;
+  workerId: string;
+  leaderId?: string;
+  callbackFn?: () => void;
 };

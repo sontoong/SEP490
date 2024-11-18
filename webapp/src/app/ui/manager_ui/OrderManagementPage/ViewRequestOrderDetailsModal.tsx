@@ -1,4 +1,3 @@
-import { customers, orders, products } from "../../../../constants/testData";
 import {
   CheckCircleTwoTone,
   MailFilled,
@@ -8,24 +7,30 @@ import {
 import { Modal } from "../../../components/modals";
 import { Space } from "antd";
 import { Avatar } from "../../../components/avatar";
-import { combineArraysLoose, formatCurrency } from "../../../utils/helpers";
+import { formatCurrency, formatDateToLocal } from "../../../utils/helpers";
 import { Grid } from "../../../components/grids";
 import { List } from "../../../components/list";
 import { PrimaryButton } from "../../../components/buttons";
+import { RequestOrder } from "../../../models/order";
+import { useRequest } from "../../../hooks/useRequest";
+import { useEffect } from "react";
 
-export function ViewRequestOrderDetailModal({
-  OrderId,
+export function ViewRequestOrderDetailsModal({
+  requestOrder,
   isModalVisible,
   setIsModalVisible,
 }: {
-  OrderId: string;
+  requestOrder: RequestOrder;
   isModalVisible: boolean;
   setIsModalVisible: any;
 }) {
-  const record = orders.find((order) => order.OrderId === OrderId);
-  const customer = customers.find(
-    (customer) => customer.CustomerId === record?.CustomerId,
-  );
+  const { state: requestState, handleGetDetailsOfRequest } = useRequest();
+
+  useEffect(() => {
+    if (isModalVisible) {
+      handleGetDetailsOfRequest({ RequestId: requestOrder.order.requestId });
+    }
+  }, [handleGetDetailsOfRequest, isModalVisible, requestOrder.order.requestId]);
 
   return (
     <>
@@ -46,81 +51,78 @@ export function ViewRequestOrderDetailModal({
             size="middle"
           />,
         ]}
+        loading={requestState.isFetching}
         closeIcon={null}
         width={1000}
-        // confirmLoading={state.isSending}
       >
         <Grid
           className="text-sm"
           items={[
             <Space direction="vertical" size={10} className="w-full">
-              <Avatar src={customer?.AvatarUrl} size={70} />
+              <Avatar
+                src={requestOrder.customer_Leader[0].avatarUrl}
+                size={150}
+              />
               <div>
-                <strong>Họ và Tên:</strong> {customer?.Fullname}
+                <strong>Họ và Tên:</strong>{" "}
+                {requestOrder.customer_Leader[0].fullName}
               </div>
               <div>
                 <Space direction="horizontal" size={3}>
                   <PhoneFilled />
                   <strong>SĐT:</strong>
-                  <span>{customer?.PhoneNumber}</span>
+                  <span>{requestOrder.customer_Leader[0].phoneNumber}</span>
                 </Space>
               </div>
               <div>
                 <Space direction="horizontal" size={3}>
                   <MailFilled />
-                  <strong>Email:</strong>
-                  <span>{customer?.Email}</span>
+                  <strong>email:</strong>
+                  <span>{requestOrder.customer_Leader[0].email}</span>
                 </Space>
               </div>
               <div>
-                <strong>Chung cư:</strong> {customer?.RoomId}
-              </div>
-              <div>
-                <strong>Phòng:</strong> {customer?.RoomId}
-              </div>
-              <div>
-                <strong>Leader:</strong> {customer?.Role}
+                <strong>Leader:</strong>{" "}
+                {requestOrder.customer_Leader[1].fullName}
               </div>
             </Space>,
             <Space direction="vertical" size={15} className="w-full">
               <div>
                 <div className="text-2xl font-bold">Đơn hàng</div>
-                <div className="text-xs text-gray-400">#{OrderId}</div>
+                <div className="text-xs text-gray-400">
+                  #{requestOrder.order.orderCode ?? "N/A"}
+                </div>
               </div>
               <div>
-                <strong>Ngày đặt:</strong> 13/11/2024
+                <strong>Ngày đặt:</strong>{" "}
+                {formatDateToLocal(requestOrder.order.purchaseTime)}
               </div>
               <List
                 fontSize={16}
                 itemLayout="vertical"
-                dataSource={combineArraysLoose(record?.OrderDetails, products, [
-                  "ProductId",
-                ])}
+                dataSource={requestState.currentRequest.productList}
                 footer={
                   <div className="flex justify-between text-base">
                     <div className="font-bold uppercase">Tổng tiền</div>
-                    <div className="font-bold">{formatCurrency(500)}</div>
+                    <div className="font-bold">
+                      {formatCurrency(requestOrder.order.totalPrice)}
+                    </div>
                   </div>
                 }
-                renderItem={(item) => {
+                renderItem={(item, index) => {
                   return (
                     <List.Item
-                      key={item.ProductId}
+                      key={index}
                       extra={
                         <Space size={20}>
                           <div>
                             <div>
                               <span>Giá gốc: </span>
-                              {formatCurrency(item.ProductPrices?.PriceByDate)}
+                              {formatCurrency(item.price)}
                             </div>
                             <div className="font-bold">
                               <span>Tổng: </span>
-                              {item.ProductPrices?.PriceByDate
-                                ? formatCurrency(
-                                    item.ProductPrices?.PriceByDate *
-                                      item.Quantity,
-                                  )
-                                : "N/A"}
+                              {formatCurrency(item.totalPrice)}
                             </div>
                           </div>
                         </Space>
@@ -130,23 +132,23 @@ export function ViewRequestOrderDetailModal({
                         avatar={
                           <Avatar
                             size={50}
-                            src={item.ImageUrl}
+                            src={item.imageUrl}
                             shape="square"
                           />
                         }
                         title={
                           <div className="font-normal">
                             <Space>
-                              <div>{item.Name}</div>
+                              <div>{item.name}</div>
                               <div>
-                                {item.Status ? (
+                                {item.isCustomerPaying ? (
                                   <CheckCircleTwoTone twoToneColor="#52c41a" />
                                 ) : (
                                   <></>
                                 )}
                               </div>
                             </Space>
-                            <div>Số lượng: {item.Quantity}</div>
+                            <div>Số lượng: {item.quantity}</div>
                           </div>
                         }
                       />

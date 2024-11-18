@@ -1,6 +1,6 @@
 import { App, GetProp, UploadFile, UploadProps } from "antd";
 import { v4 as uuidv4 } from "uuid";
-import { UploadImg } from "../inputs/upload-img";
+import { UploadImg } from "./upload-img";
 
 export default function CustomUploadImage(props: UploadImageProps) {
   const { message } = App.useApp();

@@ -1,17 +1,18 @@
-import { EnvironmentFilled, WarningOutlined } from "@ant-design/icons";
+import { EnvironmentFilled } from "@ant-design/icons";
 import { Form } from "../../components/form";
-import { Modal } from "../../components/modals";
 import { useTitle } from "../../hooks/useTitle";
-import { Space, TableColumnsType, Tag, Typography } from "antd";
+import { Space, TableColumnsType, Typography } from "antd";
 import { Avatar } from "../../components/avatar";
 import { Table } from "../../components/table";
-import { apartmentAreas } from "../../../constants/testData";
-import { ApartmentArea } from "../../models/apartmentArea";
+import { Apartment } from "../../models/apartment";
 import { leaderNameGenerator } from "../../utils/generators/name";
-import { statusGenerator } from "../../utils/generators/status";
 import ApartmentManagementDropdown from "../../ui/manager_ui/ApartmentManagementPage/ApartmentManagementDropdown";
 import { Input } from "../../components/inputs";
 import CreateNewApartmentModalButton from "../../ui/manager_ui/ApartmentManagementPage/CreateNewApartmentModalButton";
+import { useApartment } from "../../hooks/useApartment";
+import { usePagination } from "../../hooks/usePagination";
+import { useCallback, useEffect, useState } from "react";
+import htmlParse from "../../utils/htmlParser";
 
 const { Paragraph } = Typography;
 
@@ -20,69 +21,51 @@ export default function ApartmentManagementPage() {
     tabTitle: "Apartments - EWMH",
     paths: [{ title: "Danh sách chung cư", path: "/apartments" }],
   });
-  const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();
+  const { state, handleGetAllApartmentsPaginated } = useApartment();
+  const { currentPage, currentPageSize, setPageSize, goToPage } =
+    usePagination();
+  const [searchByName, setSearchByName] = useState<string>();
+
+  const fetchApartments = useCallback(() => {
+    handleGetAllApartmentsPaginated({
+      PageIndex: currentPage,
+      Pagesize: currentPageSize,
+      SearchByName: searchByName,
+    });
+  }, [
+    currentPage,
+    currentPageSize,
+    handleGetAllApartmentsPaginated,
+    searchByName,
+  ]);
+
+  useEffect(() => {
+    fetchApartments();
+  }, [fetchApartments]);
 
   const initialValuesSearch = {
     searchString: "",
   };
 
-  const handleSearchSubmit = (values: any) => {
-    console.log(values);
+  const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
+    setPageSize(8);
+    goToPage(1);
+    setSearchByName(searchString);
   };
 
-  function handleConfirmLock() {
-    modal.confirm({
-      icon: <WarningOutlined />,
-      width: "fit-content",
-      title: (
-        <div className="flex items-center whitespace-nowrap text-sm">
-          <span>Bạn có muốn đổi trạng thái thành</span>
-          <Tag color="volcano" className="mx-1">
-            Vô hiệu hóa
-          </Tag>
-          <span>?</span>
-        </div>
-      ),
-      onOk: async () => {
-        const sleep = (ms: number) => {
-          return new Promise((resolve) => setTimeout(resolve, ms));
-        };
-
-        await sleep(1000); // Example delay
-      },
-    });
-  }
-
-  function handleConfirmUnlock() {
-    modal.confirm({
-      icon: <WarningOutlined />,
-      width: "fit-content",
-      title: (
-        <div className="flex items-center whitespace-nowrap text-sm">
-          <span>Bạn có muốn đổi trạng thái thành</span>
-          <Tag color="green" className="mx-1">
-            Đang hoạt động
-          </Tag>
-          <span>?</span>
-        </div>
-      ),
-      onOk() {},
-    });
-  }
-
-  const apartmentListColumns: TableColumnsType<ApartmentArea> = [
+  const apartmentListColumns: TableColumnsType<Apartment> = [
     {
       title: "Tên chung cư",
-      render: (_, { Name, AvatarUrl, Address }) => (
+      render: (_, { name, avatarUrl, address }) => (
         <Space direction="horizontal" size={15}>
-          <Avatar src={AvatarUrl} size={60} shape="square" />
+          <Avatar src={avatarUrl} size={60} shape="square" />
           <Space direction="vertical">
-            <div className="text-base font-bold">{Name}</div>
+            <div className="text-base font-bold">{name}</div>
             <Space>
               <EnvironmentFilled />
               <Paragraph ellipsis={{ rows: 1 }} className="!m-0 text-sm">
-                {Address}
+                {address}
               </Paragraph>
             </Space>
           </Space>
@@ -91,51 +74,25 @@ export default function ApartmentManagementPage() {
     },
     {
       title: "Công ty",
-      dataIndex: "ManagementCompany",
+      dataIndex: "managementCompany",
     },
     {
       title: "Miêu tả",
-      dataIndex: "Description",
+      dataIndex: "description",
       render: (value) => (
         <Paragraph
           ellipsis={{ rows: 2 }}
-          className="max-w-[500px] break-words text-sm"
+          className="!m-0 max-w-[500px] break-words text-sm"
         >
-          {value}
+          {htmlParse(value)}
         </Paragraph>
       ),
     },
     {
       title: "Trưởng nhóm",
-      render: (_, { LeaderId }) => {
-        return <div>{leaderNameGenerator(LeaderId)}</div>;
+      render: (_, { account }) => {
+        return <div>{leaderNameGenerator(account.fullName)}</div>;
       },
-    },
-    {
-      title: "Trạng thái",
-      render: (_, { Status }) => {
-        return (
-          <div
-            onClick={() =>
-              Status ? handleConfirmLock() : handleConfirmUnlock()
-            }
-            className="cursor-pointer"
-          >
-            {statusGenerator(!Status)}
-          </div>
-        );
-      },
-      filters: [
-        {
-          text: "Hoạt động",
-          value: "true",
-        },
-        {
-          text: "Vô hiệu hóa",
-          value: "false",
-        },
-      ],
-      onFilter: (value, record) => record.Status.toString() === value,
     },
     {
       title: "",
@@ -164,26 +121,38 @@ export default function ApartmentManagementPage() {
               rules={[
                 {
                   type: "string",
-                  required: true,
                   whitespace: true,
                   message: "",
                 },
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm"
+                placeholder="Tìm kiếm theo tên chung cư"
                 onSearch={() => searchForm.submit()}
+                onClear={() => {
+                  searchForm.setFieldValue("searchString", "");
+                  searchForm.submit();
+                }}
               />
             </Form.Item>
           </Form>
         </div>
         <Table
           columns={apartmentListColumns}
-          dataSource={apartmentAreas}
-          rowKey={(record) => record.AreaId}
+          dataSource={state.currentApartmentList.apartments}
+          rowKey={(record) => record.areaId}
+          loading={state.isFetching}
+          pagination={{
+            total: state.currentApartmentList.total,
+            pageSize: currentPageSize,
+            current: currentPage,
+            onChange: (pageIndex, pageSize) => {
+              goToPage(pageIndex);
+              setPageSize(pageSize);
+            },
+          }}
         />
       </Space>
-      {contextHolder}
     </>
   );
 }

@@ -3,8 +3,17 @@ import { jwtDecode } from "jwt-decode";
 import { useCallback } from "react";
 import { NavigateFunction } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { login, LoginParams, setCurrentUser } from "../redux/slice/authSlice";
-import { setShowOTPModal } from "../redux/slice/specialUISlice";
+import {
+  getAccountInfo,
+  login,
+  LoginParams,
+  logout,
+  resetPassword,
+  ResetPasswordParams,
+  sendPasswordResetLink,
+  SendPasswordResetLinkParams,
+  setCurrentUser,
+} from "../redux/slice/authSlice";
 
 export function useAuth() {
   const { notification } = App.useApp();
@@ -15,22 +24,16 @@ export function useAuth() {
     async (value: LoginParams, navigate: NavigateFunction) => {
       const resultAction = await dispatch(login(value));
       if (login.fulfilled.match(resultAction)) {
-        const { accessToken, refreshToken } = resultAction.payload;
-        if (accessToken && refreshToken) {
-          localStorage.setItem("access_token", accessToken);
-          localStorage.setItem("refresh_token", refreshToken);
-          const decode = jwtDecode(accessToken) as any;
+        const { at, rt } = resultAction.payload;
+        if (at && rt) {
+          localStorage.setItem("access_token", at);
+          localStorage.setItem("refresh_token", rt);
+          const decode = jwtDecode(at) as any;
           dispatch(setCurrentUser(decode));
           navigate("/");
-        } else {
-          dispatch(
-            setShowOTPModal({
-              open: true,
-              extraValues: { email: value.email },
-            }),
-          );
         }
       } else {
+        console.log(resultAction);
         if (resultAction.payload) {
           notification.error({
             message: "Lỗi",
@@ -49,14 +52,133 @@ export function useAuth() {
     [dispatch, notification],
   );
 
+  const handleSendPasswordResetLink = useCallback(
+    async ({
+      values,
+      callBackFn,
+    }: {
+      values: SendPasswordResetLinkParams;
+      callBackFn?: () => void;
+    }) => {
+      const resultAction = await dispatch(sendPasswordResetLink(values));
+      if (sendPasswordResetLink.fulfilled.match(resultAction)) {
+        if (callBackFn) {
+          callBackFn();
+        }
+        notification.success({
+          message: "Success",
+          description: "Gửi yêu cầu thành công",
+          placement: "topRight",
+        });
+      } else {
+        console.log(resultAction);
+        if (resultAction.payload) {
+          notification.error({
+            message: "Lỗi",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Lỗi",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleResetPassword = useCallback(
+    async ({
+      values,
+      callBackFn,
+    }: {
+      values: ResetPasswordParams;
+      callBackFn?: () => void;
+    }) => {
+      const resultAction = await dispatch(resetPassword(values));
+      if (resetPassword.fulfilled.match(resultAction)) {
+        if (callBackFn) {
+          callBackFn();
+        }
+        notification.success({
+          message: "Success",
+          description: "Đổi mật khẩu thành công",
+          placement: "topRight",
+        });
+      } else {
+        console.log(resultAction);
+        if (resultAction.payload) {
+          notification.error({
+            message: "Lỗi",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Lỗi",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleGetAccountInfo = useCallback(async () => {
+    const resultAction = await dispatch(getAccountInfo());
+    if (getAccountInfo.fulfilled.match(resultAction)) {
+      dispatch(setCurrentUser(resultAction.payload));
+    } else {
+      console.log(resultAction);
+      if (resultAction.payload) {
+        notification.error({
+          message: "Lỗi",
+          description: `${resultAction.payload}`,
+          placement: "topRight",
+        });
+      } else {
+        notification.error({
+          message: "Lỗi",
+          description: resultAction.error.message,
+          placement: "topRight",
+        });
+      }
+    }
+  }, [dispatch, notification]);
+
   const handleLogout = useCallback(async () => {
-    localStorage.clear();
-    window.location.href = "/login";
-  }, []);
+    const resultAction = await dispatch(logout());
+    if (logout.fulfilled.match(resultAction)) {
+      localStorage.clear();
+      window.location.href = "/login";
+    } else {
+      if (resultAction.payload) {
+        console.log(resultAction);
+        notification.error({
+          message: "Lỗi",
+          description: `${resultAction.payload}`,
+          placement: "topRight",
+        });
+      } else {
+        notification.error({
+          message: "Lỗi",
+          description: resultAction.error.message,
+          placement: "topRight",
+        });
+      }
+    }
+  }, [dispatch, notification]);
 
   return {
     state,
     handleLogin,
     handleLogout,
+    handleGetAccountInfo,
+    handleSendPasswordResetLink,
+    handleResetPassword,
   };
 }

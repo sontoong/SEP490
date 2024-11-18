@@ -6,9 +6,12 @@ import { EditOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Product } from "../../../models/product";
 import { UploadImage } from "../../../components/image-upload/image-upload";
-import { ensureBase64Avatar } from "../../../utils/helpers";
+import { validateImageString, getFiles } from "../../../utils/helpers";
 import { ImageUpload } from "../../../components/image-upload";
 import { TextEditor } from "../../../components/rte";
+import { UpdateProductParams } from "../../../redux/slice/productSlice";
+import { useProduct } from "../../../hooks/useProduct";
+import { useSpecialUI } from "../../../hooks/useSpecialUI";
 
 export default function UpdateProductModal({
   open = false,
@@ -17,36 +20,47 @@ export default function UpdateProductModal({
 }: UpdateProductModalProps) {
   const [updateProductForm] = Form.useForm();
   const [images, setImages] = useState<UploadImage[]>([]);
+  const {
+    state,
+    handleGetProduct,
+    handleUpdateProduct,
+    handleGetAllProductPaginated,
+  } = useProduct();
+  const { state: specialUIState } = useSpecialUI();
 
-  const initialValuesUpdateProduct = {
+  const initialValuesUpdateProduct: UpdateProductParams = {
+    ProductId: "",
     Name: "",
     Description: "",
-    ProductPrices: {
-      PriceByDate: 0,
-    },
-    In_Of_stock: 0,
-    WarrantyMonths: 0,
+    Price: 0,
+    InOfStock: 0,
+    WarantyMonths: 0,
+    Image: { name: "" },
   };
 
   useEffect(() => {
+    if (open) {
+      handleGetProduct({ ProductId: product.productId });
+    }
+  }, [handleGetProduct, product.productId, open]);
+
+  useEffect(() => {
     updateProductForm.setFieldsValue({
-      Name: product.Name,
-      Description: product.Description,
-      ProductPrices: {
-        PriceByDate: product.ProductPrices.PriceByDate,
-      },
-      In_Of_stock: product.In_Of_stock,
-      WarrantyMonths: product.WarrantyMonths,
+      Name: state.currentProduct.name,
+      Description: state.currentProduct.description,
+      Price: state.currentProduct.priceByDate,
+      InOfStock: state.currentProduct.inOfStock,
+      WarantyMonths: state.currentProduct.warantyMonths,
     });
-    if (product.ImageUrl) {
+    if (state.currentProduct.imageUrl) {
       setImages([
         {
           name: "",
-          url: ensureBase64Avatar(product.ImageUrl),
+          url: validateImageString(state.currentProduct.imageUrl),
         },
       ]);
     }
-  }, [product, product.ImageUrl, updateProductForm, open]);
+  }, [state.currentProduct, updateProductForm]);
 
   const handleOk = () => {
     updateProductForm.submit();
@@ -56,9 +70,19 @@ export default function UpdateProductModal({
     setIsModalOpen(false);
   };
 
-  const handleUpdateProductSubmit = (values: any) => {
-    console.log(values);
-    setIsModalOpen(false);
+  const handleUpdateProductSubmit = async (values: any) => {
+    const Image = await getFiles(images);
+    handleUpdateProduct({
+      values: {
+        ...values,
+        ProductId: state.currentProduct.productId,
+        Image: Image[0],
+      },
+      callBackFn: () => {
+        setIsModalOpen(false);
+        handleGetAllProductPaginated({ PageIndex: 1, Pagesize: 8 });
+      },
+    });
   };
 
   return (
@@ -70,11 +94,17 @@ export default function UpdateProductModal({
         </Space>
       }
       open={open}
-      afterClose={updateProductForm.resetFields}
+      afterClose={() => {
+        updateProductForm.resetFields();
+        setImages([]);
+      }}
       onOk={handleOk}
       onCancel={handleCancel}
+      okButtonProps={{ loading: state.isSending }}
+      cancelButtonProps={{ disabled: state.isSending }}
       closeIcon={null}
       maskClosable={false}
+      loading={specialUIState.isLoading}
       modalRender={(dom) => (
         <Form
           form={updateProductForm}
@@ -115,7 +145,7 @@ export default function UpdateProductModal({
           <TextEditor />
         </Form.Item>
         <Form.Item
-          name={["ProductPrices", "PriceByDate"]}
+          name="Price"
           label={<div className="text-sm text-secondary">Giá hiện tại</div>}
           rules={[{ type: "number", required: true, min: 1000 }]}
         >
@@ -126,7 +156,7 @@ export default function UpdateProductModal({
           />
         </Form.Item>
         <Form.Item
-          name="In_Of_stock"
+          name="InOfStock"
           label={<div className="text-sm text-secondary">Số lượng</div>}
           rules={[
             {
@@ -139,7 +169,7 @@ export default function UpdateProductModal({
           <InputNumber placeholder="Nhập số lượng" className="w-1/2" />
         </Form.Item>
         <Form.Item
-          name="WarrantyMonths"
+          name="WarantyMonths"
           label={
             <div className="text-sm text-secondary">Số tháng bảo hành</div>
           }

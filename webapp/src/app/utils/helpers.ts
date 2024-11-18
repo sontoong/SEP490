@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { UserDefinedKeys } from "./types";
+import { UploadFile } from "antd/es/upload";
 
 type Locale = "vi-VN" | "en-US" | "fr-FR" | "ja-JP";
 
@@ -20,7 +21,7 @@ export const formatCurrency = (
   }
 
   if (locale === "vi-VN") {
-    returnAmount = amount * 1000;
+    returnAmount = amount;
   }
 
   return returnAmount.toLocaleString(locale, {
@@ -62,7 +63,7 @@ export const formatDateToLocal = (
   dateStr?: string,
   locale: string = "vi-VN",
 ) => {
-  if (dateStr === null || dateStr === undefined) return "";
+  if (isNonValue(dateStr)) return "";
 
   const date = new Date(dateStr);
   const options: Intl.DateTimeFormatOptions = {
@@ -147,28 +148,29 @@ export const base64ToBlob = (base64: string, filename: string): File | null => {
   }
 };
 
-export function ensureBase64Avatar(avatarString?: string) {
-  if (avatarString) {
+export function validateImageString(imageString?: string) {
+  if (imageString) {
     const base64Prefix = "data:image/jpeg;base64,";
     const urlPattern = /^(http|https):\/\//;
     const filePattern = /\.(jpeg|jpg|png|gif)$/i;
 
     // Check if the string is a URL
-    if (urlPattern.test(avatarString)) {
-      return avatarString;
+    if (urlPattern.test(imageString)) {
+      const separator = imageString.includes("?") ? "&" : "?";
+      return `${imageString}${separator}t=${Date.now()}`;
     }
 
     // Check if the string is a file path
-    if (filePattern.test(avatarString)) {
-      return avatarString;
+    if (filePattern.test(imageString)) {
+      return imageString;
     }
 
     // Check if the string is already a base64-encoded image
-    if (!avatarString.startsWith(base64Prefix)) {
-      return base64Prefix + avatarString;
+    if (!imageString.startsWith(base64Prefix)) {
+      return base64Prefix + imageString;
     }
 
-    return avatarString;
+    return imageString;
   }
   return;
 }
@@ -206,7 +208,9 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
   ];
 };
 
-export const isEmptyObject = (obj: object) => {
+export const isEmptyObject = (obj?: object) => {
+  if (!obj) return 0;
+
   return Object.keys(obj).length === 0;
 };
 
@@ -235,3 +239,48 @@ export function combineArraysLoose<T extends object, U extends object>(
     return match ? { ...item1, ...match } : item1;
   });
 }
+
+export async function getFiles(
+  files: Omit<UploadFile, "uid">[],
+): Promise<File[]> {
+  const urlPattern = /^(http|https):\/\//;
+  const base64Prefix = "data:image/jpeg;base64,";
+
+  const fileListPromises = files.map(async (file) => {
+    if (file.originFileObj) {
+      return file.originFileObj;
+    } else if (file.url) {
+      if (urlPattern.test(file.url)) {
+        return null;
+        // const blob = await fetchFileBlob(file.url);
+        // return blob ? new File([blob], file.name || "image") : null;
+      } else if (!file.url.startsWith(base64Prefix)) {
+        const blob = base64ToBlob(file.url, file.name);
+        return blob ? blob : null;
+      }
+    } else {
+      return null;
+    }
+  });
+
+  // Resolve all promises and filter out any null values
+  const fileList = (await Promise.all(fileListPromises)).filter(
+    Boolean,
+  ) as File[];
+  return fileList;
+}
+
+// Helper function to fetch file as Blob
+// async function fetchFileBlob(url: string): Promise<Blob | null> {
+//   try {
+//     const response = await fetch(url);
+//     if (response.ok) {
+//       return await response.blob();
+//     }
+//     console.error("Failed to fetch file from URL:", url);
+//     return null;
+//   } catch (error) {
+//     console.error("Error fetching file:", error);
+//     return null;
+//   }
+// }

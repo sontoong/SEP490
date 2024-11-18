@@ -18,7 +18,7 @@ export default function LoginPage() {
   const [form] = Form.useForm();
 
   const initialValues: LoginParams = {
-    email: "",
+    email_Or_Phone: "",
     password: "",
   };
 
@@ -34,20 +34,21 @@ export default function LoginPage() {
       />
       <ScreenCard
         cardTitle={"Hệ thống quản lí EWMH"}
-        className="w-1/3"
+        className="w-[500px]"
         bordered={false}
       >
         <div className="px-5">
           <Space direction="vertical" size="large" className="w-full">
-            <div>
-              <Form
-                form={form}
-                initialValues={initialValues}
-                name="LoginPage"
-                onFinish={handleSubmit}
-              >
+            <Form
+              form={form}
+              initialValues={initialValues}
+              name="LoginPage"
+              onFinish={handleSubmit}
+              // autoComplete="off"
+            >
+              <div>
                 <Form.Item
-                  name="email"
+                  name="email_Or_Phone"
                   label={
                     <Space>
                       <UserOutlined />
@@ -62,7 +63,7 @@ export default function LoginPage() {
                     },
                   ]}
                 >
-                  <Input placeholder="Nhập Email" />
+                  <Input placeholder="Nhập email" size="large" />
                 </Form.Item>
                 <Form.Item
                   name="password"
@@ -80,21 +81,23 @@ export default function LoginPage() {
                     },
                   ]}
                 >
-                  <Input.Password placeholder="Nhập mật khẩu" />
+                  <Input.Password placeholder="Nhập mật khẩu" size="large" />
                 </Form.Item>
-              </Form>
-              <Link to="/forgot-password">
-                <span className="underline">Đổi mật khẩu</span>
-              </Link>
-            </div>
-            <div className="flex justify-center">
-              <PrimaryButton.BoldText
-                text="Đăng nhập"
-                loading={stateAuth.isSending}
-                onClick={() => form.submit()}
-                className="w-full"
-              />
-            </div>
+                <Link to="/forgot-password">
+                  <span className="underline">Đổi mật khẩu</span>
+                </Link>
+              </div>
+              <div className="mt-5 flex justify-center">
+                <Form.Item className="w-full">
+                  <PrimaryButton.BoldText
+                    text="Đăng nhập"
+                    loading={stateAuth.isSending}
+                    className="w-full"
+                    htmlType="submit"
+                  />
+                </Form.Item>
+              </div>
+            </Form>
           </Space>
         </div>
       </ScreenCard>

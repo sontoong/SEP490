@@ -1,5 +1,5 @@
 export type PieChartValue = {
-  type: string;
+  name: string;
   value: number | string;
 };
 

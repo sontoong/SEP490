@@ -1,7 +1,7 @@
 import { Column } from "@ant-design/plots";
 import { ColumnChartValue } from "../../models/chart";
 
-function ColumnChart({ data }: ColumnChartProps) {
+function ColumnChart({ data, loading }: ColumnChartProps) {
   const config = {
     data,
     xField: "x",
@@ -10,11 +10,12 @@ function ColumnChart({ data }: ColumnChartProps) {
     group: true,
   };
 
-  return <Column {...config} />;
+  return <Column {...config} loading={loading} />;
 }
 
 type ColumnChartProps = {
   data: ColumnChartValue | ColumnChartValue[];
+  loading?: boolean;
 };
 
 export default ColumnChart;

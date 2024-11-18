@@ -1,6 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import { Table } from "../../../components/table";
-import { Space, TableColumnsType } from "antd";
+import { TableColumnsType } from "antd";
 import { Request } from "../../../models/request";
 import {
   requestStatusGenerator,
@@ -8,59 +7,90 @@ import {
 } from "../../../utils/generators/requestStatus";
 import { formatDateToLocal } from "../../../utils/helpers";
 import { EyeOutlined } from "@ant-design/icons";
-import { requests } from "../../../../constants/testData";
+import { useRequest } from "../../../hooks/useRequest";
+import { usePagination } from "../../../hooks/usePagination";
+import { useCallback, useEffect } from "react";
 
-export default function NewRequestTable() {
-  const navigate = useNavigate();
+export default function NewRequestTable(props: NewRequestTableProps) {
+  const { state, handleGetAllRequestPaginated } = useRequest();
+  const { currentPage, currentPageSize, setPageSize, goToPage } =
+    usePagination();
+  const { handleGetDetailsOfRequest } = useRequest();
+
+  const fetchRequests = useCallback(() => {
+    handleGetAllRequestPaginated({
+      PageIndex: currentPage,
+      Pagesize: currentPageSize,
+    });
+  }, [currentPage, currentPageSize, handleGetAllRequestPaginated]);
+
+  useEffect(() => {
+    fetchRequests();
+  }, [fetchRequests]);
 
   const contractListColumns: TableColumnsType<Request> = [
     {
       title: "Khách hàng",
-      render: (_, { CustomerId }) => (
-        <div className="text-base font-bold">{CustomerId}</div>
+      render: (_, { customer_Leader }) => (
+        <div className="text-base font-bold">{customer_Leader[0].fullName}</div>
       ),
     },
     {
       title: "Loại yêu cầu",
-      dataIndex: "CategoryRequest",
+      dataIndex: ["request", "categoryRequest"],
       render: (value) => requestTypeGenerator(value),
     },
     {
       title: "Bắt đầu",
-      dataIndex: "Start",
+      dataIndex: ["request", "start"],
       render: (value) => <div>{formatDateToLocal(value)}</div>,
     },
     {
       title: "Kết thúc",
-      dataIndex: "End",
-      render: (value) => <div>{formatDateToLocal(value)}</div>,
+      dataIndex: ["request", "end"],
+      render: (value) => <div>{value ? formatDateToLocal(value) : "N/A"}</div>,
     },
     {
       title: "Trạng thái",
       dataIndex: "Status",
-      render: (_, { Status }) => {
-        return <div>{requestStatusGenerator(Status)}</div>;
+      render: (_, { request }) => {
+        return <div>{requestStatusGenerator(request.status)}</div>;
       },
     },
     {
       title: "",
       key: "actions",
-      render: (_, { RequestId }) => (
-        <EyeOutlined onClick={() => navigate(`/requests/${RequestId}`)} />
+      render: (_, { request }) => (
+        <EyeOutlined
+          onClick={() => {
+            if (props.setDrawerOpen) {
+              props.setDrawerOpen(true);
+              handleGetDetailsOfRequest({ RequestId: request.requestId });
+            }
+          }}
+        />
       ),
     },
   ];
-
   return (
-    <Space direction="vertical" size={20} className="w-full">
-      <div className="pb-10 text-5xl font-semibold text-primary">
-        Yêu cầu mới nhất
-      </div>
-      <Table
-        columns={contractListColumns}
-        dataSource={requests}
-        rowKey={(record) => record.RequestId}
-      />
-    </Space>
+    <Table
+      columns={contractListColumns}
+      dataSource={state.currentRequestList.requests}
+      rowKey={(record) => record.request.requestId}
+      loading={state.isFetching}
+      pagination={{
+        total: state.currentRequestList.total,
+        pageSize: currentPageSize,
+        current: currentPage,
+        onChange: (pageIndex, pageSize) => {
+          goToPage(pageIndex);
+          setPageSize(pageSize);
+        },
+      }}
+    />
   );
 }
+
+type NewRequestTableProps = {
+  setDrawerOpen?: any;
+};

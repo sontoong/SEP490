@@ -5,11 +5,15 @@ import { PrimaryButton } from "../../../components/buttons";
 import AddRoomModalButton from "./AddRoomModalButton";
 import { Table } from "../../../components/table";
 import { Room } from "../../../models/room";
-import { rooms } from "../../../../constants/testData";
 import { customerNameGenerator } from "../../../utils/generators/name";
 import EditRoomModalButton from "./UpdateRoomModalButton";
+import { useCallback, useEffect } from "react";
+import { useApartment } from "../../../hooks/useApartment";
+import { useSpecialUI } from "../../../hooks/useSpecialUI";
+import { usePagination } from "../../../hooks/usePagination";
 
 export function ViewApartmentDetailModal({
+  apartmentId,
   isModalVisible,
   setIsModalVisible,
 }: {
@@ -17,21 +21,42 @@ export function ViewApartmentDetailModal({
   isModalVisible: boolean;
   setIsModalVisible: any;
 }) {
+  const { state: apartmentState, handleGetAllRoomsPaginated } = useApartment();
+  const { state: specialUIState } = useSpecialUI();
+  const { currentPage, currentPageSize, setPageSize, goToPage } =
+    usePagination();
+
+  const fetchRooms = useCallback(() => {
+    handleGetAllRoomsPaginated({
+      PageIndex: currentPage,
+      Pagesize: currentPageSize,
+      AreaId: apartmentId,
+    });
+  }, [apartmentId, currentPage, currentPageSize, handleGetAllRoomsPaginated]);
+
+  useEffect(() => {
+    if (isModalVisible) {
+      fetchRooms();
+    }
+  }, [fetchRooms, isModalVisible]);
+
   const roomListColumns: TableColumnsType<Room> = [
     {
       title: "Số phòng",
-      dataIndex: "RoomId",
+      dataIndex: "roomId",
     },
     {
       title: "Khách hàng",
-      render: (_, { CustomerId }) => {
-        return <div>{customerNameGenerator(CustomerId)}</div>;
+      render: (_, { customer }) => {
+        return <div>{customerNameGenerator(customer)}</div>;
       },
     },
     {
       title: "",
       key: "actions",
-      render: () => <EditRoomModalButton />,
+      render: (_, { areaId, roomId }) => (
+        <EditRoomModalButton areaId={areaId} oldRoomId={roomId} />
+      ),
     },
   ];
 
@@ -60,12 +85,22 @@ export function ViewApartmentDetailModal({
       >
         <Space direction="vertical" size={20} className="w-full">
           <div className="flex justify-end">
-            <AddRoomModalButton />
+            <AddRoomModalButton apartmentId={apartmentId} />
           </div>
           <Table
             columns={roomListColumns}
-            dataSource={rooms}
-            rowKey={(record) => record.RoomId}
+            dataSource={apartmentState.currentRoomList.rooms}
+            rowKey={(record) => record.roomId}
+            loading={specialUIState.isLoading}
+            pagination={{
+              total: apartmentState.currentRoomList.total,
+              pageSize: currentPageSize,
+              current: currentPage,
+              onChange: (pageIndex, pageSize) => {
+                goToPage(pageIndex);
+                setPageSize(pageSize);
+              },
+            }}
           />
         </Space>
       </Modal>

@@ -1,18 +1,8 @@
-import { useEffect, useState } from "react";
 import { PieChart } from "../../../components/charts";
-import { PieChartValue } from "../../../models/chart";
+import { useDashboard } from "../../../hooks/useDashboard";
 
 export const RevenueChart = () => {
-  const [data, setData] = useState<PieChartValue[]>([]);
+  const { state } = useDashboard();
 
-  useEffect(() => {
-    setTimeout(() => {
-      setData([
-        { type: "Đơn hàng", value: 27 },
-        { type: "Dịch vụ", value: 25 },
-      ]);
-    }, 1000);
-  }, []);
-
-  return <PieChart data={data} />;
+  return <PieChart data={state.revenueChart} loading={state.isFetching} />;
 };

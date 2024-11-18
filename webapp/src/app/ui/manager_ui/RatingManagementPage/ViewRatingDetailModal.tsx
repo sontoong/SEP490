@@ -1,11 +1,18 @@
-import { customers, requests } from "../../../../constants/testData";
-import { LikeOutlined, MailFilled, PhoneFilled } from "@ant-design/icons";
+import {
+  EnvironmentFilled,
+  LikeOutlined,
+  MailFilled,
+  PhoneFilled,
+} from "@ant-design/icons";
 import { Modal } from "../../../components/modals";
 import { Rate, Space } from "antd";
 import { Avatar } from "../../../components/avatar";
 import { Grid } from "../../../components/grids";
 import { PrimaryButton } from "../../../components/buttons";
 import { Feedback } from "../../../models/feedback";
+import { useFeedback } from "../../../hooks/useFeedback";
+import { useEffect } from "react";
+import { useSpecialUI } from "../../../hooks/useSpecialUI";
 
 export function ViewRatingDetailModal({
   feedback,
@@ -16,12 +23,14 @@ export function ViewRatingDetailModal({
   isModalVisible: boolean;
   setIsModalVisible: any;
 }) {
-  const customerId = requests.find(
-    (request) => request.RequestId === feedback.RequestId,
-  )?.CustomerId;
-  const customer = customers.find(
-    (customer) => customer.CustomerId === customerId,
-  );
+  const { state: feedbackState, handleGetFeedbackDetails } = useFeedback();
+  const { state: specialUIState } = useSpecialUI();
+
+  useEffect(() => {
+    if (isModalVisible) {
+      handleGetFeedbackDetails({ feedbackId: feedback.feedbackId });
+    }
+  }, [feedback.feedbackId, handleGetFeedbackDetails, isModalVisible]);
 
   return (
     <>
@@ -29,7 +38,7 @@ export function ViewRatingDetailModal({
         title={
           <Space className="text-base">
             <LikeOutlined />
-            <div className="uppercase text-secondary">Chi tiết đơn hàng</div>
+            <div className="uppercase text-secondary">Đánh giá</div>
           </Space>
         }
         maskClosable={false}
@@ -42,48 +51,61 @@ export function ViewRatingDetailModal({
             size="middle"
           />,
         ]}
+        loading={specialUIState.isLoading}
         closeIcon={null}
-        width={1000}
-        // confirmLoading={state.isSending}
+        width={700}
       >
         <Grid
           className="text-sm"
           items={[
             <Space direction="vertical" size={10} className="w-full">
-              <Avatar src={customer?.AvatarUrl} size={70} />
+              <Avatar
+                src={feedbackState.currentFeedback.avatarUrl}
+                size={150}
+              />
               <div>
-                <strong>Họ và Tên:</strong> {customer?.Fullname}
+                <strong>Họ và Tên:</strong>{" "}
+                {feedbackState.currentFeedback.customerName}
               </div>
               <div>
                 <Space direction="horizontal" size={3}>
                   <PhoneFilled />
                   <strong>SĐT:</strong>
-                  <span>{customer?.PhoneNumber}</span>
+                  <span>{feedbackState.currentFeedback.customerPhone}</span>
                 </Space>
               </div>
               <div>
                 <Space direction="horizontal" size={3}>
                   <MailFilled />
                   <strong>Email:</strong>
-                  <span>{customer?.Email}</span>
+                  <span>{feedbackState.currentFeedback.customerEmail}</span>
                 </Space>
               </div>
               <div>
-                <strong>Chung cư:</strong> {customer?.RoomId}
+                <Space direction="horizontal" size={3}>
+                  <EnvironmentFilled />
+                  <strong>Địa chỉ:</strong>
+                  <span>{feedbackState.currentFeedback.customerAddress}</span>
+                </Space>
               </div>
               <div>
-                <strong>Phòng:</strong> {customer?.RoomId}
-              </div>
-              <div>
-                <strong>Leader:</strong> {customer?.Role}
+                <Space direction="horizontal" size={3}>
+                  <PhoneFilled />
+                  <strong>SĐT:</strong>
+                  <span>{feedbackState.currentFeedback.customerPhone}</span>
+                </Space>
               </div>
             </Space>,
             <Space direction="vertical" size={15} className="w-full">
               <div>
                 <div className="text-2xl font-bold">Đánh giá</div>
-                <Rate disabled allowHalf value={feedback.Rate} />
+                <Rate
+                  disabled
+                  allowHalf
+                  value={feedbackState.currentFeedback.rate}
+                />
               </div>
-              <div>{feedback.Content}</div>
+              <div>{feedbackState.currentFeedback.content}</div>
             </Space>,
           ]}
         />

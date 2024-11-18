@@ -6,9 +6,12 @@ import { EditOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { ServicePackage } from "../../../models/service";
 import { UploadImage } from "../../../components/image-upload/image-upload";
-import { ensureBase64Avatar } from "../../../utils/helpers";
+import { getFiles, validateImageString } from "../../../utils/helpers";
 import { ImageUpload } from "../../../components/image-upload";
 import { TextEditor } from "../../../components/rte";
+import { useServicePackage } from "../../../hooks/useServicePackage";
+import { UpdateServicePackageParams } from "../../../redux/slice/servicePackageSlice";
+import { useSpecialUI } from "../../../hooks/useSpecialUI";
 
 export default function UpdateServiceModal({
   open = false,
@@ -17,36 +20,45 @@ export default function UpdateServiceModal({
 }: UpdateServiceModalProps) {
   const [updateServiceForm] = Form.useForm();
   const [images, setImages] = useState<UploadImage[]>([]);
+  const {
+    state,
+    handleGetServicePackage,
+    handleUpdateServicePackage,
+    handleGetAllServicePackagePaginated,
+  } = useServicePackage();
+  const { state: specialUIState } = useSpecialUI();
 
-  const initialValuesUpdateService = {
+  const initialValuesUpdateService: UpdateServicePackageParams = {
+    ServicePackageId: "",
     Name: "",
     Description: "",
     NumOfRequest: 0,
-    Policy: "",
-    ServicePackagePrices: {
-      PriceByDate: 0,
-    },
+    Price: 0,
+    Image: { name: "" },
   };
 
   useEffect(() => {
+    if (open) {
+      handleGetServicePackage({ ServicePackageId: record.servicePackageId });
+    }
+  }, [handleGetServicePackage, open, record.servicePackageId]);
+
+  useEffect(() => {
     updateServiceForm.setFieldsValue({
-      Name: record.Name,
-      Description: record.Description,
-      NumOfRequest: record.NumOfRequest,
-      Policy: record.Policy,
-      ServicePackagePrices: {
-        PriceByDate: record.ServicePackagePrices.PriceByDate,
-      },
+      Name: state.currentServicePackage.name,
+      Description: state.currentServicePackage.description,
+      NumOfRequest: state.currentServicePackage.numOfRequest,
+      Price: state.currentServicePackage.priceByDate,
     });
-    if (record.ImageUrl) {
+    if (state.currentServicePackage.imageUrl) {
       setImages([
         {
           name: "",
-          url: ensureBase64Avatar(record.ImageUrl),
+          url: validateImageString(state.currentServicePackage.imageUrl),
         },
       ]);
     }
-  }, [record, record.ImageUrl, updateServiceForm, open]);
+  }, [state.currentServicePackage, updateServiceForm]);
 
   const handleOk = () => {
     updateServiceForm.submit();
@@ -56,9 +68,19 @@ export default function UpdateServiceModal({
     setIsModalOpen(false);
   };
 
-  const handleUpdateServiceSubmit = (values: any) => {
-    console.log(values);
-    setIsModalOpen(false);
+  const handleUpdateServiceSubmit = async (values: any) => {
+    const Image = await getFiles(images);
+    handleUpdateServicePackage({
+      values: {
+        ...values,
+        ServicePackageId: state.currentServicePackage.servicePackageId,
+        Image: Image[0],
+      },
+      callBackFn: () => {
+        setIsModalOpen(false);
+        handleGetAllServicePackagePaginated({ PageIndex: 1, Pagesize: 8 });
+      },
+    });
   };
 
   return (
@@ -70,11 +92,17 @@ export default function UpdateServiceModal({
         </Space>
       }
       open={open}
-      afterClose={updateServiceForm.resetFields}
+      afterClose={() => {
+        updateServiceForm.resetFields();
+        setImages([]);
+      }}
       onOk={handleOk}
       onCancel={handleCancel}
+      okButtonProps={{ loading: state.isSending }}
+      cancelButtonProps={{ disabled: state.isSending }}
       closeIcon={null}
       maskClosable={false}
+      loading={specialUIState.isLoading}
       modalRender={(dom) => (
         <Form
           form={updateServiceForm}
@@ -130,7 +158,7 @@ export default function UpdateServiceModal({
           <InputNumber placeholder="Nhập số lần sửa chữa" className="w-1/2" />
         </Form.Item>
         <Form.Item
-          name={["ServicePackagePrices", "PriceByDate"]}
+          name="Price"
           label={<div className="text-sm text-secondary">Giá gói (VND)</div>}
           rules={[{ type: "number", required: true, min: 1000 }]}
         >
@@ -139,19 +167,6 @@ export default function UpdateServiceModal({
             className="w-1/2"
             step={1000}
           />
-        </Form.Item>
-        <Form.Item
-          name="Policy"
-          label={<div className="text-sm text-secondary">Chính sách</div>}
-          rules={[
-            {
-              type: "string",
-              required: true,
-              whitespace: true,
-            },
-          ]}
-        >
-          <TextEditor />
         </Form.Item>
       </Space>
     </Modal>

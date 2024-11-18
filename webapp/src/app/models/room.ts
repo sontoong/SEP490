@@ -1,5 +1,5 @@
 export type Room = {
-  RoomId: string;
-  AreaId: string;
-  CustomerId: string;
+  areaId: string;
+  roomId: string;
+  customer: string;
 };

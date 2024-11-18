@@ -1,29 +1,29 @@
 import { Space } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { UserOutlined } from "@ant-design/icons";
 import { PrimaryButton } from "../../components/buttons";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
 import { useAuth } from "../../hooks/useAuth";
-import { LoginParams } from "../../redux/slice/authSlice";
+import { SendPasswordResetLinkParams } from "../../redux/slice/authSlice";
 import LoginBackground from "../../../assets/images/login_background.png";
 import { ScreenCard } from "../../components/card";
 import { useTitle } from "../../hooks/useTitle";
 
 export default function LoginPage() {
   useTitle({ tabTitle: "Forgot Password - EWMH" });
-  const navigate = useNavigate();
-  const { state: stateAuth, handleLogin } = useAuth();
+  const { state: stateAuth, handleSendPasswordResetLink } = useAuth();
 
   const [form] = Form.useForm();
 
-  const initialValues: LoginParams = {
+  const initialValues: SendPasswordResetLinkParams = {
     email: "",
-    password: "",
   };
 
-  const handleSubmit = async (values: LoginParams) => {
-    handleLogin(values, navigate);
+  const handleSubmit = async (values: SendPasswordResetLinkParams) => {
+    handleSendPasswordResetLink({
+      values: values,
+    });
   };
 
   return (
@@ -39,7 +39,7 @@ export default function LoginPage() {
               <Form
                 form={form}
                 initialValues={initialValues}
-                name="LoginPage"
+                name="ForgotPasswordForm"
                 onFinish={handleSubmit}
               >
                 <Form.Item
@@ -58,7 +58,7 @@ export default function LoginPage() {
                     },
                   ]}
                 >
-                  <Input placeholder="Nhập Email" />
+                  <Input placeholder="Nhập email" />
                 </Form.Item>
               </Form>
               <Link to="/login">

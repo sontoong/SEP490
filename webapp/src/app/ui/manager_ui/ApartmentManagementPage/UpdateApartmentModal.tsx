@@ -7,11 +7,14 @@ import { TextEditor } from "../../../components/rte";
 import { ImageUpload } from "../../../components/image-upload";
 import { UploadImage } from "../../../components/image-upload/image-upload";
 import { InputSelect } from "../../../components/inputs";
-import { leaders } from "../../../../constants/testData";
 import { Avatar } from "../../../components/avatar";
+import { Apartment } from "../../../models/apartment";
+import { getFiles, validateImageString } from "../../../utils/helpers";
+import { useApartment } from "../../../hooks/useApartment";
+import { UpdateApartmentParams } from "../../../redux/slice/apartmentSlice";
+import { useAccount } from "../../../hooks/useAccount";
+import { Skeleton } from "../../../components/skeletons";
 import { Leader } from "../../../models/user";
-import { ApartmentArea } from "../../../models/apartmentArea";
-import { ensureBase64Avatar } from "../../../utils/helpers";
 
 export default function UpdateApartmentModal({
   apartment,
@@ -20,46 +23,46 @@ export default function UpdateApartmentModal({
 }: UpdateApartmentModalProps) {
   const [updateApartmentForm] = Form.useForm();
   const [images, setImages] = useState<UploadImage[]>([]);
+  const { state: accountState, handleGetAllLeaderPaginated } = useAccount();
+  const {
+    state: apartmentState,
+    handleUpdateApartment,
+    handleGetAllApartmentsPaginated,
+  } = useApartment();
 
-  const leaderId = Form.useWatch("LeaderId", updateApartmentForm);
-  const currentLeader = leaders.find(
-    (leader: Leader) => leader.LeaderId === leaderId,
-  );
+  useEffect(() => {
+    if (isModalVisible) {
+      handleGetAllLeaderPaginated({ PageIndex: 1, Pagesize: 1000 });
+    }
+  }, [handleGetAllLeaderPaginated, isModalVisible]);
 
-  const initialValuesUpdateNewApartment: any = {
+  const initialValuesUpdateNewApartment: UpdateApartmentParams = {
     Name: "",
     Address: "",
     ManagementCompany: "",
     Description: "",
-    LeaderId: null,
+    LeaderId: "",
+    AreaId: "",
+    Image: { name: "" },
   };
 
   useEffect(() => {
     updateApartmentForm.setFieldsValue({
-      Name: apartment.Name,
-      Address: apartment.Address,
-      ManagementCompany: apartment.ManagementCompany,
-      Description: apartment.Description,
-      LeaderId: apartment.LeaderId,
+      Name: apartment.name,
+      Address: apartment.address,
+      ManagementCompany: apartment.managementCompany,
+      Description: apartment.description,
+      LeaderId: apartment.leaderId,
     });
-    if (apartment.AvatarUrl) {
+    if (apartment.avatarUrl) {
       setImages([
         {
           name: "",
-          url: ensureBase64Avatar(apartment.AvatarUrl),
+          url: validateImageString(apartment.avatarUrl),
         },
       ]);
     }
-  }, [
-    apartment.Address,
-    apartment.AvatarUrl,
-    apartment.Description,
-    apartment.LeaderId,
-    apartment.ManagementCompany,
-    apartment.Name,
-    updateApartmentForm,
-    isModalVisible,
-  ]);
+  }, [apartment, updateApartmentForm, isModalVisible]);
 
   const handleOk = async () => {
     updateApartmentForm.submit();
@@ -69,9 +72,20 @@ export default function UpdateApartmentModal({
     setIsModalVisible(false);
   };
 
-  const handleUpdateNewServiceSubmit = (values: any) => {
-    console.log(values);
-    setIsModalVisible(false);
+  const handleUpdateNewServiceSubmit = async (values: any) => {
+    const Image = await getFiles(images);
+    handleUpdateApartment({
+      values: {
+        ...values,
+        AreaId: apartment.areaId,
+        ProductId: apartment.leaderId,
+        Image: Image[0],
+      },
+      callBackFn: () => {
+        setIsModalVisible(false);
+        handleGetAllApartmentsPaginated({ PageIndex: 1, Pagesize: 8 });
+      },
+    });
   };
 
   return (
@@ -80,13 +94,18 @@ export default function UpdateApartmentModal({
         title={
           <Space className="text-base">
             <HomeOutlined />
-            <div className="uppercase text-secondary">Thêm chung cư mới</div>
+            <div className="uppercase text-secondary">Chỉnh sửa chung cư</div>
           </Space>
         }
         open={isModalVisible}
-        afterClose={updateApartmentForm.resetFields}
+        afterClose={() => {
+          updateApartmentForm.resetFields();
+          setImages([]);
+        }}
         onOk={handleOk}
         onCancel={handleCancel}
+        okButtonProps={{ loading: apartmentState.isSending }}
+        cancelButtonProps={{ disabled: apartmentState.isSending }}
         closeIcon={null}
         maskClosable={false}
         modalRender={(dom) => (
@@ -99,6 +118,7 @@ export default function UpdateApartmentModal({
             {dom}
           </Form>
         )}
+        width={650}
       >
         <Space direction="vertical" className="w-full">
           <ImageUpload images={images} setImages={setImages} />
@@ -167,37 +187,67 @@ export default function UpdateApartmentModal({
               <InputSelect
                 className="w-full"
                 placeholder="Chọn leader"
-                options={leaders.map((leader: Leader) => ({
-                  label: leader.Fullname,
-                  value: leader.LeaderId,
-                }))}
+                options={(accountState.currentLeaderList.users as Leader[]).map(
+                  (leader) => ({
+                    label: `${leader.fullName} - ${leader.email} ${leader.areaId ? `(${leader.name})` : ""}`,
+                    value: leader?.accountId,
+                  }),
+                )}
+                loading={accountState.isFetching}
+                allowClear
               />
             </Form.Item>
-            {leaderId && (
-              <div className="rounded-lg border-2 border-solid border-secondary p-2">
-                <Space direction="vertical" className="text-sm">
-                  <Avatar size={80} src={currentLeader?.AvatarUrl} />
-                  <div className="text-lg font-bold">
-                    {currentLeader?.Fullname}
+            <Form.Item
+              shouldUpdate={(prev, cur) => prev.LeaderId !== cur.LeaderId}
+            >
+              {({ getFieldValue }) => {
+                const leaderIdForm = getFieldValue("LeaderId");
+                const currentLeader = (
+                  accountState.currentLeaderList.users as Leader[]
+                ).find((leader) => leader.accountId === leaderIdForm) as Leader;
+
+                return leaderIdForm ? (
+                  <div className="rounded-lg border-2 border-solid border-secondary p-2">
+                    <Space direction="vertical" className="text-sm">
+                      <Avatar
+                        size={80}
+                        src={currentLeader?.avatarUrl}
+                        loading={accountState.isFetching}
+                      />
+                      {accountState.isFetching ? (
+                        <Skeleton
+                          title={{ width: 200 }}
+                          paragraph={{ rows: 1, width: 400 }}
+                        />
+                      ) : (
+                        <>
+                          <div className="text-lg font-bold">
+                            {currentLeader?.fullName}
+                          </div>
+                          <Space>
+                            <div>
+                              <span className="font-bold">email: </span>
+                              <span>{currentLeader?.email}</span>
+                            </div>
+                            <div>
+                              <Space>
+                                <PhoneFilled />
+                                <span className="font-bold">SĐT: </span>
+                                <span className="whitespace-nowrap">
+                                  {currentLeader?.phoneNumber}
+                                </span>
+                              </Space>
+                            </div>
+                          </Space>
+                        </>
+                      )}
+                    </Space>
                   </div>
-                  <Space>
-                    <div>
-                      <span className="font-bold">Email: </span>
-                      <span>{currentLeader?.Email}</span>
-                    </div>
-                    <div>
-                      <Space>
-                        <PhoneFilled />
-                        <span className="font-bold">SĐT: </span>
-                        <span className="whitespace-nowrap">
-                          {currentLeader?.PhoneNumber}
-                        </span>
-                      </Space>
-                    </div>
-                  </Space>
-                </Space>
-              </div>
-            )}
+                ) : (
+                  <></>
+                );
+              }}
+            </Form.Item>
           </Space>
         </Space>
       </Modal>
@@ -208,5 +258,5 @@ export default function UpdateApartmentModal({
 type UpdateApartmentModalProps = {
   isModalVisible?: boolean;
   setIsModalVisible?: any;
-  apartment: ApartmentArea;
+  apartment: Apartment;
 };

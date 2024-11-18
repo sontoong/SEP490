@@ -1,16 +1,12 @@
 export type Product = {
-  ProductId: string;
-  Name: string;
-  Description: string;
-  ImageUrl: string;
-  In_Of_stock: number;
-  WarrantyMonths: number;
-  ProductPrices: ProductPrice;
-  Status: boolean;
-};
-
-type ProductPrice = {
-  ProductPriceId: string;
-  Date: string;
-  PriceByDate: number;
+  productId: string;
+  name: string;
+  inOfStock: number;
+  imageUrl: string;
+  status: boolean;
+  priceByDate: number;
+  description?: string;
+  warantyMonths?: number;
+  productPriceId?: string;
+  date?: string;
 };

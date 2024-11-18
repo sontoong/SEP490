@@ -6,13 +6,16 @@ import {
 import { MenuProps } from "antd";
 import { Dropdown } from "../../../components/dropdown";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { ViewRatingDetailModal } from "./ViewRatingDetailModal";
 import { Feedback } from "../../../models/feedback";
+import { useRequest } from "../../../hooks/useRequest";
 
-const RatingManagementDropdown = ({ feedback }: { feedback: Feedback }) => {
-  const navigate = useNavigate();
+const RatingManagementDropdown = ({
+  feedback,
+  setDrawerOpen,
+}: RatingManagementDropdownProps) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const { handleGetDetailsOfRequest } = useRequest();
 
   const items: MenuProps["items"] = [
     {
@@ -25,7 +28,12 @@ const RatingManagementDropdown = ({ feedback }: { feedback: Feedback }) => {
       key: "2",
       label: "Xem thông tin yêu cầu",
       icon: <DropboxOutlined />,
-      onClick: () => navigate(`/requests/${feedback.RequestId}`),
+      onClick: () => {
+        if (setDrawerOpen) {
+          setDrawerOpen(true);
+          handleGetDetailsOfRequest({ RequestId: feedback.requestId });
+        }
+      },
     },
   ];
 
@@ -44,3 +52,8 @@ const RatingManagementDropdown = ({ feedback }: { feedback: Feedback }) => {
 };
 
 export default RatingManagementDropdown;
+
+type RatingManagementDropdownProps = {
+  feedback: Feedback;
+  setDrawerOpen?: any;
+};

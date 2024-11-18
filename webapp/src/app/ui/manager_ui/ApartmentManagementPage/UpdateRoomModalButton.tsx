@@ -4,13 +4,22 @@ import { Modal } from "../../../components/modals";
 import { EditOutlined, HomeOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Input } from "../../../components/inputs";
+import { useApartment } from "../../../hooks/useApartment";
 
-export default function EditRoomModalButton() {
+export default function EditRoomModalButton({
+  areaId,
+  oldRoomId,
+}: {
+  areaId: string;
+  oldRoomId: string;
+}) {
   const [addRoomForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { state, handleUpdateRoom, handleGetAllRoomsPaginated } =
+    useApartment();
 
   const initialValuesCreateNewApartment: any = {
-    RoomId: "",
+    newRoomId: oldRoomId,
   };
 
   const showModal = () => {
@@ -25,9 +34,19 @@ export default function EditRoomModalButton() {
     setIsModalVisible(false);
   };
 
-  const handleCreateNewServiceSubmit = (values: any) => {
-    console.log(values);
-    setIsModalVisible(false);
+  const handleUpdateRoomSubmit = (values: any) => {
+    const newRoomId = values.newRoomId;
+    handleUpdateRoom({
+      values: { areaId: areaId, newRoomId: newRoomId, oldRoomId: oldRoomId },
+      callBackFn: () => {
+        setIsModalVisible(false);
+        handleGetAllRoomsPaginated({
+          PageIndex: 1,
+          Pagesize: 8,
+          AreaId: areaId,
+        });
+      },
+    });
   };
 
   return (
@@ -44,6 +63,8 @@ export default function EditRoomModalButton() {
         afterClose={addRoomForm.resetFields}
         onOk={handleOk}
         onCancel={handleCancel}
+        okButtonProps={{ loading: state.isSending }}
+        cancelButtonProps={{ disabled: state.isSending }}
         closeIcon={null}
         maskClosable={false}
         modalRender={(dom) => (
@@ -51,7 +72,7 @@ export default function EditRoomModalButton() {
             form={addRoomForm}
             initialValues={initialValuesCreateNewApartment}
             name="AddRoomForm"
-            onFinish={handleCreateNewServiceSubmit}
+            onFinish={handleUpdateRoomSubmit}
           >
             {dom}
           </Form>
@@ -60,7 +81,7 @@ export default function EditRoomModalButton() {
         <Space direction="vertical" className="w-full">
           <div>
             <Form.Item
-              name="RoomId"
+              name="newRoomId"
               label={<div className="text-sm text-secondary">Số phòng</div>}
               rules={[
                 {
@@ -68,7 +89,7 @@ export default function EditRoomModalButton() {
                 },
               ]}
             >
-              <Input placeholder="Nhập số phòng" />
+              <Input placeholder="Nhập số phòng mới" size="large" />
             </Form.Item>
           </div>
         </Space>

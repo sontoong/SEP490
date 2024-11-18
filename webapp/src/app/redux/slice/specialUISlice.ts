@@ -1,9 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+//use this when you dont want actions to refetch/trigger isLoading/isSending of their initial slice state
 export const excludedActions = [
   "auth/send/loginVerify",
   "auth/send/registerVerify",
   "auth/send/forgetPasswordVerify",
+  "product/fetch/getProduct",
+  "servicePackage/fetch/getServicePackage",
+  "apartment/fetch/getAllRoomPaginated",
+  "account/fetch/getAllLeaderPaginatedExcluded",
+  "order/fetch/getOrderDetails",
+  "feedback/fetch/getFeedbackDetails",
+  "request/fetch/getDetailsOfRequest",
 ];
 export const excludedActionsPending = excludedActions.map(
   (action) => `${action}/pending`,

@@ -7,33 +7,58 @@ import {
   PhoneFilled,
   PlusCircleOutlined,
 } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextEditor } from "../../../components/rte";
 import { ImageUpload } from "../../../components/image-upload";
 import { UploadImage } from "../../../components/image-upload/image-upload";
 import { InputSelect } from "../../../components/inputs";
-import { leaders } from "../../../../constants/testData";
 import { Avatar } from "../../../components/avatar";
+import { useAccount } from "../../../hooks/useAccount";
+import agent from "../../../services/agent";
 import { Leader } from "../../../models/user";
+import { AddApartmentParams } from "../../../redux/slice/apartmentSlice";
+import { getFiles } from "../../../utils/helpers";
+import { useApartment } from "../../../hooks/useApartment";
+import { Skeleton } from "../../../components/skeletons";
 
 export default function CreateNewApartmentModalButton() {
   const [createNewApartmentForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [images, setImages] = useState<UploadImage[]>([]);
+  const { state: accountState, handleGetAllLeaderPaginated } = useAccount();
+  const {
+    state: apartmentState,
+    handleAddApartment,
+    handleGetAllApartmentsPaginated,
+  } = useApartment();
 
-  const leaderId = Form.useWatch("LeaderId", createNewApartmentForm);
+  useEffect(() => {
+    handleGetAllLeaderPaginated({ PageIndex: 1, Pagesize: 1000 });
+  }, [handleGetAllLeaderPaginated]);
 
-  const currentLeader = leaders.find(
-    (leader: Leader) => leader.LeaderId === leaderId,
-  );
-
-  const initialValuesCreateNewApartment: any = {
+  const initialValuesCreateNewApartment: Partial<AddApartmentParams> = {
     Name: "",
     Address: "",
     ManagementCompany: "",
-    Description: "",
-    LeaderId: null,
+    Description: undefined,
+    Image: { name: "" },
+    LeaderId: undefined,
   };
+
+  async function fetchLeaderList(
+    email: string,
+  ): Promise<{ label: string; value: string }[]> {
+    return agent.Account.getAllLeaderPaginated({
+      PageIndex: 1,
+      Pagesize: 5,
+      SearchByEmail: email,
+    }).then((body) => {
+      return body[0].map((leader: Leader) => ({
+        label: `${leader.fullName} - ${leader.email} ${leader.areaId ? `(${leader.name})` : ""}`,
+        value: leader.accountId,
+      }));
+    });
+  }
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -47,9 +72,18 @@ export default function CreateNewApartmentModalButton() {
     setIsModalVisible(false);
   };
 
-  const handleCreateNewServiceSubmit = (values: any) => {
-    console.log(values);
-    setIsModalVisible(false);
+  const handleCreateNewServiceSubmit = async (values: any) => {
+    const Image = await getFiles(images);
+    await handleAddApartment({
+      values: {
+        ...values,
+        Image: Image[0],
+      },
+      callBackFn: () => {
+        setIsModalVisible(false);
+        handleGetAllApartmentsPaginated({ PageIndex: 1, Pagesize: 8 });
+      },
+    });
   };
 
   return (
@@ -67,9 +101,14 @@ export default function CreateNewApartmentModalButton() {
           </Space>
         }
         open={isModalVisible}
-        afterClose={createNewApartmentForm.resetFields}
+        afterClose={() => {
+          createNewApartmentForm.resetFields();
+          setImages([]);
+        }}
         onOk={handleOk}
         onCancel={handleCancel}
+        okButtonProps={{ loading: apartmentState.isSending }}
+        cancelButtonProps={{ disabled: apartmentState.isSending }}
         closeIcon={null}
         maskClosable={false}
         modalRender={(dom) => (
@@ -82,6 +121,7 @@ export default function CreateNewApartmentModalButton() {
             {dom}
           </Form>
         )}
+        width={650}
       >
         <Space direction="vertical" className="w-full">
           <ImageUpload images={images} setImages={setImages} />
@@ -96,7 +136,7 @@ export default function CreateNewApartmentModalButton() {
               },
             ]}
           >
-            <Input placeholder="Nhập tên chung cư" />
+            <Input placeholder="Nhập tên chung cư" size="large" />
           </Form.Item>
           <Form.Item
             name="Address"
@@ -109,7 +149,7 @@ export default function CreateNewApartmentModalButton() {
               },
             ]}
           >
-            <Input placeholder="Nhập địa chỉ" />
+            <Input placeholder="Nhập địa chỉ" size="large" />
           </Form.Item>
           <Form.Item
             name="ManagementCompany"
@@ -119,10 +159,11 @@ export default function CreateNewApartmentModalButton() {
                 type: "string",
                 required: true,
                 whitespace: true,
+                min: 4,
               },
             ]}
           >
-            <Input placeholder="Nhập tên công ty" />
+            <Input placeholder="Nhập tên công ty" size="large" />
           </Form.Item>
           <Form.Item
             name="Description"
@@ -135,9 +176,9 @@ export default function CreateNewApartmentModalButton() {
               },
             ]}
           >
-            <TextEditor />
+            <TextEditor placeholder="Nhập mô tả" />
           </Form.Item>
-          <Space direction="vertical" className="w-full">
+          <Space direction="vertical" className="w-full" size={0}>
             <Form.Item
               name="LeaderId"
               label={<div className="text-sm text-secondary">Trưởng nhóm</div>}
@@ -147,40 +188,65 @@ export default function CreateNewApartmentModalButton() {
                 },
               ]}
             >
-              <InputSelect
+              <InputSelect.Debounce
                 className="w-full"
-                placeholder="Chọn leader"
-                options={leaders.map((leader: Leader) => ({
-                  label: leader.Fullname,
-                  value: leader.LeaderId,
-                }))}
+                placeholder="Tìm kiếm bằng email"
+                fetchOptions={fetchLeaderList}
+                allowClear
+                size="large"
               />
             </Form.Item>
-            {leaderId && (
-              <div className="rounded-lg border-2 border-solid border-secondary p-2">
-                <Space direction="vertical" className="text-sm">
-                  <Avatar size={80} src={currentLeader?.AvatarUrl} />
-                  <div className="text-lg font-bold">
-                    {currentLeader?.Fullname}
+            <Form.Item
+              shouldUpdate={(prev, cur) => prev.LeaderId !== cur.LeaderId}
+            >
+              {({ getFieldValue }) => {
+                const leaderIdForm = getFieldValue("LeaderId");
+                const currentLeader = (
+                  accountState.currentLeaderList.users as Leader[]
+                ).find((leader) => leader.accountId === leaderIdForm) as Leader;
+
+                return leaderIdForm ? (
+                  <div className="rounded-lg border-2 border-solid border-secondary p-2">
+                    <Space direction="vertical" className="text-sm">
+                      <Avatar
+                        size={80}
+                        src={currentLeader?.avatarUrl}
+                        loading={accountState.isFetching}
+                      />
+                      {accountState.isFetching ? (
+                        <Skeleton
+                          title={{ width: 200 }}
+                          paragraph={{ rows: 1, width: 400 }}
+                        />
+                      ) : (
+                        <>
+                          <div className="text-lg font-bold">
+                            {currentLeader?.fullName}
+                          </div>
+                          <Space>
+                            <div>
+                              <span className="font-bold">email: </span>
+                              <span>{currentLeader?.email}</span>
+                            </div>
+                            <div>
+                              <Space>
+                                <PhoneFilled />
+                                <span className="font-bold">SĐT: </span>
+                                <span className="whitespace-nowrap">
+                                  {currentLeader?.phoneNumber}
+                                </span>
+                              </Space>
+                            </div>
+                          </Space>
+                        </>
+                      )}
+                    </Space>
                   </div>
-                  <Space>
-                    <div>
-                      <span className="font-bold">Email: </span>
-                      <span>{currentLeader?.Email}</span>
-                    </div>
-                    <div>
-                      <Space>
-                        <PhoneFilled />
-                        <span className="font-bold">SĐT: </span>
-                        <span className="whitespace-nowrap">
-                          {currentLeader?.PhoneNumber}
-                        </span>
-                      </Space>
-                    </div>
-                  </Space>
-                </Space>
-              </div>
-            )}
+                ) : (
+                  <></>
+                );
+              }}
+            </Form.Item>
           </Space>
         </Space>
       </Modal>

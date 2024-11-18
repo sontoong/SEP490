@@ -10,10 +10,11 @@ import {
 import { MenuProps, Modal, Space } from "antd";
 import { Avatar } from "../../../components/avatar";
 import { Dropdown } from "../../../components/dropdown";
-import { Customer } from "../../../models/user";
+import { Contract } from "../../../models/contract";
 import { Grid } from "../../../components/grids";
+import { formatDateToLocal } from "../../../utils/helpers";
 
-const ContractManagementDropdown = ({ record }: { record: Customer }) => {
+const ContractManagementDropdown = ({ record }: { record: Contract }) => {
   const [modal, contextHolder] = Modal.useModal();
 
   const items: MenuProps["items"] = [
@@ -26,6 +27,9 @@ const ContractManagementDropdown = ({ record }: { record: Customer }) => {
     {
       key: "2",
       label: "Tải hợp đồng",
+      onClick: () => {
+        window.open(record.item.fileUrl);
+      },
       icon: <DownloadOutlined />,
     },
   ];
@@ -36,7 +40,7 @@ const ContractManagementDropdown = ({ record }: { record: Customer }) => {
       width: 750,
       title: (
         <div className="text-sm uppercase text-secondary">
-          Thông tin của {record.Fullname}
+          Thông tin của {record.getCusInfo[0].fullName}
         </div>
       ),
       content: (
@@ -44,20 +48,13 @@ const ContractManagementDropdown = ({ record }: { record: Customer }) => {
           className="text-sm"
           items={[
             <Space direction="vertical" size={10}>
-              <Avatar src={record.AvatarUrl} size={70} />
+              <Avatar src={record.getCusInfo[0].avatarUrl} size={150} />
               <div>
-                <strong>Họ và Tên:</strong> {record.Fullname}
+                <strong>Họ và Tên:</strong> {record.getCusInfo[0].fullName}
               </div>
               <div>
-                <strong>Leader đã nhận: </strong>
-                {record.RoomId ? record.RoomId : "N/A"}
-              </div>
-              <div>
-                <strong>Chung cư:</strong>{" "}
-                {record.RoomId ? record.RoomId : "N/A"}
-              </div>
-              <div>
-                <strong>Phòng:</strong> {record.RoomId ? record.RoomId : "N/A"}
+                <strong>CCCD: </strong>
+                {record.getCusInfo[0].customers.cmT_CCCD}
               </div>
             </Space>,
             <Space direction="vertical" size={15}>
@@ -69,21 +66,23 @@ const ContractManagementDropdown = ({ record }: { record: Customer }) => {
                   <Space direction="horizontal" size={3}>
                     <PhoneFilled />
                     <strong>SĐT:</strong>
-                    <span>{record.Fullname}</span>
+                    <span>{record.getCusInfo[0].phoneNumber}</span>
                   </Space>
                 </div>
                 <div>
                   <Space direction="horizontal" size={3}>
                     <CalendarFilled />
                     <strong>Ngày sinh:</strong>
-                    <span>{record.DateOfBirth}</span>
+                    <span>
+                      {formatDateToLocal(record.getCusInfo[0].dateOfBirth)}
+                    </span>
                   </Space>
                 </div>
                 <div>
                   <Space direction="horizontal" size={3}>
                     <MailFilled />
                     <strong>Email:</strong>
-                    <span>{record.Email}</span>
+                    <span>{record.getCusInfo[0].email}</span>
                   </Space>
                 </div>
               </Space>

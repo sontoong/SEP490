@@ -3,13 +3,13 @@ import { MenuProps } from "antd";
 import { Dropdown } from "../../../components/dropdown";
 import { useState } from "react";
 import { ViewApartmentDetailModal } from "./ViewApartmentDetailModal";
-import { ApartmentArea } from "../../../models/apartmentArea";
+import { Apartment } from "../../../models/apartment";
 import UpdateApartmentModal from "./UpdateApartmentModal";
 
 const ApartmentManagementDropdown = ({
   apartment,
 }: {
-  apartment: ApartmentArea;
+  apartment: Apartment;
 }) => {
   const [
     isViewApartmentDetailModalVisible,
@@ -39,7 +39,7 @@ const ApartmentManagementDropdown = ({
         <EllipsisOutlined className="text-lg" />
       </Dropdown>
       <ViewApartmentDetailModal
-        apartmentId={apartment.AreaId}
+        apartmentId={apartment.areaId}
         isModalVisible={isViewApartmentDetailModalVisible}
         setIsModalVisible={setIsViewApartmentDetailModalVisible}
       />

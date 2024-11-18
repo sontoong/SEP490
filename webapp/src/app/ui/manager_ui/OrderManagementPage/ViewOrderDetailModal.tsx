@@ -1,7 +1,5 @@
-import { useState } from "react";
-import { customers, orders, products } from "../../../../constants/testData";
+import { useEffect, useState } from "react";
 import {
-  CheckCircleTwoTone,
   EyeOutlined,
   MailFilled,
   PhoneFilled,
@@ -10,18 +8,23 @@ import {
 import { Modal } from "../../../components/modals";
 import { Space } from "antd";
 import { Avatar } from "../../../components/avatar";
-import { combineArraysLoose, formatCurrency } from "../../../utils/helpers";
+import { formatCurrency, formatDateToLocal } from "../../../utils/helpers";
 import { Grid } from "../../../components/grids";
 import { List } from "../../../components/list";
 import { PrimaryButton } from "../../../components/buttons";
+import { useOrder } from "../../../hooks/useOrder";
+import { useSpecialUI } from "../../../hooks/useSpecialUI";
 
-export function ViewDetailButton({ OrderId }: { OrderId: string }) {
+export function ViewDetailButton({ orderId }: { orderId: string }) {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const { state: orderState, handleGetOrder } = useOrder();
+  const { state: specialUIState } = useSpecialUI();
 
-  const record = orders.find((order) => order.OrderId === OrderId);
-  const customer = customers.find(
-    (customer) => customer.CustomerId === record?.CustomerId,
-  );
+  useEffect(() => {
+    if (isModalVisible) {
+      handleGetOrder({ OrderId: orderId });
+    }
+  }, [handleGetOrder, isModalVisible, orderId]);
 
   return (
     <>
@@ -35,6 +38,7 @@ export function ViewDetailButton({ OrderId }: { OrderId: string }) {
         }
         maskClosable={false}
         open={isModalVisible}
+        loading={specialUIState.isLoading}
         footer={[
           <PrimaryButton
             key="close"
@@ -45,79 +49,73 @@ export function ViewDetailButton({ OrderId }: { OrderId: string }) {
         ]}
         closeIcon={null}
         width={1000}
-        // confirmLoading={state.isSending}
       >
         <Grid
           className="text-sm"
           items={[
             <Space direction="vertical" size={10} className="w-full">
-              <Avatar src={customer?.AvatarUrl} size={70} />
               <div>
-                <strong>Họ và Tên:</strong> {customer?.Fullname}
+                <strong>Họ và Tên:</strong>{" "}
+                {orderState.currentOrder.customer?.fullName}
               </div>
               <div>
                 <Space direction="horizontal" size={3}>
                   <PhoneFilled />
                   <strong>SĐT:</strong>
-                  <span>{customer?.PhoneNumber}</span>
+                  <span>{orderState.currentOrder.customer?.phoneNumber}</span>
                 </Space>
               </div>
               <div>
                 <Space direction="horizontal" size={3}>
                   <MailFilled />
                   <strong>Email:</strong>
-                  <span>{customer?.Email}</span>
+                  <span>{orderState.currentOrder.customer?.email}</span>
                 </Space>
               </div>
               <div>
-                <strong>Chung cư:</strong> {customer?.RoomId}
+                <strong>Chung cư:</strong>{" "}
+                {orderState.currentOrder.apartment?.name}
               </div>
               <div>
-                <strong>Phòng:</strong> {customer?.RoomId}
-              </div>
-              <div>
-                <strong>Leader:</strong> {customer?.Role}
+                <strong>Leader:</strong>{" "}
+                {orderState.currentOrder.leader?.fullName}
               </div>
             </Space>,
             <Space direction="vertical" size={15} className="w-full">
               <div>
                 <div className="text-2xl font-bold">Đơn hàng</div>
-                <div className="text-xs text-gray-400">#{OrderId}</div>
+                <div className="text-xs text-gray-400">#{orderId}</div>
               </div>
               <div>
-                <strong>Ngày đặt:</strong> 13/11/2024
+                <strong>Ngày đặt:</strong>{" "}
+                {formatDateToLocal(orderState.currentOrder.order?.purchaseTime)}
               </div>
               <List
                 fontSize={16}
                 itemLayout="vertical"
-                dataSource={combineArraysLoose(record?.OrderDetails, products, [
-                  "ProductId",
-                ])}
+                dataSource={orderState.currentOrder.order?.result}
                 footer={
                   <div className="flex justify-between text-base">
                     <div className="font-bold uppercase">Tổng tiền</div>
-                    <div className="font-bold">{formatCurrency(500)}</div>
+                    <div className="font-bold">
+                      {formatCurrency(orderState.currentOrder.order?.sum)}
+                    </div>
                   </div>
                 }
                 renderItem={(item) => {
                   return (
                     <List.Item
-                      key={item.ProductId}
+                      key={item.product.productId}
                       extra={
                         <Space size={20}>
                           <div>
                             <div>
                               <span>Giá gốc: </span>
-                              {formatCurrency(item.ProductPrices?.PriceByDate)}
+                              {formatCurrency(item.orderDetail.price)}
                             </div>
                             <div className="font-bold">
                               <span>Tổng: </span>
-                              {item.ProductPrices?.PriceByDate
-                                ? formatCurrency(
-                                    item.ProductPrices?.PriceByDate *
-                                      item.Quantity,
-                                  )
-                                : "N/A"}
+                              {formatCurrency(item.orderDetail.totalPrice)}
                             </div>
                           </div>
                         </Space>
@@ -127,23 +125,16 @@ export function ViewDetailButton({ OrderId }: { OrderId: string }) {
                         avatar={
                           <Avatar
                             size={50}
-                            src={item.ImageUrl}
+                            src={item.product.imageUrl}
                             shape="square"
                           />
                         }
                         title={
                           <div className="font-normal">
                             <Space>
-                              <div>{item.Name}</div>
-                              <div>
-                                {item.Status ? (
-                                  <CheckCircleTwoTone twoToneColor="#52c41a" />
-                                ) : (
-                                  <></>
-                                )}
-                              </div>
+                              <div>{item.product.name}</div>
                             </Space>
-                            <div>Số lượng: {item.Quantity}</div>
+                            <div>Số lượng: {item.orderDetail.quantity}</div>
                           </div>
                         }
                       />

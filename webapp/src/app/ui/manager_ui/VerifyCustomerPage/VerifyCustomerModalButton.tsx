@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CalendarFilled,
   EyeOutlined,
@@ -8,15 +8,48 @@ import {
 } from "@ant-design/icons";
 import { Modal } from "../../../components/modals";
 import { Space } from "antd";
-import { OutlineButton, PrimaryButton } from "../../../components/buttons";
+import { PrimaryButton } from "../../../components/buttons";
 import { Grid } from "../../../components/grids";
-import { Avatar } from "../../../components/avatar";
-import { Customer } from "../../../models/user";
+import { PendingCustomer } from "../../../models/user";
+import { useApartment } from "../../../hooks/useApartment";
+import { useAccount } from "../../../hooks/useAccount";
+import { formatDateToLocal } from "../../../utils/helpers";
+import { Form } from "../../../components/form";
+import { InputSelect } from "../../../components/inputs";
 
 export default function VerifyCustomerModalButton({
   customer,
 }: VerifyCustomerModalProps) {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [addRoomForm] = Form.useForm();
+  const { state: apartmentState, handleGetAllRoomsPaginated } = useApartment();
+  const { state: accountState, handleApproveCustomerAccount } = useAccount();
+
+  const initialValues = {
+    roomIds: [],
+  };
+
+  useEffect(() => {
+    if (isModalVisible) {
+      handleGetAllRoomsPaginated({
+        AreaId: customer.apartment[0].areaId,
+        PageIndex: 1,
+        Pagesize: 1000,
+      });
+    }
+  }, [customer.apartment, handleGetAllRoomsPaginated, isModalVisible]);
+
+  function handleApprove(values: typeof initialValues) {
+    console.log(values);
+    handleApproveCustomerAccount({
+      values: {
+        pendingAccountId: customer.get.pendingAccountId,
+        isApproval: true,
+        roomIds: values.roomIds,
+      },
+      callBackFn: () => setIsModalVisible(false),
+    });
+  }
 
   return (
     <>
@@ -26,78 +59,89 @@ export default function VerifyCustomerModalButton({
           <Space className="text-base">
             <UserOutlined />
             <div className="uppercase text-secondary">
-              Thông tin của {customer.Fullname}
+              Thông tin của {customer.get.fullName}
             </div>
           </Space>
         }
+        afterClose={addRoomForm.resetFields}
         open={isModalVisible}
         maskClosable={false}
         footer={[
-          <OutlineButton
-            key="reject"
-            text="Không duyệt"
-            onClick={() => setIsModalVisible(false)}
-            size="middle"
-          />,
           <PrimaryButton
             key="accept"
             text="Duyệt tài khoản"
-            onClick={() => setIsModalVisible(false)}
+            onClick={() => addRoomForm.submit()}
             size="middle"
+            loading={accountState.isSending}
           />,
         ]}
         onCancel={() => setIsModalVisible(false)}
         width={800}
-        // confirmLoading={state.isSending}
+        confirmLoading={accountState.isSending}
       >
         <Grid
           className="text-sm"
           items={[
-            <Space direction="vertical" size={10}>
-              <Avatar src={customer.AvatarUrl} size={70} />
-              <div>
-                <strong>Họ và Tên:</strong> {customer.Fullname}
-              </div>
-              <div>
-                <strong>Leader đã nhận:</strong>{" "}
-                {customer.RoomId ? customer.RoomId : "N/A"}
-              </div>
-              <div>
-                <strong>Chung cư:</strong>{" "}
-                {customer.RoomId ? customer.RoomId : "N/A"}
-              </div>
-              <div>
-                <strong>Phòng:</strong>{" "}
-                {customer.RoomId ? customer.RoomId : "N/A"}
-              </div>
-            </Space>,
             <Space direction="vertical" size={15}>
               <div className="text-lg font-bold uppercase">
                 Thông tin cá nhân
               </div>
               <Space direction="vertical" size={10}>
                 <div>
+                  <strong>Họ và Tên:</strong> {customer.get.fullName}
+                </div>
+                <div>
                   <Space direction="horizontal" size={3}>
                     <PhoneFilled />
                     <strong>SĐT:</strong>
-                    <span>{customer.PhoneNumber}</span>
+                    <span>{customer.get.phoneNumber}</span>
                   </Space>
                 </div>
                 <div>
                   <Space direction="horizontal" size={3}>
                     <CalendarFilled />
                     <strong>Ngày sinh:</strong>
-                    <span>{customer.DateOfBirth}</span>
+                    <span>{formatDateToLocal(customer.get.dateOfBirth)}</span>
                   </Space>
                 </div>
                 <div>
                   <Space direction="horizontal" size={3}>
                     <MailFilled />
                     <strong>Email:</strong>
-                    <span>{customer.Email}</span>
+                    <span>{customer.get.email}</span>
                   </Space>
                 </div>
               </Space>
+            </Space>,
+            <Space direction="vertical" size={15} className="w-full">
+              <div className="text-lg font-bold uppercase">Gán phòng</div>
+              <Form
+                form={addRoomForm}
+                initialValues={initialValues}
+                name="SearchForm"
+                onFinish={handleApprove}
+                className="w-full"
+              >
+                <Form.Item
+                  noStyle
+                  name="roomIds"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Chưa thêm phòng",
+                    },
+                  ]}
+                >
+                  <InputSelect
+                    mode={"multiple"}
+                    allowClear
+                    options={apartmentState.currentRoomList.rooms.map(
+                      (room) => ({ label: room.roomId, value: room.roomId }),
+                    )}
+                    className="w-full"
+                  />
+                </Form.Item>
+              </Form>
             </Space>,
           ]}
         />
@@ -107,5 +151,5 @@ export default function VerifyCustomerModalButton({
 }
 
 type VerifyCustomerModalProps = {
-  customer: Customer;
+  customer: PendingCustomer;
 };

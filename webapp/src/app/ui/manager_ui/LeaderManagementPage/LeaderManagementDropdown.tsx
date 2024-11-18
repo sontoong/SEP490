@@ -1,6 +1,5 @@
 import {
   CalendarFilled,
-  EditOutlined,
   EllipsisOutlined,
   EyeOutlined,
   MailFilled,
@@ -11,14 +10,11 @@ import { MenuProps, Modal, Space } from "antd";
 import { Avatar } from "../../../components/avatar";
 import { Dropdown } from "../../../components/dropdown";
 import { Leader } from "../../../models/user";
-import { useState } from "react";
-import ChangeApartmentAreaModal from "./ChangeApartmentAreaModal";
 import { Grid } from "../../../components/grids";
+import { formatDateToLocal } from "../../../utils/helpers";
 
 const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
   const [modal, contextHolder] = Modal.useModal();
-  const [isChangeApartmentAreaModalOpen, setIsChangeApartmentAreaModalOpen] =
-    useState(false);
 
   const items: MenuProps["items"] = [
     {
@@ -26,12 +22,6 @@ const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
       label: "Xem chi tiết",
       onClick: handleViewDetail,
       icon: <EyeOutlined />,
-    },
-    {
-      key: "2",
-      label: "Đổi chung cư",
-      onClick: () => setIsChangeApartmentAreaModalOpen(true),
-      icon: <EditOutlined />,
     },
   ];
 
@@ -41,7 +31,7 @@ const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
       width: 700,
       title: (
         <div className="text-sm uppercase text-secondary">
-          Thông tin của {record.Fullname}
+          Thông tin của {record.fullName}
         </div>
       ),
       content: (
@@ -49,13 +39,13 @@ const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
           className="text-sm"
           items={[
             <Space direction="vertical" size={10}>
-              <Avatar src={record.AvatarUrl} size={70} />
+              <Avatar src={record.avatarUrl} size={150} />
               <div>
-                <strong>Họ và Tên:</strong> {record.Fullname}
+                <strong>Họ và Tên: </strong> {record.fullName}
               </div>
               <div>
-                <strong>Chung cư:</strong>
-                {record.ApartmentAreaName ? record.ApartmentAreaName : "N/A"}
+                <strong>Chung cư: </strong>
+                {record.name ? record.name : "N/A"}
               </div>
             </Space>,
             <Space direction="vertical" size={15}>
@@ -67,21 +57,25 @@ const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
                   <Space direction="horizontal" size={3}>
                     <PhoneFilled />
                     <strong>SĐT:</strong>
-                    <span>{record.Fullname}</span>
+                    <span>{record.phoneNumber}</span>
                   </Space>
                 </div>
                 <div>
                   <Space direction="horizontal" size={3}>
                     <CalendarFilled />
                     <strong>Ngày sinh:</strong>
-                    <span>{record.DateOfBirth}</span>
+                    <span>{formatDateToLocal(record.dateOfBirth)}</span>
                   </Space>
                 </div>
                 <div>
-                  <Space direction="horizontal" size={3}>
+                  <Space
+                    direction="horizontal"
+                    size={3}
+                    className="flex items-start"
+                  >
                     <MailFilled />
                     <strong>Email:</strong>
-                    <span>{record.Email}</span>
+                    <span className="break-all">{record.email}</span>
                   </Space>
                 </div>
               </Space>
@@ -98,10 +92,6 @@ const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
       <Dropdown menu={{ items }} trigger={["click"]}>
         <EllipsisOutlined className="text-lg" />
       </Dropdown>
-      <ChangeApartmentAreaModal
-        open={isChangeApartmentAreaModalOpen}
-        setIsModalOpen={setIsChangeApartmentAreaModalOpen}
-      />
       {contextHolder}
     </>
   );

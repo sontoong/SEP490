@@ -57,8 +57,12 @@ export default function LoginPage() {
                   rules={[
                     {
                       type: "email",
+                      message: "",
+                    },
+                    {
                       required: true,
                       whitespace: true,
+                      message: "Vui lòng nhập email",
                     },
                   ]}
                 >
@@ -77,6 +81,7 @@ export default function LoginPage() {
                       type: "string",
                       required: true,
                       whitespace: true,
+                      message: "Vui lòng nhập mật khẩu",
                     },
                   ]}
                 >

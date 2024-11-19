@@ -313,12 +313,13 @@ export const approveCustomerAccount = createAsyncThunk<
   any,
   ApproveCustomerAccountParams
 >("account/send/approveCustomerAccount", async (data, { rejectWithValue }) => {
-  const { isApproval, pendingAccountId, roomIds } = data;
+  const { isApproval, pendingAccountId, roomIds, reason } = data;
   try {
     const response = await agent.Account.approveCustomerAccount({
       isApproval,
       pendingAccountId,
       roomIds,
+      reason,
     });
     return response;
   } catch (error) {
@@ -391,4 +392,5 @@ export type ApproveCustomerAccountParams = {
   pendingAccountId: string;
   roomIds: string[];
   isApproval: boolean;
+  reason: string | null;
 };

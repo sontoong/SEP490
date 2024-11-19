@@ -14,6 +14,7 @@ import {
   SendPasswordResetLinkParams,
   setCurrentUser,
 } from "../redux/slice/authSlice";
+import { ROLE } from "../../constants/role";
 
 export function useAuth() {
   const { notification } = App.useApp();
@@ -26,14 +27,21 @@ export function useAuth() {
       if (login.fulfilled.match(resultAction)) {
         const { at, rt } = resultAction.payload;
         if (at && rt) {
-          localStorage.setItem("access_token", at);
-          localStorage.setItem("refresh_token", rt);
           const decode = jwtDecode(at) as any;
-          dispatch(setCurrentUser(decode));
-          navigate("/");
+          if (![ROLE.admin, ROLE.manager].includes(decode.role)) {
+            notification.error({
+              message: "Lỗi",
+              description: "Tài khoản không có quyền truy cập",
+              placement: "topRight",
+            });
+          } else {
+            localStorage.setItem("access_token", at);
+            localStorage.setItem("refresh_token", rt);
+            dispatch(setCurrentUser(decode));
+            navigate("/");
+          }
         }
       } else {
-        console.log(resultAction);
         if (resultAction.payload) {
           notification.error({
             message: "Lỗi",

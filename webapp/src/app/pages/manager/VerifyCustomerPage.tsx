@@ -1,6 +1,6 @@
 import { Form } from "../../components/form";
 import { useTitle } from "../../hooks/useTitle";
-import { Space, TableColumnsType } from "antd";
+import { Space, TableColumnsType, Tag } from "antd";
 import { Input } from "../../components/inputs";
 import { PendingCustomer } from "../../models/user";
 import { Table } from "../../components/table";
@@ -20,7 +20,7 @@ export default function VerifyCustomerPage() {
     usePagination();
   const [searchByPhone, setSearchByPhone] = useState<string>();
 
-  const fetchProducts = useCallback(() => {
+  const fetchPendingAccountsPaginated = useCallback(() => {
     handleGetAllPendingAccountPaginated({
       PageIndex: currentPage,
       Pagesize: currentPageSize,
@@ -34,8 +34,8 @@ export default function VerifyCustomerPage() {
   ]);
 
   useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+    fetchPendingAccountsPaginated();
+  }, [fetchPendingAccountsPaginated]);
 
   const initialValuesSearch = {
     searchString: "",
@@ -69,9 +69,29 @@ export default function VerifyCustomerPage() {
       dataIndex: ["apartment", "0", "name"],
     },
     {
+      title: "Phòng",
+      dataIndex: ["get", "roomIds"],
+      render: (_, { get }) => (
+        <>
+          {get.roomIds.map((tag) => {
+            return (
+              <Tag color="green" key={tag}>
+                {tag.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
+    },
+    {
       title: "",
       key: "actions",
-      render: (_, record) => <VerifyCustomerModalButton customer={record} />,
+      render: (_, record) => (
+        <VerifyCustomerModalButton
+          customer={record}
+          fetchPendingAccountsPaginated={fetchPendingAccountsPaginated}
+        />
+      ),
     },
   ];
 

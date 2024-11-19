@@ -34,6 +34,7 @@ function CustomAvatar(props: CustomAvatarProps) {
           icon={shape === "square" ? <FileOutlined /> : <UserOutlined />}
           className={className}
           shape={shape}
+          style={{ backgroundColor: "#fff" }}
           {...rest}
         />
       )}

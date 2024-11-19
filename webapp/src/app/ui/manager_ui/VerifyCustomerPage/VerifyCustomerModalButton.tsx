@@ -1,53 +1,106 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   CalendarFilled,
   EyeOutlined,
   MailFilled,
   PhoneFilled,
   UserOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
 import { Modal } from "../../../components/modals";
 import { Space } from "antd";
-import { PrimaryButton } from "../../../components/buttons";
+import { OutlineButton, PrimaryButton } from "../../../components/buttons";
 import { Grid } from "../../../components/grids";
 import { PendingCustomer } from "../../../models/user";
-import { useApartment } from "../../../hooks/useApartment";
 import { useAccount } from "../../../hooks/useAccount";
 import { formatDateToLocal } from "../../../utils/helpers";
 import { Form } from "../../../components/form";
-import { InputSelect } from "../../../components/inputs";
+import { Input } from "../../../components/inputs";
 
 export default function VerifyCustomerModalButton({
   customer,
+  fetchPendingAccountsPaginated,
 }: VerifyCustomerModalProps) {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [addRoomForm] = Form.useForm();
-  const { state: apartmentState, handleGetAllRoomsPaginated } = useApartment();
+  const [modal, contextHolder] = Modal.useModal();
+  const [disableReasonForm] = Form.useForm();
   const { state: accountState, handleApproveCustomerAccount } = useAccount();
 
-  const initialValues = {
-    roomIds: [],
-  };
-
-  useEffect(() => {
-    if (isModalVisible) {
-      handleGetAllRoomsPaginated({
-        AreaId: customer.apartment[0].areaId,
-        PageIndex: 1,
-        Pagesize: 1000,
-      });
-    }
-  }, [customer.apartment, handleGetAllRoomsPaginated, isModalVisible]);
-
-  function handleApprove(values: typeof initialValues) {
-    console.log(values);
+  function handleApprove() {
     handleApproveCustomerAccount({
       values: {
         pendingAccountId: customer.get.pendingAccountId,
         isApproval: true,
-        roomIds: values.roomIds,
+        roomIds: customer.get.roomIds,
+        reason: null,
       },
-      callBackFn: () => setIsModalVisible(false),
+      callBackFn: () => {
+        setIsModalVisible(false);
+        if (fetchPendingAccountsPaginated) {
+          fetchPendingAccountsPaginated();
+        }
+      },
+    });
+  }
+
+  function handleDisapprove() {
+    const initialValuesDisableReason = {
+      disableReason: "",
+    };
+
+    modal.confirm({
+      icon: <WarningOutlined />,
+      afterClose: () => {
+        disableReasonForm.resetFields();
+      },
+      title: (
+        <div className="flex items-center whitespace-nowrap text-sm">
+          <span>Vui lòng nhập lý do từ chối</span>
+        </div>
+      ),
+      content: (
+        <Space direction="vertical" className="w-full">
+          <Form
+            form={disableReasonForm}
+            initialValues={initialValuesDisableReason}
+            name="DisableReasonForm"
+          >
+            <Form.Item
+              noStyle
+              name="disableReason"
+              rules={[
+                {
+                  type: "string",
+                  required: true,
+                  message: "Vui lòng nhập lý do từ chối",
+                },
+              ]}
+            >
+              <Input.TextArea placeholder="Nhập ghi chú" />
+            </Form.Item>
+          </Form>
+        </Space>
+      ),
+      onOk: async () => {
+        await disableReasonForm.validateFields().then(async () => {
+          const values = disableReasonForm.getFieldsValue(true);
+
+          await handleApproveCustomerAccount({
+            values: {
+              pendingAccountId: customer.get.pendingAccountId,
+              isApproval: false,
+              roomIds: customer.get.roomIds,
+              reason: values.disableReason,
+            },
+            callBackFn: () => {
+              setIsModalVisible(false);
+              if (fetchPendingAccountsPaginated) {
+                fetchPendingAccountsPaginated();
+              }
+            },
+          });
+        });
+      },
     });
   }
 
@@ -63,16 +116,22 @@ export default function VerifyCustomerModalButton({
             </div>
           </Space>
         }
-        afterClose={addRoomForm.resetFields}
         open={isModalVisible}
         maskClosable={false}
         footer={[
+          <OutlineButton
+            key="decline"
+            text="Từ chối"
+            onClick={() => handleDisapprove()}
+            size="middle"
+            disabled={accountState.isSending}
+          />,
           <PrimaryButton
             key="accept"
             text="Duyệt tài khoản"
-            onClick={() => addRoomForm.submit()}
+            onClick={() => handleApprove()}
             size="middle"
-            loading={accountState.isSending}
+            disabled={accountState.isSending}
           />,
         ]}
         onCancel={() => setIsModalVisible(false)}
@@ -114,42 +173,31 @@ export default function VerifyCustomerModalButton({
               </Space>
             </Space>,
             <Space direction="vertical" size={15} className="w-full">
-              <div className="text-lg font-bold uppercase">Gán phòng</div>
-              <Form
-                form={addRoomForm}
-                initialValues={initialValues}
-                name="SearchForm"
-                onFinish={handleApprove}
-                className="w-full"
-              >
-                <Form.Item
-                  noStyle
-                  name="roomIds"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Chưa thêm phòng",
-                    },
-                  ]}
-                >
-                  <InputSelect
-                    mode={"multiple"}
-                    allowClear
-                    options={apartmentState.currentRoomList.rooms.map(
-                      (room) => ({ label: room.roomId, value: room.roomId }),
-                    )}
-                    className="w-full"
-                  />
-                </Form.Item>
-              </Form>
+              <div className="text-lg font-bold uppercase">
+                Thông tin căn hộ
+              </div>
+              <Space direction="vertical" size={10}>
+                <div>
+                  <strong>Tên chung cư:</strong> {customer.apartment[0]?.name}
+                </div>
+                <div>
+                  {customer.get.roomIds.map((room) => (
+                    <div key={room}>
+                      <strong>Phòng:</strong> {room}
+                    </div>
+                  ))}
+                </div>
+              </Space>
             </Space>,
           ]}
         />
       </Modal>
+      {contextHolder}
     </>
   );
 }
 
 type VerifyCustomerModalProps = {
   customer: PendingCustomer;
+  fetchPendingAccountsPaginated?: () => void;
 };

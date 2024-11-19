@@ -52,7 +52,7 @@ export type PendingCustomer = {
     phoneNumber: string;
     dateOfBirth: string;
     cmT_CCCD: string;
-    areaId: string;
+    roomIds: string[];
   };
   apartment: [
     {

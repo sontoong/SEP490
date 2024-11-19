@@ -21,7 +21,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!token) {
-      navigate("/login");
+      navigate("/login", { replace: true });
     }
   }, [navigate, token]);
 
@@ -34,7 +34,7 @@ export default function LoginPage() {
     if (token) {
       handleResetPassword({
         values: { password: values.password, token: token },
-        callBackFn: () => navigate("/login"),
+        callBackFn: () => navigate("/login", { replace: true }),
       });
     }
   };

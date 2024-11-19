@@ -17,7 +17,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const { state: stateAuth, handleResetPassword } = useAuth();
   const [form] = Form.useForm();
-  const token = useQueryParam("token");
+  const token = useQueryParam("token", true);
 
   useEffect(() => {
     if (!token) {

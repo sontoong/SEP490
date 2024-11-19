@@ -112,9 +112,9 @@ export default function LoginPage() {
             </div>
             <div className="flex justify-center">
               <PrimaryButton.BoldText
+                htmlType="submit"
                 text="Đổi mật khẩu"
                 loading={stateAuth.isSending}
-                onClick={() => form.submit()}
                 className="w-full"
               />
             </div>

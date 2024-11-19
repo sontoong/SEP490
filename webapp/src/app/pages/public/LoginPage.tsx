@@ -44,7 +44,6 @@ export default function LoginPage() {
               initialValues={initialValues}
               name="LoginPage"
               onFinish={handleSubmit}
-              // autoComplete="off"
             >
               <div>
                 <Form.Item
@@ -90,10 +89,10 @@ export default function LoginPage() {
               <div className="mt-5 flex justify-center">
                 <Form.Item className="w-full">
                   <PrimaryButton.BoldText
+                    htmlType="submit"
                     text="Đăng nhập"
                     loading={stateAuth.isSending}
                     className="w-full"
-                    htmlType="submit"
                   />
                 </Form.Item>
               </div>

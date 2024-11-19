@@ -58,7 +58,7 @@ export default function LoginPage() {
                     },
                   ]}
                 >
-                  <Input placeholder="Nhập email" />
+                  <Input placeholder="Nhập email" size="large" />
                 </Form.Item>
 
                 <Link to="/login">

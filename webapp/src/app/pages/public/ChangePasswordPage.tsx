@@ -72,7 +72,10 @@ export default function LoginPage() {
                     },
                   ]}
                 >
-                  <Input.Password placeholder="Nhập mật khẩu mới" />
+                  <Input.Password
+                    placeholder="Nhập mật khẩu mới"
+                    size="large"
+                  />
                 </Form.Item>
                 <Form.Item
                   name="confirm"
@@ -103,7 +106,10 @@ export default function LoginPage() {
                     }),
                   ]}
                 >
-                  <Input.Password placeholder="Nhập lại mật khẩu mới" />
+                  <Input.Password
+                    placeholder="Nhập lại mật khẩu mới"
+                    size="large"
+                  />
                 </Form.Item>
                 <Link to="/login">
                   <span className="underline">Đăng nhập</span>

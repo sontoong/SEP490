@@ -34,14 +34,14 @@ export default function LoginPage() {
       />
       <ScreenCard cardTitle={"Đổi mật khẩu"} className="w-1/3" bordered={false}>
         <div className="px-5">
-          <Space direction="vertical" size="large" className="w-full">
-            <div>
-              <Form
-                form={form}
-                initialValues={initialValues}
-                name="ForgotPasswordForm"
-                onFinish={handleSubmit}
-              >
+          <Form
+            form={form}
+            initialValues={initialValues}
+            name="ForgotPasswordForm"
+            onFinish={handleSubmit}
+          >
+            <Space direction="vertical" size="large" className="w-full">
+              <div>
                 <Form.Item
                   name="email"
                   label={
@@ -60,20 +60,21 @@ export default function LoginPage() {
                 >
                   <Input placeholder="Nhập email" />
                 </Form.Item>
-              </Form>
-              <Link to="/login">
-                <span className="underline">Đăng nhập</span>
-              </Link>
-            </div>
-            <div className="flex justify-center">
-              <PrimaryButton.BoldText
-                htmlType="submit"
-                text="Gửi link"
-                loading={stateAuth.isSending}
-                className="w-full"
-              />
-            </div>
-          </Space>
+
+                <Link to="/login">
+                  <span className="underline">Đăng nhập</span>
+                </Link>
+              </div>
+              <div className="flex justify-center">
+                <PrimaryButton.BoldText
+                  htmlType="submit"
+                  text="Gửi link"
+                  loading={stateAuth.isSending}
+                  className="w-full"
+                />
+              </div>
+            </Space>
+          </Form>
         </div>
       </ScreenCard>
     </div>

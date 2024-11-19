@@ -38,13 +38,13 @@ export default function LoginPage() {
         bordered={false}
       >
         <div className="px-5">
-          <Space direction="vertical" size="large" className="w-full">
-            <Form
-              form={form}
-              initialValues={initialValues}
-              name="LoginPage"
-              onFinish={handleSubmit}
-            >
+          <Form
+            form={form}
+            initialValues={initialValues}
+            name="LoginPage"
+            onFinish={handleSubmit}
+          >
+            <Space direction="vertical" size="large" className="w-full">
               <div>
                 <Form.Item
                   name="email_Or_Phone"
@@ -86,7 +86,7 @@ export default function LoginPage() {
                   <span className="underline">Đổi mật khẩu</span>
                 </Link>
               </div>
-              <div className="mt-5 flex justify-center">
+              <div className="flex justify-center">
                 <Form.Item className="w-full">
                   <PrimaryButton.BoldText
                     htmlType="submit"
@@ -96,8 +96,8 @@ export default function LoginPage() {
                   />
                 </Form.Item>
               </div>
-            </Form>
-          </Space>
+            </Space>
+          </Form>
         </div>
       </ScreenCard>
     </div>

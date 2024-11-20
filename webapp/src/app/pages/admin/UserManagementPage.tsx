@@ -1,4 +1,4 @@
-import { Space, TableColumnsType, Tag } from "antd";
+import { App, Space, TableColumnsType, Tag } from "antd";
 import { Avatar } from "../../components/avatar";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
@@ -18,6 +18,7 @@ import { useCallback, useEffect, useState } from "react";
 import { usePagination } from "../../hooks/usePagination";
 
 export default function UserManagementPage() {
+  const { notification } = App.useApp();
   useTitle({ tabTitle: "User Management - EWMH" });
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();
@@ -190,18 +191,42 @@ export default function UserManagementPage() {
     {
       title: "Trạng thái",
       dataIndex: "isDisabled",
-      render: (_, { isDisabled, accountId }) => {
+      render: (_, { isDisabled, accountId, role }) => {
         return (
-          <div
-            onClick={() =>
-              isDisabled
-                ? handleConfirmUnlock(accountId)
-                : handleConfirmLock(accountId)
-            }
-            className="w-fit cursor-pointer"
-          >
-            {statusGenerator(isDisabled)}
-          </div>
+          <>
+            {[ROLE.customer].includes(role) ? (
+              <div
+                onClick={() =>
+                  isDisabled
+                    ? handleConfirmUnlock(accountId)
+                    : handleConfirmLock(accountId)
+                }
+                className="w-fit cursor-pointer"
+              >
+                {statusGenerator(isDisabled)}
+              </div>
+            ) : (
+              <div
+                className="w-fit cursor-pointer"
+                onClick={() => {
+                  notification.info({
+                    message: "Không thể vô hiệu hóa tài khoản",
+                    description: (
+                      <>
+                        Không thể vô hiệu hóa tài khoản có chức vụ{" "}
+                        <span className="font-bold">
+                          {roleNameGenerator(role)}
+                        </span>
+                      </>
+                    ),
+                    placement: "topRight",
+                  });
+                }}
+              >
+                {statusGenerator(isDisabled)}
+              </div>
+            )}
+          </>
         );
       },
       filters: [
@@ -255,7 +280,7 @@ export default function UserManagementPage() {
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm"
+                placeholder="Tìm kiếm theo email"
                 onSearch={() => searchForm.submit()}
                 onClear={() => {
                   searchForm.setFieldValue("searchString", "");

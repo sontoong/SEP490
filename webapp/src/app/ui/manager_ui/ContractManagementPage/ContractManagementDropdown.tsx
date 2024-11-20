@@ -79,10 +79,16 @@ const ContractManagementDropdown = ({ record }: { record: Contract }) => {
                   </Space>
                 </div>
                 <div>
-                  <Space direction="horizontal" size={3}>
+                  <Space
+                    direction="horizontal"
+                    size={3}
+                    className="flex items-start"
+                  >
                     <MailFilled />
                     <strong>Email:</strong>
-                    <span>{record.getCusInfo[0].email}</span>
+                    <span className="break-all">
+                      {record.getCusInfo[0].email}
+                    </span>
                   </Space>
                 </div>
               </Space>

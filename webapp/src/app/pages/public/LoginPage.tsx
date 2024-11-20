@@ -51,22 +51,21 @@ export default function LoginPage() {
                   label={
                     <Space>
                       <UserOutlined />
-                      <span>Email</span>
+                      <span>Email / Số điện thoại</span>
                     </Space>
                   }
                   rules={[
                     {
-                      type: "email",
-                      message: "",
-                    },
-                    {
                       required: true,
                       whitespace: true,
-                      message: "Vui lòng nhập email",
+                      message: "Vui lòng nhập email hoặc số điện thoại",
                     },
                   ]}
                 >
-                  <Input placeholder="Nhập email" size="large" />
+                  <Input
+                    placeholder="Nhập email hoặc số điện thoại"
+                    size="large"
+                  />
                 </Form.Item>
                 <Form.Item
                   name="password"

@@ -1,4 +1,4 @@
-import { Space, TableColumnsType, Tag } from "antd";
+import { App, Space, TableColumnsType, Tag } from "antd";
 import { Avatar } from "../../components/avatar";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
@@ -14,6 +14,7 @@ import { usePagination } from "../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
 
 export default function LeaderManagementPage() {
+  const { notification } = App.useApp();
   useTitle({
     tabTitle: "Leaders - EWMH",
     paths: [{ title: "Danh sách trưởng nhóm", path: "/leaders" }],
@@ -163,19 +164,36 @@ export default function LeaderManagementPage() {
     {
       title: "Trạng thái",
       dataIndex: "isDisabled",
-      render: (_, { isDisabled, accountId, areaId }) => {
+      render: (_, { isDisabled, accountId, areaId, name }) => {
         return (
           <>
             {areaId ? (
-              <div>{statusGenerator(isDisabled)}</div>
+              <div
+                className="w-fit cursor-pointer"
+                onClick={() => {
+                  notification.info({
+                    message: "Trưởng nhóm có liên kết với chung cư",
+                    description: (
+                      <>
+                        Vui lòng thay trưởng nhóm của chung cư{" "}
+                        <span className="font-bold">{name}</span> để có thể vô
+                        hiệu hóa tài khoản
+                      </>
+                    ),
+                    placement: "topRight",
+                  });
+                }}
+              >
+                {statusGenerator(isDisabled)}
+              </div>
             ) : (
               <div
+                className="w-fit cursor-pointer"
                 onClick={() =>
                   isDisabled
                     ? handleConfirmUnlock(accountId)
                     : handleConfirmLock(accountId)
                 }
-                className="w-fit cursor-pointer"
               >
                 {statusGenerator(isDisabled)}
               </div>

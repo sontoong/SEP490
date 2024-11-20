@@ -70,6 +70,20 @@ export default function LoginPage() {
                       whitespace: true,
                       message: "Vui lòng nhập mật khẩu",
                     },
+                    {
+                      max: 20,
+                      message: "Mật khẩu không được quá 20 ký tự",
+                    },
+                    {
+                      min: 8,
+                      message: "Mật khẩu phải có ít nhất 8 ký tự",
+                    },
+                    {
+                      pattern:
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/,
+                      message:
+                        "Mật khẩu phải chứa ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một ký tự đặc biệt",
+                    },
                   ]}
                 >
                   <Input.Password

@@ -19,6 +19,7 @@ import { User } from "../../../models/user";
 import { useAccount } from "../../../hooks/useAccount";
 import { ROLE } from "../../../../constants/role";
 import { CreatePersonnelAccountParams } from "../../../redux/slice/accountSlice";
+import dayjs from "dayjs";
 
 export default function CreateNewAccountModalButton() {
   const [form] = Form.useForm();
@@ -163,7 +164,11 @@ export default function CreateNewAccountModalButton() {
               label="Ngày sinh"
               rules={[{ required: true }]}
             >
-              <InputDate placeholder="Chọn ngày sinh" size="large" />
+              <InputDate
+                placeholder="Chọn ngày sinh"
+                size="large"
+                minDate={dayjs("31-12-2000", "DD-MM-YYYY")}
+              />
             </Form.Item>
           </Space>
           <Form.Item name="role" label="Vai trò" rules={[{ required: true }]}>

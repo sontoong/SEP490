@@ -17,7 +17,7 @@ export default function OrderManagementPage() {
     paths: [{ title: "Danh sách đơn hàng", path: "/orders" }],
   });
   const [searchForm] = Form.useForm();
-  const { setPageSize, goToPage } = usePagination();
+  const { goToPage } = usePagination();
   const { state: requestState } = useRequest();
   const { state: specialUIState } = useSpecialUI();
   const [searchByPhone, setSearchByPhone] = useState<string>();
@@ -28,7 +28,6 @@ export default function OrderManagementPage() {
   };
 
   const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
-    setPageSize(8);
     goToPage(1);
     setSearchByPhone(searchString);
   };

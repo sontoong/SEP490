@@ -49,7 +49,6 @@ export default function ApartmentManagementPage() {
   };
 
   const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
-    setPageSize(8);
     goToPage(1);
     setSearchByName(searchString);
   };
@@ -143,6 +142,7 @@ export default function ApartmentManagementPage() {
           rowKey={(record) => record.areaId}
           loading={state.isFetching}
           pagination={{
+            showSizeChanger: true,
             total: state.currentApartmentList.total,
             pageSize: currentPageSize,
             current: currentPage,
@@ -150,6 +150,9 @@ export default function ApartmentManagementPage() {
               goToPage(pageIndex);
               setPageSize(pageSize);
             },
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} trong tổng ${total} chung cư`,
+            pageSizeOptions: [5, 10, 20, 50, 100],
           }}
         />
       </Space>

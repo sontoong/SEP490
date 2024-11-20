@@ -74,6 +74,7 @@ export default function CustomerOrderTab(props: CustomerOrderTabProps) {
         rowKey={(record) => record.order?.orderId}
         loading={state.isFetching}
         pagination={{
+          showSizeChanger: true,
           total: state.currentOrderList.total,
           pageSize: currentPageSize,
           current: currentPage,
@@ -81,6 +82,9 @@ export default function CustomerOrderTab(props: CustomerOrderTabProps) {
             goToPage(pageIndex);
             setPageSize(pageSize);
           },
+          showTotal: (total, range) =>
+            `${range[0]}-${range[1]} trong tổng ${total} đơn hàng`,
+          pageSizeOptions: [5, 10, 20, 50, 100],
         }}
         onChange={(_, __, sorter) => {
           setTableParams({

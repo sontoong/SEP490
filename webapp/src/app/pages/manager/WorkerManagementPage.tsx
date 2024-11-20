@@ -52,7 +52,6 @@ export default function WorkerManagementPage() {
   };
 
   const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
-    setPageSize(8);
     goToPage(1);
     setSearchByPhone(searchString);
   };
@@ -256,6 +255,7 @@ export default function WorkerManagementPage() {
           rowKey={(record) => record.item.accountId}
           loading={state.isFetching}
           pagination={{
+            showSizeChanger: true,
             total: state.currentWorkerList.total,
             pageSize: currentPageSize,
             current: currentPage,
@@ -263,6 +263,9 @@ export default function WorkerManagementPage() {
               goToPage(pageIndex);
               setPageSize(pageSize);
             },
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} trong tổng ${total} nhân viên`,
+            pageSizeOptions: [5, 10, 20, 50, 100],
           }}
           onChange={(_, filters) => {
             setTableParams({

@@ -80,6 +80,7 @@ export default function RequestOrderTab(props: CustomerOrderTabProps) {
         rowKey={(record) => record.order.requestId}
         loading={orderState.isFetching}
         pagination={{
+          showSizeChanger: true,
           total: orderState.currentOrderList.total,
           pageSize: currentPageSize,
           current: currentPage,
@@ -87,6 +88,9 @@ export default function RequestOrderTab(props: CustomerOrderTabProps) {
             goToPage(pageIndex);
             setPageSize(pageSize);
           },
+          showTotal: (total, range) =>
+            `${range[0]}-${range[1]} trong tổng ${total} yêu cầu`,
+          pageSizeOptions: [5, 10, 20, 50, 100],
         }}
         onChange={(_, __, sorter) => {
           setTableParams({

@@ -74,7 +74,7 @@ export default function ChangeLeaderModal({
       title={
         <Space className="text-base">
           <EditOutlined />
-          <div className="uppercase text-secondary">Giao cho leader</div>
+          <div className="uppercase text-secondary">Giao cho trưởng nhóm</div>
         </Space>
       }
       open={open}
@@ -96,78 +96,81 @@ export default function ChangeLeaderModal({
         </Form>
       )}
     >
-      <Form.Item
-        name="leaderId"
-        label={<div className="text-sm text-secondary">Leader</div>}
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <InputSelect
-          className="w-full"
-          placeholder="Chọn leader"
-          options={(accountState.currentLeaderList.users as Leader[]).map(
-            (leader) => ({
-              label: `${leader.fullName} - ${leader.email} ${leader.areaId ? `(${leader.name})` : ""}`,
-              value: leader.accountId,
-            }),
-          )}
-          loading={specialUIState.isLoading}
-          size="large"
-          allowClear
-        />
-      </Form.Item>
-      <Form.Item shouldUpdate={(prev, cur) => prev.leaderId !== cur.leaderId}>
-        {({ getFieldValue }) => {
-          const leaderIdForm = getFieldValue("leaderId");
-          const currentLeader = (
-            accountState.currentLeaderList.users as Leader[]
-          ).find((leader) => leader.accountId === leaderIdForm) as Leader;
-
-          return leaderIdForm ? (
-            <div className="rounded-lg border-2 border-solid border-secondary p-2">
-              <Space direction="vertical" className="text-sm">
-                <Avatar
-                  size={80}
-                  src={currentLeader?.avatarUrl}
-                  loading={specialUIState.isLoading}
-                />
-                {specialUIState.isLoading ? (
-                  <Skeleton
-                    title={{ width: 200 }}
-                    paragraph={{ rows: 1, width: 400 }}
+      <Space direction="vertical" className="w-full" size={0}>
+        <Form.Item
+          name="leaderId"
+          label={<div className="text-sm text-secondary">Trưởng nhóm</div>}
+          rules={[
+            {
+              required: true,
+              message: "Vui lòng chọn trưởng nhóm",
+            },
+          ]}
+          style={{ marginBottom: 10 }}
+        >
+          <InputSelect
+            className="w-full"
+            placeholder="Chọn leader"
+            options={(accountState.currentLeaderList.users as Leader[]).map(
+              (leader) => ({
+                label: `${leader.fullName} - ${leader.email} ${leader.areaId ? `(${leader.name})` : ""}`,
+                value: leader.accountId,
+              }),
+            )}
+            loading={specialUIState.isLoading}
+            size="large"
+            allowClear
+          />
+        </Form.Item>
+        <Form.Item shouldUpdate={(prev, cur) => prev.leaderId !== cur.leaderId}>
+          {({ getFieldValue }) => {
+            const leaderIdForm = getFieldValue("leaderId");
+            const currentLeader = (
+              accountState.currentLeaderList.users as Leader[]
+            ).find((leader) => leader.accountId === leaderIdForm) as Leader;
+            return leaderIdForm ? (
+              <div className="rounded-lg border-2 border-solid border-secondary p-2">
+                <Space direction="vertical" className="text-sm">
+                  <Avatar
+                    size={80}
+                    src={currentLeader?.avatarUrl}
+                    loading={specialUIState.isLoading}
                   />
-                ) : (
-                  <>
-                    <div className="text-lg font-bold">
-                      {currentLeader?.fullName}
-                    </div>
-                    <Space>
-                      <div>
-                        <span className="font-bold">email: </span>
-                        <span>{currentLeader?.email}</span>
+                  {specialUIState.isLoading ? (
+                    <Skeleton
+                      title={{ width: 200 }}
+                      paragraph={{ rows: 1, width: 400 }}
+                    />
+                  ) : (
+                    <>
+                      <div className="text-lg font-bold">
+                        {currentLeader?.fullName}
                       </div>
-                      <div>
-                        <Space>
-                          <PhoneFilled />
-                          <span className="font-bold">SĐT: </span>
-                          <span className="whitespace-nowrap">
-                            {currentLeader?.phoneNumber}
-                          </span>
-                        </Space>
-                      </div>
-                    </Space>
-                  </>
-                )}
-              </Space>
-            </div>
-          ) : (
-            <></>
-          );
-        }}
-      </Form.Item>
+                      <Space>
+                        <div>
+                          <span className="font-bold">email: </span>
+                          <span>{currentLeader?.email}</span>
+                        </div>
+                        <div>
+                          <Space>
+                            <PhoneFilled />
+                            <span className="font-bold">SĐT: </span>
+                            <span className="whitespace-nowrap">
+                              {currentLeader?.phoneNumber}
+                            </span>
+                          </Space>
+                        </div>
+                      </Space>
+                    </>
+                  )}
+                </Space>
+              </div>
+            ) : (
+              <></>
+            );
+          }}
+        </Form.Item>
+      </Space>
     </Modal>
   );
 }

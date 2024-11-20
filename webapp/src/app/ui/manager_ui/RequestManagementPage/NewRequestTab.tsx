@@ -87,6 +87,7 @@ export default function NewRequestTab(props: NewRequestTabProps) {
       rowKey={(record) => record.request.requestId}
       loading={state.isFetching}
       pagination={{
+        showSizeChanger: true,
         total: state.currentRequestList.total,
         pageSize: currentPageSize,
         current: currentPage,
@@ -94,6 +95,9 @@ export default function NewRequestTab(props: NewRequestTabProps) {
           goToPage(pageIndex);
           setPageSize(pageSize);
         },
+        showTotal: (total, range) =>
+          `${range[0]}-${range[1]} trong tổng ${total} yêu cầu`,
+        pageSizeOptions: [5, 10, 20, 50, 100],
       }}
     />
   );

@@ -42,7 +42,6 @@ export default function VerifyCustomerPage() {
   };
 
   const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
-    setPageSize(8);
     goToPage(1);
     setSearchByPhone(searchString);
   };
@@ -134,6 +133,7 @@ export default function VerifyCustomerPage() {
           rowKey={(record) => record.get.pendingAccountId}
           loading={state.isFetching}
           pagination={{
+            showSizeChanger: true,
             total: state.currentPendingAccountList.total,
             pageSize: currentPageSize,
             current: currentPage,
@@ -141,6 +141,9 @@ export default function VerifyCustomerPage() {
               goToPage(pageIndex);
               setPageSize(pageSize);
             },
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} trong tổng ${total} yêu cầu`,
+            pageSizeOptions: [5, 10, 20, 50, 100],
           }}
         />
       </Space>

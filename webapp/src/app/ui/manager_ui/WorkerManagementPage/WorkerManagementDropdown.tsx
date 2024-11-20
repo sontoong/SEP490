@@ -59,7 +59,7 @@ const WorkerManagementDropdown = ({
                 <strong>Họ và Tên:</strong> {record.item?.fullName}
               </div>
               <div>
-                <strong>Leader:</strong>{" "}
+                <strong>Trưởng nhóm:</strong>{" "}
                 {record.getLeaderInfo?.accountId
                   ? record.getLeaderInfo?.fullName
                   : "N/A"}

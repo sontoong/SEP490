@@ -55,7 +55,6 @@ export default function ProductManagementPage() {
   };
 
   const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
-    setPageSize(8);
     goToPage(1);
     setSearchByName(searchString);
   };
@@ -212,6 +211,7 @@ export default function ProductManagementPage() {
           rowKey={(record) => record.productId}
           loading={state.isFetching}
           pagination={{
+            showSizeChanger: true,
             total: state.currentProductList.total,
             pageSize: currentPageSize,
             current: currentPage,
@@ -219,6 +219,9 @@ export default function ProductManagementPage() {
               goToPage(pageIndex);
               setPageSize(pageSize);
             },
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} trong tổng ${total} sản phẩm`,
+            pageSizeOptions: [5, 10, 20, 50, 100],
           }}
           onChange={(_, filters, sorter) => {
             setTableParams({

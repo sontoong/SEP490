@@ -192,6 +192,7 @@ export default function RatingManagementPage() {
           rowKey={(record) => record.feedbackId}
           loading={state.isFetching}
           pagination={{
+            showSizeChanger: true,
             total: state.currentFeedbackList.total,
             pageSize: currentPageSize,
             current: currentPage,
@@ -199,6 +200,9 @@ export default function RatingManagementPage() {
               goToPage(pageIndex);
               setPageSize(pageSize);
             },
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} trong tổng ${total} đánh giá`,
+            pageSizeOptions: [5, 10, 20, 50, 100],
           }}
           onChange={(_, filters, sorter) => {
             setTableParams({

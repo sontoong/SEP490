@@ -79,6 +79,7 @@ export default function NewRequestTable(props: NewRequestTableProps) {
       rowKey={(record) => record.request.requestId}
       loading={state.isFetching}
       pagination={{
+        showSizeChanger: true,
         total: state.currentRequestList.total,
         pageSize: currentPageSize,
         current: currentPage,

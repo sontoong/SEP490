@@ -57,7 +57,6 @@ export default function ServiceManagementPage() {
   };
 
   const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
-    setPageSize(8);
     goToPage(1);
     setSearchByName(searchString);
   };
@@ -216,6 +215,7 @@ export default function ServiceManagementPage() {
           rowKey={(record) => record.servicePackageId}
           loading={state.isFetching}
           pagination={{
+            showSizeChanger: true,
             total: state.currentServicePackageList.total,
             pageSize: currentPageSize,
             current: currentPage,
@@ -223,6 +223,9 @@ export default function ServiceManagementPage() {
               goToPage(pageIndex);
               setPageSize(pageSize);
             },
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} trong tổng ${total} gói`,
+            pageSizeOptions: [5, 10, 20, 50, 100],
           }}
           onChange={(_, filters) => {
             setTableParams({

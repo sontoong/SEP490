@@ -48,7 +48,6 @@ export default function ContractManagementPage() {
   };
 
   const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
-    setPageSize(8);
     goToPage(1);
     setSearchByPhone(searchString);
   };
@@ -132,6 +131,7 @@ export default function ContractManagementPage() {
           rowKey={(record) => record.item.contractId}
           loading={state.isFetching}
           pagination={{
+            showSizeChanger: true,
             total: state.currentContractList.total,
             pageSize: currentPageSize,
             current: currentPage,
@@ -139,6 +139,8 @@ export default function ContractManagementPage() {
               goToPage(pageIndex);
               setPageSize(pageSize);
             },
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} trong tổng ${total} hợp đồng`,
           }}
           onChange={(_, __, sorter) => {
             setTableParams({

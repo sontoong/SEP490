@@ -32,7 +32,11 @@ export default function LoginPage() {
         src={LoginBackground}
         className="absolute h-full w-full object-cover"
       />
-      <ScreenCard cardTitle={"Đổi mật khẩu"} className="w-1/3" bordered={false}>
+      <ScreenCard
+        cardTitle={"Đổi mật khẩu"}
+        className="w-[500px]"
+        bordered={false}
+      >
         <div className="px-5">
           <Form
             form={form}

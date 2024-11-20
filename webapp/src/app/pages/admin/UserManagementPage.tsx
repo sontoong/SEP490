@@ -59,7 +59,6 @@ export default function UserManagementPage() {
   };
 
   const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
-    setPageSize(8);
     goToPage(1);
     setSearchByEmail(searchString);
   };

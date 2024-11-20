@@ -53,7 +53,6 @@ export default function LeaderManagementPage() {
   };
 
   const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
-    setPageSize(8);
     goToPage(1);
     setSearchByName(searchString);
   };
@@ -255,6 +254,7 @@ export default function LeaderManagementPage() {
           rowKey={(record) => record.accountId}
           loading={state.isFetching}
           pagination={{
+            showSizeChanger: true,
             total: state.currentLeaderList.total,
             pageSize: currentPageSize,
             current: currentPage,
@@ -262,6 +262,9 @@ export default function LeaderManagementPage() {
               goToPage(pageIndex);
               setPageSize(pageSize);
             },
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} trong tổng ${total} trưởng nhóm`,
+            pageSizeOptions: [5, 10, 20, 50, 100],
           }}
           onChange={(_, filters) => {
             setTableParams({

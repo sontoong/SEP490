@@ -136,7 +136,7 @@ export default function ServiceManagementPage() {
     },
     {
       title: "Trạng thái",
-      dataIndex: "Status",
+      dataIndex: "status",
       render: (_, { status, servicePackageId }) => {
         return (
           <div

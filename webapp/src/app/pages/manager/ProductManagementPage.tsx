@@ -124,7 +124,7 @@ export default function ProductManagementPage() {
         return formatCurrency(value);
       },
       sorter: true,
-      sortDirections: ["descend"],
+      sortDirections: ["ascend"],
     },
     {
       title: "Số lượng",
@@ -221,7 +221,7 @@ export default function ProductManagementPage() {
               sorter: {
                 priceByDate: Array.isArray(sorter)
                   ? undefined
-                  : !(sorter.order === "descend"),
+                  : sorter.order === "ascend",
               },
             });
           }}

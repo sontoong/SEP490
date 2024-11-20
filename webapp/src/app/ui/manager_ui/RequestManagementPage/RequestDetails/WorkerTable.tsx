@@ -4,7 +4,7 @@ import { Avatar } from "../../../../components/avatar";
 import { User } from "../../../../models/user";
 import { Table } from "../../../../components/table";
 
-export default function WorkerTable({ workers }: { workers: User[] }) {
+export default function WorkerTable({ workers }: { workers?: User[] }) {
   const contractListColumns: TableColumnsType<User> = [
     {
       title: "Họ và Tên",

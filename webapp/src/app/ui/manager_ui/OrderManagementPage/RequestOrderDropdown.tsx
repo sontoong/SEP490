@@ -8,16 +8,16 @@ import { Dropdown } from "../../../components/dropdown";
 import { useState } from "react";
 import { ViewRequestOrderDetailsModal } from "./ViewRequestOrderDetailsModal";
 import { RequestOrder } from "../../../models/order";
+import { useRequest } from "../../../hooks/useRequest";
 
 const RequestOrderDropdown = ({
   requestOrder,
   setOpen,
-  setRequestOrderId,
 }: {
   requestOrder: RequestOrder;
   setOpen: any;
-  setRequestOrderId: () => void;
 }) => {
+  const { handleGetDetailsOfRequest } = useRequest();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const items: MenuProps["items"] = [
@@ -32,8 +32,7 @@ const RequestOrderDropdown = ({
       label: "Xem thông tin yêu cầu",
       icon: <DropboxOutlined />,
       onClick: () => {
-        setRequestOrderId();
-        window.scrollTo(0, 0);
+        handleGetDetailsOfRequest({ RequestId: requestOrder.order.requestId });
         setOpen(true);
       },
     },

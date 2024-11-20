@@ -187,6 +187,7 @@ export default function CreateNewApartmentModalButton() {
                   required: true,
                 },
               ]}
+              style={{ marginBottom: 10 }}
             >
               <InputSelect.Debounce
                 className="w-full"

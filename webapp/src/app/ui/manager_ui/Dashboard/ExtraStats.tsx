@@ -34,7 +34,12 @@ export default function ExtraStats() {
             return (
               <Card
                 key={index}
-                title={`${item.name} mới tháng ${new Date().getMonth() + 1}`}
+                title={
+                  <>
+                    Số <span className="lowercase">{item.name}</span> mới tháng{" "}
+                    {new Date().getMonth() + 1}
+                  </>
+                }
               >
                 <Statistic
                   title={<div>{`${item.currentMonthCount} ${item.name}`}</div>}

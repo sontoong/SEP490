@@ -8,7 +8,7 @@ import { Avatar } from "../../../../components/avatar";
 export default function RequestProductList({
   products,
 }: {
-  products: Request["productList"];
+  products?: Request["productList"];
 }) {
   return (
     <List

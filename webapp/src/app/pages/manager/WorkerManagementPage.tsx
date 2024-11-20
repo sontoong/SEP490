@@ -1,4 +1,4 @@
-import { App, Space, TableColumnsType, Tag } from "antd";
+import { Space, TableColumnsType, Tag } from "antd";
 import { useTitle } from "../../hooks/useTitle";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
@@ -14,7 +14,7 @@ import { usePagination } from "../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
 
 export default function WorkerManagementPage() {
-  const { notification } = App.useApp();
+  // const { notification } = App.useApp();
   useTitle({
     tabTitle: "Workers - EWMH",
     paths: [{ title: "Danh sách nhân viên", path: "/workers" }],
@@ -166,20 +166,20 @@ export default function WorkerManagementPage() {
       render: (isDisabled, { getLeaderInfo }) => {
         return getLeaderInfo?.accountId ? (
           <div
-            className="w-fit cursor-pointer"
-            onClick={() => {
-              notification.info({
-                message: "Nhân viên có liên kết với trưởng nhóm",
-                description: (
-                  <>
-                    Vui lòng bỏ gán nhân viên khỏi trưởng nhóm{" "}
-                    <span className="font-bold">{getLeaderInfo.fullName}</span>{" "}
-                    để có thể vô hiệu hóa tài khoản.
-                  </>
-                ),
-                placement: "topRight",
-              });
-            }}
+          // className="w-fit cursor-pointer"
+          // onClick={() => {
+          //   notification.info({
+          //     message: "Nhân viên có liên kết với trưởng nhóm",
+          //     description: (
+          //       <>
+          //         Vui lòng bỏ gán nhân viên khỏi trưởng nhóm{" "}
+          //         <span className="font-bold">{getLeaderInfo.fullName}</span>{" "}
+          //         để có thể vô hiệu hóa tài khoản.
+          //       </>
+          //     ),
+          //     placement: "topRight",
+          //   });
+          // }}
           >
             {statusGenerator(isDisabled)}
           </div>

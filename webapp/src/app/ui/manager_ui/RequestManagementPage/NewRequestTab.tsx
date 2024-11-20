@@ -73,7 +73,6 @@ export default function NewRequestTab(props: NewRequestTabProps) {
           onClick={() => {
             if (props.setDrawerOpen) {
               handleGetDetailsOfRequest({ RequestId: request.requestId });
-              window.scrollTo(0, 0);
               props.setDrawerOpen(true);
             }
           }}

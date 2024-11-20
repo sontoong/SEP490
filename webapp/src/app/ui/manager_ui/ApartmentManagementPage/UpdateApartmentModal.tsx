@@ -133,7 +133,7 @@ export default function UpdateApartmentModal({
               },
             ]}
           >
-            <Input placeholder="Nhập tên chung cư" />
+            <Input placeholder="Nhập tên chung cư" size="large" />
           </Form.Item>
           <Form.Item
             name="Address"
@@ -146,7 +146,7 @@ export default function UpdateApartmentModal({
               },
             ]}
           >
-            <Input placeholder="Nhập địa chỉ" />
+            <Input placeholder="Nhập địa chỉ" size="large" />
           </Form.Item>
           <Form.Item
             name="ManagementCompany"
@@ -159,7 +159,7 @@ export default function UpdateApartmentModal({
               },
             ]}
           >
-            <Input placeholder="Nhập tên công ty" />
+            <Input placeholder="Nhập tên công ty" size="large" />
           </Form.Item>
           <Form.Item
             name="Description"
@@ -174,7 +174,7 @@ export default function UpdateApartmentModal({
           >
             <TextEditor />
           </Form.Item>
-          <Space direction="vertical" className="w-full">
+          <Space direction="vertical" className="w-full" size={0}>
             <Form.Item
               name="LeaderId"
               label={<div className="text-sm text-secondary">Trưởng nhóm</div>}
@@ -183,6 +183,7 @@ export default function UpdateApartmentModal({
                   required: true,
                 },
               ]}
+              style={{ marginBottom: 10 }}
             >
               <InputSelect
                 className="w-full"
@@ -195,6 +196,7 @@ export default function UpdateApartmentModal({
                 )}
                 loading={accountState.isFetching}
                 allowClear
+                size="large"
               />
             </Form.Item>
             <Form.Item

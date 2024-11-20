@@ -1,4 +1,4 @@
-import { Drawer, TableColumnsType } from "antd";
+import { TableColumnsType } from "antd";
 import { formatCurrency, formatDateToLocal } from "../../../utils/helpers";
 import { RequestOrder } from "../../../models/order";
 import { Table } from "../../../components/table";
@@ -6,15 +6,12 @@ import RequestOrderDropdown from "./RequestOrderDropdown";
 import { useOrder } from "../../../hooks/useOrder";
 import { usePagination } from "../../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
-import RequestDetails from "./RequestDetails/RequestDetails";
 
 export default function RequestOrderTab(props: CustomerOrderTabProps) {
   const { state: orderState, handleGetAllRequestOrderPaginated } = useOrder();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
     usePagination();
   const [tableParams, setTableParams] = useState<TableParams>();
-  const [open, setOpen] = useState(false);
-  const [requestOrderId, setRequestOrderId] = useState<string>("");
 
   const fetchOrders = useCallback(() => {
     handleGetAllRequestOrderPaginated({
@@ -71,27 +68,12 @@ export default function RequestOrderTab(props: CustomerOrderTabProps) {
       title: "",
       key: "actions",
       render: (_, record) => (
-        <RequestOrderDropdown
-          requestOrder={record}
-          setOpen={setOpen}
-          setRequestOrderId={() => setRequestOrderId(record.order.requestId)}
-        />
+        <RequestOrderDropdown requestOrder={record} setOpen={props.setOpen} />
       ),
     },
   ];
   return (
     <>
-      <Drawer
-        title="Thông tin yêu cầu"
-        placement="right"
-        open={open}
-        getContainer={false}
-        destroyOnClose
-        onClose={() => setOpen(false)}
-        width="100%"
-      >
-        <RequestDetails requestOrderId={requestOrderId} />
-      </Drawer>
       <Table
         columns={contractListColumns}
         dataSource={orderState.currentRequestOrderList.orders}
@@ -122,6 +104,7 @@ export default function RequestOrderTab(props: CustomerOrderTabProps) {
 
 type CustomerOrderTabProps = {
   searchByPhone?: string;
+  setOpen: any;
 };
 
 type TableParams = {

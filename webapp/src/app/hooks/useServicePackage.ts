@@ -163,7 +163,7 @@ export function useServicePackage() {
         }
         notification.success({
           message: "Success",
-          description: "Cập nhật sản phẩm thành công",
+          description: "Cập nhật gói dịch vụ thành công",
           placement: "topRight",
         });
       } else {

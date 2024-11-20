@@ -17,15 +17,12 @@ export default function UpdateServiceModal({
   open = false,
   setIsModalOpen,
   record,
+  fetchServicePackage,
 }: UpdateServiceModalProps) {
   const [updateServiceForm] = Form.useForm();
   const [images, setImages] = useState<UploadImage[]>([]);
-  const {
-    state,
-    handleGetServicePackage,
-    handleUpdateServicePackage,
-    handleGetAllServicePackagePaginated,
-  } = useServicePackage();
+  const { state, handleGetServicePackage, handleUpdateServicePackage } =
+    useServicePackage();
   const { state: specialUIState } = useSpecialUI();
 
   const initialValuesUpdateService: UpdateServicePackageParams = {
@@ -78,7 +75,7 @@ export default function UpdateServiceModal({
       },
       callBackFn: () => {
         setIsModalOpen(false);
-        handleGetAllServicePackagePaginated({ PageIndex: 1, Pagesize: 8 });
+        fetchServicePackage();
       },
     });
   };
@@ -177,4 +174,5 @@ type UpdateServiceModalProps = {
   open?: boolean;
   setIsModalOpen?: any;
   record: ServicePackage;
+  fetchServicePackage: any;
 };

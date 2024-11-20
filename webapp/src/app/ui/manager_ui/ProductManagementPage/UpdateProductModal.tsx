@@ -17,15 +17,11 @@ export default function UpdateProductModal({
   open = false,
   setIsModalOpen,
   product,
+  fetchProducts,
 }: UpdateProductModalProps) {
   const [updateProductForm] = Form.useForm();
   const [images, setImages] = useState<UploadImage[]>([]);
-  const {
-    state,
-    handleGetProduct,
-    handleUpdateProduct,
-    handleGetAllProductPaginated,
-  } = useProduct();
+  const { state, handleGetProduct, handleUpdateProduct } = useProduct();
   const { state: specialUIState } = useSpecialUI();
 
   const initialValuesUpdateProduct: UpdateProductParams = {
@@ -80,7 +76,7 @@ export default function UpdateProductModal({
       },
       callBackFn: () => {
         setIsModalOpen(false);
-        handleGetAllProductPaginated({ PageIndex: 1, Pagesize: 8 });
+        fetchProducts();
       },
     });
   };
@@ -192,4 +188,5 @@ type UpdateProductModalProps = {
   open?: boolean;
   setIsModalOpen?: any;
   product: Product;
+  fetchProducts: any;
 };

@@ -161,7 +161,12 @@ export default function ProductManagementPage() {
     {
       title: "",
       key: "actions",
-      render: (_, record) => <ProductManagementDropdown record={record} />,
+      render: (_, record) => (
+        <ProductManagementDropdown
+          record={record}
+          fetchProducts={fetchProducts}
+        />
+      ),
     },
   ];
 

@@ -6,7 +6,13 @@ import { Product } from "../../../models/product";
 import UpdateProductModal from "./UpdateProductModal";
 import ViewProductDetailsModal from "./ViewProductDetailsModal";
 
-const ProductManagementDropdown = ({ record }: { record: Product }) => {
+const ProductManagementDropdown = ({
+  record,
+  fetchProducts,
+}: {
+  record: Product;
+  fetchProducts: any;
+}) => {
   const [isUpdateProductModalOpen, setIsUpdateProductModalOpen] =
     useState(false);
   const [isViewProductModalOpen, setIsViewProductModalOpen] = useState(false);
@@ -35,6 +41,7 @@ const ProductManagementDropdown = ({ record }: { record: Product }) => {
         open={isUpdateProductModalOpen}
         setIsModalOpen={setIsUpdateProductModalOpen}
         product={record}
+        fetchProducts={fetchProducts}
       />
       <ViewProductDetailsModal
         open={isViewProductModalOpen}

@@ -165,7 +165,12 @@ export default function ServiceManagementPage() {
     {
       title: "",
       key: "actions",
-      render: (_, record) => <ServiceManagementDropdown record={record} />,
+      render: (_, record) => (
+        <ServiceManagementDropdown
+          record={record}
+          fetchServicePackage={fetchServicePackage}
+        />
+      ),
     },
   ];
 

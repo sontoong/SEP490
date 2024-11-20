@@ -6,7 +6,13 @@ import { useState } from "react";
 import UpdateServiceModal from "./UpdateServiceModal";
 import ViewServicePackageDetailsModal from "./ViewServiceManagementDetailsModal";
 
-const ServiceManagementDropdown = ({ record }: { record: ServicePackage }) => {
+const ServiceManagementDropdown = ({
+  record,
+  fetchServicePackage,
+}: {
+  record: ServicePackage;
+  fetchServicePackage: any;
+}) => {
   const [isChangeLeaderModalOpen, setIsChangeLeaderModalOpen] = useState(false);
   const [isViewServicePackageModalOpen, setIsViewServicePackageModalOpen] =
     useState(false);
@@ -35,6 +41,7 @@ const ServiceManagementDropdown = ({ record }: { record: ServicePackage }) => {
         open={isChangeLeaderModalOpen}
         setIsModalOpen={setIsChangeLeaderModalOpen}
         record={record}
+        fetchServicePackage={fetchServicePackage}
       />
       <ViewServicePackageDetailsModal
         open={isViewServicePackageModalOpen}

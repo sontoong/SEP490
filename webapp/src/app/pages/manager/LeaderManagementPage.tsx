@@ -177,7 +177,7 @@ export default function LeaderManagementPage() {
                       <>
                         Vui lòng thay trưởng nhóm của chung cư{" "}
                         <span className="font-bold">{name}</span> để có thể vô
-                        hiệu hóa tài khoản
+                        hiệu hóa tài khoản.
                       </>
                     ),
                     placement: "topRight",

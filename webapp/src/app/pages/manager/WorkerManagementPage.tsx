@@ -174,7 +174,7 @@ export default function WorkerManagementPage() {
                   <>
                     Vui lòng bỏ gán nhân viên khỏi trưởng nhóm{" "}
                     <span className="font-bold">{getLeaderInfo.fullName}</span>{" "}
-                    để có thể vô hiệu hóa tài khoản
+                    để có thể vô hiệu hóa tài khoản.
                   </>
                 ),
                 placement: "topRight",

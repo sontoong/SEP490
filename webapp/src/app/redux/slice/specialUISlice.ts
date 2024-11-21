@@ -8,6 +8,7 @@ export const excludedActions = [
   "product/fetch/getProduct",
   "servicePackage/fetch/getServicePackage",
   "apartment/fetch/getAllRoomPaginated",
+  "account/fetch/getAllFreeLeaders",
   "account/fetch/getAllLeaderPaginatedExcluded",
   "order/fetch/getOrderDetails",
   "feedback/fetch/getFeedbackDetails",

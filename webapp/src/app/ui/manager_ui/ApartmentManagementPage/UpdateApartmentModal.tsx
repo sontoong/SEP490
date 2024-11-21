@@ -1,4 +1,4 @@
-import { Input, Space } from "antd";
+import { App, Input, Space } from "antd";
 import { Form } from "../../../components/form";
 import { Modal } from "../../../components/modals";
 import { HomeOutlined, PhoneFilled } from "@ant-design/icons";
@@ -21,6 +21,7 @@ export default function UpdateApartmentModal({
   isModalVisible,
   setIsModalVisible,
 }: UpdateApartmentModalProps) {
+  const { notification } = App.useApp();
   const [updateApartmentForm] = Form.useForm();
   const [images, setImages] = useState<UploadImage[]>([]);
   const { state: accountState, handleGetAllLeaderPaginated } = useAccount();
@@ -73,13 +74,20 @@ export default function UpdateApartmentModal({
   };
 
   const handleUpdateNewServiceSubmit = async (values: any) => {
-    const Image = await getFiles(images);
+    const Images = await getFiles(images);
+    if (images.length === 0) {
+      notification.error({
+        message: "Vui lòng chọn ít nhất 1 ảnh",
+      });
+      return;
+    }
+
     handleUpdateApartment({
       values: {
         ...values,
         AreaId: apartment.areaId,
         ProductId: apartment.leaderId,
-        Image: Image[0],
+        Image: Images[0],
       },
       callBackFn: () => {
         setIsModalVisible(false);
@@ -130,6 +138,12 @@ export default function UpdateApartmentModal({
                 type: "string",
                 required: true,
                 whitespace: true,
+                message: "Vui lòng nhập tên chung cư",
+              },
+              {
+                type: "string",
+                min: 4,
+                message: "Tên chung cư phải có ít nhất 4 ký tự",
               },
             ]}
           >
@@ -143,6 +157,12 @@ export default function UpdateApartmentModal({
                 type: "string",
                 required: true,
                 whitespace: true,
+                message: "Vui lòng nhập địa chỉ chung cư",
+              },
+              {
+                type: "string",
+                min: 4,
+                message: "Địa chỉ chung cư phải có ít nhất 4 ký tự",
               },
             ]}
           >
@@ -156,6 +176,12 @@ export default function UpdateApartmentModal({
                 type: "string",
                 required: true,
                 whitespace: true,
+                message: "Vui lòng nhập tên công ty",
+              },
+              {
+                type: "string",
+                min: 4,
+                message: "Tên công ty phải có ít nhất 4 ký tự",
               },
             ]}
           >
@@ -169,6 +195,7 @@ export default function UpdateApartmentModal({
                 type: "string",
                 required: true,
                 whitespace: true,
+                message: "Vui lòng nhập mô tả chung cư",
               },
             ]}
           >
@@ -181,6 +208,7 @@ export default function UpdateApartmentModal({
               rules={[
                 {
                   required: true,
+                  message: "Vui lòng chọn trưởng nhóm",
                 },
               ]}
               style={{ marginBottom: 10 }}
@@ -188,12 +216,15 @@ export default function UpdateApartmentModal({
               <InputSelect
                 className="w-full"
                 placeholder="Chọn leader"
-                options={(accountState.currentLeaderList.users as Leader[]).map(
-                  (leader) => ({
-                    label: `${leader.fullName} - ${leader.email} ${leader.areaId ? `(${leader.name})` : ""}`,
+                options={(accountState.currentLeaderList.users as Leader[])
+                  .filter(
+                    (leader) =>
+                      !leader.areaId || leader.accountId === apartment.leaderId,
+                  )
+                  .map((leader) => ({
+                    label: `${leader.fullName} - ${leader.email}`,
                     value: leader?.accountId,
-                  }),
-                )}
+                  }))}
                 loading={accountState.isFetching}
                 allowClear
                 size="large"

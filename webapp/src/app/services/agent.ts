@@ -33,6 +33,7 @@ const Account = {
     userRequests.get(`${ACCOUNT_BASE}/18`, params),
   getAllWorkerPaginated: (params: any) =>
     userRequests.get(`${ACCOUNT_BASE}/19`, params),
+  getAllFreeLeaders: () => userRequests.get(`${ACCOUNT_BASE}/21`),
 };
 
 const APARTMENT_BASE = "apartment";
@@ -63,6 +64,8 @@ const Order = {
   getOrderDetails: (params: any) => saleRequests.get(`${ORDER_BASE}/8`, params),
   getAllRequestOrdersPaginated: (params: any) =>
     requestRequests.get(`${REQUEST_BASE}/24`, params),
+  getTodaysOrdersPaginated: (params: any) =>
+    saleRequests.get(`${ORDER_BASE}/9`, params),
 };
 
 const PRODUCT_BASE = "product";
@@ -131,6 +134,10 @@ const Request = {
     requestRequests.get(`${REQUEST_BASE}/18`, params),
   getDetailsOfRequest: (params: any) =>
     requestRequests.get(`${REQUEST_BASE}/25`, params),
+  updatePriceOfRequest: (data: any) =>
+    requestRequests.put(`${REQUEST_BASE}/25`, data),
+  getAllTodaysRequestsPaginated: (params: any) =>
+    requestRequests.get(`${REQUEST_BASE}/27`, params),
 };
 
 const STATISTIC_BASE = "Transaction";

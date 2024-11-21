@@ -1,6 +1,6 @@
 import { Col, Drawer, Row, Space } from "antd";
 import { useTitle } from "../../hooks/useTitle";
-import NewRequestTable from "../../ui/manager_ui/Dashboard/NewRequestTable";
+import TodaysRequestTable from "../../ui/manager_ui/Dashboard/TodaysRequestTable";
 import { RevenueChart } from "../../ui/manager_ui/Dashboard/RevenueChart";
 import { Card } from "../../components/card";
 import NetGainChart from "../../ui/manager_ui/Dashboard/NetGainChart";
@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import RequestDetails from "../../ui/manager_ui/Dashboard/RequestDetails/RequestDetails";
 import { useSpecialUI } from "../../hooks/useSpecialUI";
 import { useRequest } from "../../hooks/useRequest";
+import TodaysOrderTab from "../../ui/manager_ui/Dashboard/TodaysOrderTable";
 
 const disabledDate: RangePickerProps["disabledDate"] = (current) => {
   return current < dayjs().startOf("year");
@@ -88,9 +89,15 @@ export default function DashboardPage() {
         </Space>
         <Space direction="vertical" size={20} className="relative w-full">
           <div className="text-5xl font-semibold text-primary">
-            Yêu cầu mới nhất
+            Danh sách yêu cầu trong hôm nay
           </div>
-          <NewRequestTable setDrawerOpen={setOpen} />
+          <TodaysRequestTable setDrawerOpen={setOpen} />
+        </Space>
+        <Space direction="vertical" size={20} className="relative w-full">
+          <div className="text-5xl font-semibold text-primary">
+            Danh sách đơn hàng trong hôm nay
+          </div>
+          <TodaysOrderTab />
         </Space>
       </Space>
     </>

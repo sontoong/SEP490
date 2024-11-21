@@ -17,6 +17,15 @@ export type Leader = User & {
   name: string;
 };
 
+export type FreeLeader = {
+  accountId: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  avatarUrl: string;
+  dateOfBirth: string;
+};
+
 export type Worker = {
   item: {
     accountId: string;

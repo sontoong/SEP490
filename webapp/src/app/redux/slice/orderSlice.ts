@@ -6,6 +6,7 @@ import { Order, OrderDetails, RequestOrder } from "../../models/order";
 
 export type TOrder = {
   currentOrderList: { orders: Order[]; total: number };
+  todaysOrderList: { orders: Order[]; total: number };
   currentRequestOrderList: { orders: RequestOrder[]; total: number };
   currentOrder: OrderDetails;
   isFetching: boolean;
@@ -14,6 +15,7 @@ export type TOrder = {
 
 const initialState: TOrder = {
   currentOrderList: { orders: [], total: 0 },
+  todaysOrderList: { orders: [], total: 0 },
   currentRequestOrderList: { orders: [], total: 0 },
   currentOrder: {
     apartment: {
@@ -43,6 +45,12 @@ const orderSlice = createSlice({
       action: PayloadAction<TOrder["currentOrderList"]>,
     ) => {
       state.currentOrderList = action.payload;
+    },
+    setTodaysOrderList: (
+      state,
+      action: PayloadAction<TOrder["todaysOrderList"]>,
+    ) => {
+      state.todaysOrderList = action.payload;
     },
     setCurrentRequestOrderList: (
       state,
@@ -121,6 +129,27 @@ export const getAllOrderPaginated = createAsyncThunk<
   }
 });
 
+export const getTodaysOrdersPaginated = createAsyncThunk<
+  any,
+  GetTodaysOrderPaginatedParams
+>("order/fetch/getTodaysOrdersPaginated", async (data, { rejectWithValue }) => {
+  const { PageIndex, Pagesize } = data;
+  try {
+    const response = await agent.Order.getTodaysOrdersPaginated({
+      PageIndex,
+      Pagesize,
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+});
+
 export const getAllRequestOrdersPaginated = createAsyncThunk<
   any,
   GetAllOrderPaginatedParams
@@ -171,6 +200,7 @@ export const {
   setCurrentOrderList,
   setCurrentOrder,
   setCurrentRequestOrderList,
+  setTodaysOrderList,
 } = orderSlice.actions;
 
 export default orderSlice.reducer;
@@ -180,6 +210,11 @@ export type GetAllOrderPaginatedParams = {
   Pagesize: number;
   SearchByPhone?: string;
   DescreasingDateSort?: boolean;
+};
+
+export type GetTodaysOrderPaginatedParams = {
+  PageIndex: number;
+  Pagesize: number;
 };
 
 export type GetOrderParams = {

@@ -146,10 +146,12 @@ export default function ChangeLeaderModal({
                       <div className="text-lg font-bold">
                         {currentLeader?.fullName}
                       </div>
-                      <Space>
+                      <div className="flex gap-5">
                         <div>
-                          <span className="font-bold">email: </span>
-                          <span>{currentLeader?.email}</span>
+                          <span className="font-bold">Email: </span>
+                          <span className="break-all">
+                            {currentLeader?.email}
+                          </span>
                         </div>
                         <div>
                           <Space>
@@ -160,7 +162,7 @@ export default function ChangeLeaderModal({
                             </span>
                           </Space>
                         </div>
-                      </Space>
+                      </div>
                     </>
                   )}
                 </Space>

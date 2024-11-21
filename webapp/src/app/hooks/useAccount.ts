@@ -13,7 +13,7 @@ import {
   getAllAccountPaginated,
   GetAllAccountPaginatedParams,
   getAllLeaderPaginated,
-  getAllLeaderPaginatedExcluded,
+  getAllFreeLeaders,
   GetAllLeaderPaginatedParams,
   getAllPendingAccountPaginated,
   GetAllPendingAccountPaginatedParams,
@@ -23,6 +23,8 @@ import {
   setCurrentPendingAccountList,
   setCurrentUserList,
   setCurrentWorkerList,
+  setFreeLeaderList,
+  getAllLeaderPaginatedExcluded,
 } from "../redux/slice/accountSlice";
 
 export function useAccount() {
@@ -176,6 +178,32 @@ export function useAccount() {
     [dispatch, notification],
   );
 
+  const handleGetAllFreeLeaders = useCallback(async () => {
+    dispatch(setCurrentLeaderList({ users: [], total: 0 }));
+    const resultAction = await dispatch(getAllFreeLeaders());
+    if (getAllFreeLeaders.fulfilled.match(resultAction)) {
+      dispatch(
+        setFreeLeaderList({
+          users: resultAction.payload,
+        }),
+      );
+    } else {
+      if (resultAction.payload) {
+        notification.error({
+          message: "Lỗi",
+          description: `${resultAction.payload}`,
+          placement: "topRight",
+        });
+      } else {
+        notification.error({
+          message: "Lỗi",
+          description: resultAction.error.message,
+          placement: "topRight",
+        });
+      }
+    }
+  }, [dispatch, notification]);
+
   const handleCreatePersonnelAccount = useCallback(
     async ({
       values,
@@ -321,12 +349,13 @@ export function useAccount() {
     state,
     handleGetAllAccountPaginated,
     handleGetAllLeaderPaginated,
+    handleGetAllLeaderPaginatedExcluded,
     handleGetAllWorkerPaginated,
     handleGetAllPendingAccountPaginated,
     handleCreatePersonnelAccount,
     handleDisableUser,
     handleAssignWorkerToLeader,
-    handleGetAllLeaderPaginatedExcluded,
+    handleGetAllFreeLeaders,
     handleApproveCustomerAccount,
   };
 }

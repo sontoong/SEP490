@@ -7,9 +7,12 @@ import {
   getAllRequestOrdersPaginated,
   getOrderDetails,
   GetOrderParams,
+  GetTodaysOrderPaginatedParams,
+  getTodaysOrdersPaginated,
   setCurrentOrder,
   setCurrentOrderList,
   setCurrentRequestOrderList,
+  setTodaysOrderList,
 } from "../redux/slice/orderSlice";
 
 export function useOrder() {
@@ -23,6 +26,35 @@ export function useOrder() {
       if (getAllOrderPaginated.fulfilled.match(resultAction)) {
         dispatch(
           setCurrentOrderList({
+            orders: resultAction.payload.result,
+            total: resultAction.payload.count,
+          }),
+        );
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Lỗi",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Lỗi",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleGetTodaysOrderPaginated = useCallback(
+    async (value: GetTodaysOrderPaginatedParams) => {
+      const resultAction = await dispatch(getTodaysOrdersPaginated(value));
+      if (getTodaysOrdersPaginated.fulfilled.match(resultAction)) {
+        dispatch(
+          setTodaysOrderList({
             orders: resultAction.payload.result,
             total: resultAction.payload.count,
           }),
@@ -104,5 +136,6 @@ export function useOrder() {
     handleGetAllOrderPaginated,
     handleGetOrder,
     handleGetAllRequestOrderPaginated,
+    handleGetTodaysOrderPaginated,
   };
 }

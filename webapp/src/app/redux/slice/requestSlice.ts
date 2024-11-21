@@ -6,6 +6,7 @@ import { Request } from "../../models/request";
 
 export type TRequest = {
   currentRequestList: { requests: Request[]; total: number };
+  todaysRequestList: { requests: Request[]; total: number };
   currentRequest: Request;
   isFetching: boolean;
   isSending: boolean;
@@ -13,6 +14,7 @@ export type TRequest = {
 
 const initialState: TRequest = {
   currentRequestList: { requests: [], total: 0 },
+  todaysRequestList: { requests: [], total: 0 },
   currentRequest: {
     workerList: [],
     customer_Leader: [],
@@ -39,6 +41,7 @@ const initialState: TRequest = {
       start: "",
       status: 0,
       totalPrice: 0,
+      requestPrice: 0,
     },
   },
   isFetching: false,
@@ -54,6 +57,12 @@ const requestSlice = createSlice({
       action: PayloadAction<TRequest["currentRequestList"]>,
     ) => {
       state.currentRequestList = action.payload;
+    },
+    setTodaysRequestList: (
+      state,
+      action: PayloadAction<TRequest["todaysRequestList"]>,
+    ) => {
+      state.todaysRequestList = action.payload;
     },
     setCurrentRequest: (
       state,
@@ -131,6 +140,30 @@ export const getAllRequestsPaginated = createAsyncThunk<
   },
 );
 
+export const getAllTodaysRequestsPaginated = createAsyncThunk<
+  any,
+  GetAllTodaysRequestsPaginatedParams
+>(
+  "request/fetch/getAllTodaysRequestsPaginated",
+  async (data, { rejectWithValue }) => {
+    const { PageIndex, Pagesize } = data;
+    try {
+      const response = await agent.Request.getAllTodaysRequestsPaginated({
+        PageIndex,
+        Pagesize,
+      });
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
 export const getDetailsOfRequest = createAsyncThunk<
   any,
   GetDetailsOfRequestParams
@@ -151,8 +184,11 @@ export const getDetailsOfRequest = createAsyncThunk<
   }
 });
 
-export const { setCurrentRequestList, setCurrentRequest } =
-  requestSlice.actions;
+export const {
+  setCurrentRequestList,
+  setCurrentRequest,
+  setTodaysRequestList,
+} = requestSlice.actions;
 
 export default requestSlice.reducer;
 
@@ -160,6 +196,11 @@ export type GetAllRequestsPaginatedParams = {
   PageIndex: number;
   Pagesize: number;
   Status?: number;
+};
+
+export type GetAllTodaysRequestsPaginatedParams = {
+  PageIndex: number;
+  Pagesize: number;
 };
 
 export type GetDetailsOfRequestParams = {

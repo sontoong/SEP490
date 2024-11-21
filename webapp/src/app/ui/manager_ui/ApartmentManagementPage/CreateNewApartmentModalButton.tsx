@@ -1,4 +1,4 @@
-import { Input, Space } from "antd";
+import { App, Input, Space } from "antd";
 import { Form } from "../../../components/form";
 import { Modal } from "../../../components/modals";
 import { PrimaryButton } from "../../../components/buttons";
@@ -7,7 +7,7 @@ import {
   PhoneFilled,
   PlusCircleOutlined,
 } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TextEditor } from "../../../components/rte";
 import { ImageUpload } from "../../../components/image-upload";
 import { UploadImage } from "../../../components/image-upload/image-upload";
@@ -22,19 +22,16 @@ import { useApartment } from "../../../hooks/useApartment";
 import { Skeleton } from "../../../components/skeletons";
 
 export default function CreateNewApartmentModalButton() {
+  const { notification } = App.useApp();
   const [createNewApartmentForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [images, setImages] = useState<UploadImage[]>([]);
-  const { state: accountState, handleGetAllLeaderPaginated } = useAccount();
+  const { state: accountState } = useAccount();
   const {
     state: apartmentState,
     handleAddApartment,
     handleGetAllApartmentsPaginated,
   } = useApartment();
-
-  useEffect(() => {
-    handleGetAllLeaderPaginated({ PageIndex: 1, Pagesize: 1000 });
-  }, [handleGetAllLeaderPaginated]);
 
   const initialValuesCreateNewApartment: Partial<AddApartmentParams> = {
     Name: "",
@@ -45,18 +42,19 @@ export default function CreateNewApartmentModalButton() {
     LeaderId: undefined,
   };
 
-  async function fetchLeaderList(
+  async function fetchFreeLeaderList(
     email: string,
   ): Promise<{ label: string; value: string }[]> {
-    return agent.Account.getAllLeaderPaginated({
-      PageIndex: 1,
-      Pagesize: 5,
-      SearchByEmail: email,
-    }).then((body) => {
-      return body[0].map((leader: Leader) => ({
-        label: `${leader.fullName} - ${leader.email} ${leader.areaId ? `(${leader.name})` : ""}`,
-        value: leader.accountId,
-      }));
+    return agent.Account.getAllFreeLeaders().then((body) => {
+      const trimmedEmail = email.trim();
+      if (!trimmedEmail) return [];
+
+      return body
+        .filter((leader: Leader) => leader.email.includes(trimmedEmail))
+        .map((leader: Leader) => ({
+          label: `${leader.fullName} - ${leader.email} ${leader.areaId ? `(${leader.name})` : ""}`,
+          value: leader.accountId,
+        }));
     });
   }
 
@@ -73,11 +71,18 @@ export default function CreateNewApartmentModalButton() {
   };
 
   const handleCreateNewServiceSubmit = async (values: any) => {
-    const Image = await getFiles(images);
+    const Images = await getFiles(images);
+    if (Images.length === 0) {
+      notification.error({
+        message: "Vui lòng chọn ít nhất 1 ảnh",
+      });
+      return;
+    }
+
     await handleAddApartment({
       values: {
         ...values,
-        Image: Image[0],
+        Image: Images[0],
       },
       callBackFn: () => {
         setIsModalVisible(false);
@@ -133,6 +138,12 @@ export default function CreateNewApartmentModalButton() {
                 type: "string",
                 required: true,
                 whitespace: true,
+                message: "Vui lòng nhập tên chung cư",
+              },
+              {
+                type: "string",
+                min: 4,
+                message: "Tên chung cư phải có ít nhất 4 ký tự",
               },
             ]}
           >
@@ -146,6 +157,12 @@ export default function CreateNewApartmentModalButton() {
                 type: "string",
                 required: true,
                 whitespace: true,
+                message: "Vui lòng nhập địa chỉ chung cư",
+              },
+              {
+                type: "string",
+                min: 4,
+                message: "Địa chỉ chung cư phải có ít nhất 4 ký tự",
               },
             ]}
           >
@@ -159,7 +176,12 @@ export default function CreateNewApartmentModalButton() {
                 type: "string",
                 required: true,
                 whitespace: true,
+                message: "Vui lòng nhập tên công ty",
+              },
+              {
+                type: "string",
                 min: 4,
+                message: "Tên công ty phải có ít nhất 4 ký tự",
               },
             ]}
           >
@@ -173,6 +195,7 @@ export default function CreateNewApartmentModalButton() {
                 type: "string",
                 required: true,
                 whitespace: true,
+                message: "Vui lòng nhập mô tả chung cư",
               },
             ]}
           >
@@ -185,6 +208,7 @@ export default function CreateNewApartmentModalButton() {
               rules={[
                 {
                   required: true,
+                  message: "Vui lòng chọn trưởng nhóm",
                 },
               ]}
               style={{ marginBottom: 10 }}
@@ -192,7 +216,7 @@ export default function CreateNewApartmentModalButton() {
               <InputSelect.Debounce
                 className="w-full"
                 placeholder="Tìm kiếm bằng email"
-                fetchOptions={fetchLeaderList}
+                fetchOptions={fetchFreeLeaderList}
                 allowClear
                 size="large"
               />

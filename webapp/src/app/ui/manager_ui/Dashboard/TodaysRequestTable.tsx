@@ -11,18 +11,18 @@ import { useRequest } from "../../../hooks/useRequest";
 import { usePagination } from "../../../hooks/usePagination";
 import { useCallback, useEffect } from "react";
 
-export default function NewRequestTable(props: NewRequestTableProps) {
-  const { state, handleGetAllRequestPaginated } = useRequest();
+export default function TodaysRequestTable(props: TodaysRequestTableProps) {
+  const { state, handleGetAllTodaysRequestsPaginated } = useRequest();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
     usePagination();
   const { handleGetDetailsOfRequest } = useRequest();
 
   const fetchRequests = useCallback(() => {
-    handleGetAllRequestPaginated({
+    handleGetAllTodaysRequestsPaginated({
       PageIndex: currentPage,
       Pagesize: currentPageSize,
     });
-  }, [currentPage, currentPageSize, handleGetAllRequestPaginated]);
+  }, [currentPage, currentPageSize, handleGetAllTodaysRequestsPaginated]);
 
   useEffect(() => {
     fetchRequests();
@@ -75,23 +75,26 @@ export default function NewRequestTable(props: NewRequestTableProps) {
   return (
     <Table
       columns={contractListColumns}
-      dataSource={state.currentRequestList.requests}
+      dataSource={state.todaysRequestList.requests}
       rowKey={(record) => record.request.requestId}
       loading={state.isFetching}
       pagination={{
         showSizeChanger: true,
-        total: state.currentRequestList.total,
+        total: state.todaysRequestList.total,
         pageSize: currentPageSize,
         current: currentPage,
         onChange: (pageIndex, pageSize) => {
           goToPage(pageIndex);
           setPageSize(pageSize);
         },
+        showTotal: (total, range) =>
+          `${range[0]}-${range[1]} trong tổng ${total} trưởng nhóm`,
+        pageSizeOptions: [5, 10, 20, 50, 100],
       }}
     />
   );
 }
 
-type NewRequestTableProps = {
+type TodaysRequestTableProps = {
   setDrawerOpen?: any;
 };

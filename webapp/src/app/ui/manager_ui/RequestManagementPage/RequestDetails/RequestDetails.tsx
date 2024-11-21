@@ -157,18 +157,28 @@ export default function RequestDetails({
         ]}
         fontSize={18}
       />
-      <Space className="flex justify-between text-sm">
-        <div className="font-bold">Giá gửi yêu cầu: </div>
-        <div className="font-semibold">
-          {formatCurrency(request?.request.totalPrice)}
-        </div>
-      </Space>
-      <Space className="flex justify-between text-sm">
-        <div className="font-bold">Tổng giá: </div>
-        <div className="font-bold">
-          {formatCurrency(request?.request.totalPrice)}
-        </div>
-      </Space>
+      {request?.request.status === 3 ? (
+        <></>
+      ) : (
+        <>
+          <Space className="flex justify-between text-sm">
+            <div className="font-bold">Giá gửi yêu cầu: </div>
+            <div className="font-semibold">
+              {request?.request.requestPrice === 0
+                ? "Miễn phí"
+                : formatCurrency(request?.request.requestPrice)}
+            </div>
+          </Space>
+          <Space className="flex justify-between text-sm">
+            <div className="font-bold">Tổng giá: </div>
+            <div className="font-bold">
+              {request?.request.totalPrice === 0
+                ? "Miễn phí"
+                : formatCurrency(request?.request.totalPrice)}
+            </div>
+          </Space>
+        </>
+      )}
     </Space>
   );
 }

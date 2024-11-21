@@ -18,7 +18,8 @@ export default function Tiptap(props: TextEditorProps) {
     ],
     content: props.value,
     onUpdate: ({ editor }) => {
-      if (props.onChange) props.onChange(editor.getHTML());
+      const content = editor.getText() ? editor.getHTML() : "";
+      props.onChange?.(content);
     },
     editorProps: {
       attributes: {

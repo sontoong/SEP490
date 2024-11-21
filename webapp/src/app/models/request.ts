@@ -5,7 +5,7 @@ import { User } from "./user";
 export type Request = {
   request: RequestDetails;
   customer_Leader: CustomerLeader[];
-  workerList: User[];
+  workerList: { getWokerInfo: User; isLead: boolean }[];
   productList: Product[];
 };
 
@@ -31,6 +31,7 @@ type RequestDetails = {
   feedbacks: Feedback[];
   leader: User | null;
   priceRequests: any[];
+  requestPrice: number;
 };
 
 type CustomerLeader = {

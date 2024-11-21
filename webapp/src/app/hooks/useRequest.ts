@@ -4,10 +4,13 @@ import { useAppDispatch, useAppSelector } from "../redux/hook";
 import {
   getAllRequestsPaginated,
   GetAllRequestsPaginatedParams,
+  getAllTodaysRequestsPaginated,
+  GetAllTodaysRequestsPaginatedParams,
   getDetailsOfRequest,
   GetDetailsOfRequestParams,
   setCurrentRequest,
   setCurrentRequestList,
+  setTodaysRequestList,
 } from "../redux/slice/requestSlice";
 
 export function useRequest() {
@@ -21,6 +24,35 @@ export function useRequest() {
       if (getAllRequestsPaginated.fulfilled.match(resultAction)) {
         dispatch(
           setCurrentRequestList({
+            requests: resultAction.payload[0],
+            total: resultAction.payload[1],
+          }),
+        );
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Lỗi",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Lỗi",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
+  const handleGetAllTodaysRequestsPaginated = useCallback(
+    async (value: GetAllTodaysRequestsPaginatedParams) => {
+      const resultAction = await dispatch(getAllTodaysRequestsPaginated(value));
+      if (getAllTodaysRequestsPaginated.fulfilled.match(resultAction)) {
+        dispatch(
+          setTodaysRequestList({
             requests: resultAction.payload[0],
             total: resultAction.payload[1],
           }),
@@ -71,6 +103,7 @@ export function useRequest() {
   return {
     state,
     handleGetAllRequestPaginated,
+    handleGetAllTodaysRequestsPaginated,
     handleGetDetailsOfRequest,
   };
 }

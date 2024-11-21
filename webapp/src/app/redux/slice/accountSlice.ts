@@ -24,6 +24,9 @@ export type TAccount = {
     users: Leader[];
     total: number;
   };
+  freeLeaderList: {
+    users: Leader[];
+  };
   currentWorkerList: {
     users: Worker[];
     total: number;
@@ -36,6 +39,7 @@ const initialState: TAccount = {
   currentUserList: { users: [], total: 0 },
   currentPendingAccountList: { users: [], total: 0 },
   currentLeaderList: { users: [], total: 0 },
+  freeLeaderList: { users: [] },
   currentWorkerList: { users: [], total: 0 },
   isFetching: false,
   isSending: false,
@@ -62,6 +66,12 @@ const accountSlice = createSlice({
       action: PayloadAction<TAccount["currentLeaderList"]>,
     ) => {
       state.currentLeaderList = action.payload;
+    },
+    setFreeLeaderList: (
+      state,
+      action: PayloadAction<TAccount["freeLeaderList"]>,
+    ) => {
+      state.freeLeaderList = action.payload;
     },
     setCurrentWorkerList: (
       state,
@@ -175,6 +185,23 @@ export const getAllLeaderPaginatedExcluded = createAsyncThunk<
         Pagesize,
         SearchByEmail,
       });
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
+export const getAllFreeLeaders = createAsyncThunk<any, void>(
+  "account/fetch/getAllFreeLeaders",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await agent.Account.getAllFreeLeaders();
       return response;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -337,6 +364,7 @@ export const {
   setCurrentLeaderList,
   setCurrentWorkerList,
   setCurrentPendingAccountList,
+  setFreeLeaderList,
 } = accountSlice.actions;
 
 export default accountSlice.reducer;

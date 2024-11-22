@@ -6,9 +6,28 @@ function PieChart({ data, loading }: PieChartProps) {
     data,
     angleField: "value",
     colorField: "name",
+    interaction: {
+      elementHighlight: true,
+    },
+    state: {
+      inactive: { opacity: 0.5 },
+    },
     label: {
-      text: "name",
-      position: "outside",
+      text: ({ name, value }: PieChartValue) => {
+        return `${name} - ${value}%`;
+      },
+      position: "spider",
+      fontSize: 17,
+    },
+    legend: {
+      color: {
+        title: false,
+        position: "right",
+        rowPadding: 5,
+      },
+    },
+    tooltip: {
+      title: "name",
     },
   };
 

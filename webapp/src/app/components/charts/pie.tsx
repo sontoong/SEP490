@@ -14,7 +14,7 @@ function PieChart({ data, loading }: PieChartProps) {
     },
     label: {
       text: ({ name, value }: PieChartValue) => {
-        return `${name} - ${value}%`;
+        return `${name}: ${value}%`;
       },
       position: "spider",
       fontSize: 17,

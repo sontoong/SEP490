@@ -6,6 +6,9 @@ import { useState } from "react";
 import RequestDetails from "../../ui/manager_ui/RequestManagementPage/RequestDetails/RequestDetails";
 import { useRequest } from "../../hooks/useRequest";
 import { useSpecialUI } from "../../hooks/useSpecialUI";
+import ProcessingRequestTab from "../../ui/manager_ui/RequestManagementPage/ProcessingRequestTab";
+import CompletedRequestTab from "../../ui/manager_ui/RequestManagementPage/CompletedRequestTab";
+import CanceledRequestTab from "../../ui/manager_ui/RequestManagementPage/CanceledRequestTab";
 
 export default function RequestManagementPage() {
   useTitle({
@@ -25,17 +28,17 @@ export default function RequestManagementPage() {
     {
       key: "2",
       label: "Đang xử lý",
-      children: <NewRequestTab status={1} setDrawerOpen={setOpen} />,
+      children: <ProcessingRequestTab status={1} setDrawerOpen={setOpen} />,
     },
     {
       key: "3",
       label: "Đã hoàn thành",
-      children: <NewRequestTab status={2} setDrawerOpen={setOpen} />,
+      children: <CompletedRequestTab status={2} setDrawerOpen={setOpen} />,
     },
     {
       key: "4",
       label: "Đã hủy",
-      children: <NewRequestTab status={3} setDrawerOpen={setOpen} />,
+      children: <CanceledRequestTab status={3} setDrawerOpen={setOpen} />,
     },
   ];
 

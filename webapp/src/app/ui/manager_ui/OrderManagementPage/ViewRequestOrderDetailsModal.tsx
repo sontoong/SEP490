@@ -87,12 +87,7 @@ export function ViewRequestOrderDetailsModal({
               </div>
             </Space>,
             <Space direction="vertical" size={15} className="w-full">
-              <div>
-                <div className="text-2xl font-bold">Đơn hàng</div>
-                <div className="text-xs text-gray-400">
-                  #{requestOrder.order.orderCode ?? "N/A"}
-                </div>
-              </div>
+              <div className="text-2xl font-bold">Đơn hàng</div>
               <div>
                 <strong>Ngày đặt:</strong>{" "}
                 {formatDateToLocal(requestOrder.order.purchaseTime)}

@@ -157,9 +157,7 @@ export default function RequestDetails({
         ]}
         fontSize={18}
       />
-      {request?.request.status === 3 ? (
-        <></>
-      ) : (
+      {request?.request.status === 2 ? (
         <>
           <Space className="flex justify-between text-sm">
             <div className="font-bold">Giá gửi yêu cầu: </div>
@@ -178,6 +176,8 @@ export default function RequestDetails({
             </div>
           </Space>
         </>
+      ) : (
+        <></>
       )}
     </Space>
   );

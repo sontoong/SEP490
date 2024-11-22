@@ -11,7 +11,7 @@ import { useRequest } from "../../../hooks/useRequest";
 import { useCallback, useEffect } from "react";
 import { usePagination } from "../../../hooks/usePagination";
 
-export default function NewRequestTab(props: NewRequestTabProps) {
+export default function ProcessingRequestTab(props: NewRequestTabProps) {
   const { state, handleGetAllRequestPaginated, handleGetDetailsOfRequest } =
     useRequest();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
@@ -83,12 +83,12 @@ export default function NewRequestTab(props: NewRequestTabProps) {
   return (
     <Table
       columns={contractListColumns}
-      dataSource={state.newRequestList.requests}
+      dataSource={state.processingRequestList.requests}
       rowKey={(record) => record.request.requestId}
       loading={state.isFetching}
       pagination={{
         showSizeChanger: true,
-        total: state.newRequestList.total,
+        total: state.processingRequestList.total,
         pageSize: currentPageSize,
         current: currentPage,
         onChange: (pageIndex, pageSize) => {

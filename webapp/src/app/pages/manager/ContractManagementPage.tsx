@@ -59,12 +59,12 @@ export default function ContractManagementPage() {
     },
     {
       title: "Tên gói dịch vụ",
-      render: (_, { item }) => (
-        <Space direction="vertical">
-          <div className="text-base font-bold">{item.name}</div>
-          {/* <div className="text-base">{item.contractId}</div> */}
-        </Space>
-      ),
+      dataIndex: ["item", "name"],
+      // render: (_, { item }) => (
+      //   <Space direction="vertical">
+      //     <div className="text-base font-bold">{item.name}</div>
+      //   </Space>
+      // ),
     },
     {
       title: "Khách hàng",

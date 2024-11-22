@@ -9,6 +9,10 @@ import {
   getDetailsOfRequest,
   GetDetailsOfRequestParams,
   setCurrentRequest,
+  setNewRequestList,
+  setProcessingRequestList,
+  setCompletedRequestList,
+  setCanceledRequestList,
   setCurrentRequestList,
   setTodaysRequestList,
 } from "../redux/slice/requestSlice";
@@ -22,12 +26,51 @@ export function useRequest() {
     async (value: GetAllRequestsPaginatedParams) => {
       const resultAction = await dispatch(getAllRequestsPaginated(value));
       if (getAllRequestsPaginated.fulfilled.match(resultAction)) {
-        dispatch(
-          setCurrentRequestList({
-            requests: resultAction.payload[0],
-            total: resultAction.payload[1],
-          }),
-        );
+        switch (value.Status) {
+          case 0:
+            dispatch(
+              setNewRequestList({
+                requests: resultAction.payload[0],
+                total: resultAction.payload[1],
+              }),
+            );
+            break;
+
+          case 1:
+            dispatch(
+              setProcessingRequestList({
+                requests: resultAction.payload[0],
+                total: resultAction.payload[1],
+              }),
+            );
+            break;
+
+          case 2:
+            dispatch(
+              setCompletedRequestList({
+                requests: resultAction.payload[0],
+                total: resultAction.payload[1],
+              }),
+            );
+            break;
+
+          case 3:
+            dispatch(
+              setCanceledRequestList({
+                requests: resultAction.payload[0],
+                total: resultAction.payload[1],
+              }),
+            );
+            break;
+
+          default:
+            dispatch(
+              setCurrentRequestList({
+                requests: resultAction.payload[0],
+                total: resultAction.payload[1],
+              }),
+            );
+        }
       } else {
         if (resultAction.payload) {
           notification.error({

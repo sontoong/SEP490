@@ -35,9 +35,10 @@ export default function CustomerOrderTab(props: CustomerOrderTabProps) {
   const contractListColumns: TableColumnsType<Order> = [
     {
       title: "Mã đơn hàng",
-      render: (_, { order }) => (
-        <div className="text-base font-bold">{order?.orderId}</div>
-      ),
+      dataIndex: ["order", "orderId"],
+      // render: (_, { order }) => (
+      //   <div className="text-base font-bold">{order?.orderId}</div>
+      // ),
     },
     {
       title: "Khách hàng",

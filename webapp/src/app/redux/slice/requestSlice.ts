@@ -5,16 +5,24 @@ import { excludedActionsPending } from "./specialUISlice";
 import { Request } from "../../models/request";
 
 export type TRequest = {
-  currentRequestList: { requests: Request[]; total: number };
+  newRequestList: { requests: Request[]; total: number };
+  processingRequestList: { requests: Request[]; total: number };
+  completedRequestList: { requests: Request[]; total: number };
+  canceledRequestList: { requests: Request[]; total: number };
   todaysRequestList: { requests: Request[]; total: number };
+  currentRequestList: { requests: Request[]; total: number };
   currentRequest: Request;
   isFetching: boolean;
   isSending: boolean;
 };
 
 const initialState: TRequest = {
-  currentRequestList: { requests: [], total: 0 },
+  newRequestList: { requests: [], total: 0 },
+  processingRequestList: { requests: [], total: 0 },
+  completedRequestList: { requests: [], total: 0 },
+  canceledRequestList: { requests: [], total: 0 },
   todaysRequestList: { requests: [], total: 0 },
+  currentRequestList: { requests: [], total: 0 },
   currentRequest: {
     workerList: [],
     customer_Leader: [],
@@ -52,11 +60,35 @@ const requestSlice = createSlice({
   name: "request",
   initialState,
   reducers: {
+    setNewRequestList: (
+      state,
+      action: PayloadAction<TRequest["newRequestList"]>,
+    ) => {
+      state.newRequestList = action.payload;
+    },
+    setProcessingRequestList: (
+      state,
+      action: PayloadAction<TRequest["processingRequestList"]>,
+    ) => {
+      state.processingRequestList = action.payload;
+    },
+    setCompletedRequestList: (
+      state,
+      action: PayloadAction<TRequest["completedRequestList"]>,
+    ) => {
+      state.completedRequestList = action.payload;
+    },
+    setCanceledRequestList: (
+      state,
+      action: PayloadAction<TRequest["canceledRequestList"]>,
+    ) => {
+      state.canceledRequestList = action.payload;
+    },
     setCurrentRequestList: (
       state,
-      action: PayloadAction<TRequest["currentRequestList"]>,
+      action: PayloadAction<TRequest["canceledRequestList"]>,
     ) => {
-      state.currentRequestList = action.payload;
+      state.canceledRequestList = action.payload;
     },
     setTodaysRequestList: (
       state,
@@ -185,9 +217,13 @@ export const getDetailsOfRequest = createAsyncThunk<
 });
 
 export const {
-  setCurrentRequestList,
+  setNewRequestList,
+  setCompletedRequestList,
+  setProcessingRequestList,
+  setCanceledRequestList,
   setCurrentRequest,
   setTodaysRequestList,
+  setCurrentRequestList,
 } = requestSlice.actions;
 
 export default requestSlice.reducer;

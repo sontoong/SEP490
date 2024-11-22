@@ -1,7 +1,7 @@
 import { TabsProps, Typography } from "antd";
 import { defaultImage } from "../../../constants/images";
 import { Tabs } from "../tabs";
-import { ensureBase64Avatar } from "../../utils/helpers";
+import { validateImageString } from "../../utils/helpers";
 
 const { Title, Paragraph } = Typography;
 
@@ -24,7 +24,7 @@ const BannerContainer = ({
   return (
     <div
       style={{
-        backgroundImage: `url(${ensureBase64Avatar(image) ?? defaultImage})`,
+        backgroundImage: `url(${validateImageString(image) ?? defaultImage})`,
         ...boxShadowStyle,
         backgroundAttachment: "fixed",
         height: `${height}`,

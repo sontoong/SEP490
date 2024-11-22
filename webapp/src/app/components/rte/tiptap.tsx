@@ -2,13 +2,24 @@ import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import TextEditorMenuBar from "./tiptap-menubar";
+import { useEffect } from "react";
+import Placeholder from "@tiptap/extension-placeholder";
 
 export default function Tiptap(props: TextEditorProps) {
   const editor = useEditor({
-    extensions: [StarterKit, Underline],
+    extensions: [
+      StarterKit,
+      Underline,
+      Placeholder.configure({
+        placeholder: props.placeholder,
+        emptyEditorClass:
+          "cursor-text before:content-[attr(data-placeholder)] before:absolute before:top-3 before:left-3 before:text-slate-400 before:text-[16px] before:opacity-50 before-pointer-events-none",
+      }),
+    ],
     content: props.value,
     onUpdate: ({ editor }) => {
-      if (props.onChange) props.onChange(editor.getHTML());
+      const content = editor.getText() ? editor.getHTML() : "";
+      props.onChange?.(content);
     },
     editorProps: {
       attributes: {
@@ -17,6 +28,12 @@ export default function Tiptap(props: TextEditorProps) {
       },
     },
   });
+
+  useEffect(() => {
+    if (editor && !editor.isDestroyed)
+      editor?.commands.setContent(props.value ?? null);
+  }, [editor, props.value]);
+
   return (
     <div>
       <TextEditorMenuBar editor={editor} />
@@ -28,4 +45,5 @@ export default function Tiptap(props: TextEditorProps) {
 type TextEditorProps = {
   value?: string;
   onChange?: (content: string) => void;
+  placeholder?: string;
 };

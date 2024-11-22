@@ -18,6 +18,8 @@ function CustomDatePicker(props: CustomDatePickerProps) {
   );
 }
 
+CustomDatePicker.RangePicker = DatePicker.RangePicker;
+
 export default CustomDatePicker;
 
 type CustomDatePickerProps = Omit<DatePickerProps, "style">;

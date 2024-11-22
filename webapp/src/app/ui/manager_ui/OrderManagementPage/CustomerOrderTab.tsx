@@ -1,66 +1,112 @@
 import { Table } from "../../../components/table";
 import { TableColumnsType } from "antd";
-import {
-  calculateDateToNow,
-  formatCurrency,
-  formatDateToLocal,
-} from "../../../utils/helpers";
+import { formatCurrency, formatDateToLocal } from "../../../utils/helpers";
 import { Order } from "../../../models/order";
 import { ViewDetailButton } from "./ViewOrderDetailModal";
+import { useOrder } from "../../../hooks/useOrder";
+import { usePagination } from "../../../hooks/usePagination";
+import { useCallback, useEffect, useState } from "react";
 
 export default function CustomerOrderTab(props: CustomerOrderTabProps) {
+  const { state, handleGetAllOrderPaginated } = useOrder();
+  const { currentPage, currentPageSize, setPageSize, goToPage } =
+    usePagination();
+  const [tableParams, setTableParams] = useState<TableParams>();
+
+  const fetchOrders = useCallback(() => {
+    handleGetAllOrderPaginated({
+      PageIndex: currentPage,
+      Pagesize: currentPageSize,
+      SearchByPhone: props.searchByPhone,
+      DescreasingDateSort: tableParams?.sorter?.["order.purchaseTime"],
+    });
+  }, [
+    currentPage,
+    currentPageSize,
+    handleGetAllOrderPaginated,
+    props.searchByPhone,
+    tableParams?.sorter,
+  ]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
+
   const contractListColumns: TableColumnsType<Order> = [
     {
-      title: "ID",
-      render: (_, { OrderId }) => (
-        <div className="text-base font-bold">{OrderId}</div>
-      ),
+      title: "Mã đơn hàng",
+      dataIndex: ["order", "orderId"],
+      // render: (_, { order }) => (
+      //   <div className="text-base font-bold">{order?.orderId}</div>
+      // ),
     },
     {
       title: "Khách hàng",
-      dataIndex: "CustomerId",
+      dataIndex: ["customer", "0", "fullName"],
+    },
+    {
+      title: "SĐT",
+      dataIndex: ["customer", "0", "phoneNumber"],
     },
     {
       title: "Ngày đặt",
-      dataIndex: "PurchaseTime",
+      dataIndex: ["order", "purchaseTime"],
       render: (value) => <div>{formatDateToLocal(value)}</div>,
-      sorter: (a, b) =>
-        (calculateDateToNow({
-          time: a.PurchaseTime,
-          format: false,
-        }) as number) -
-        (calculateDateToNow({
-          time: b.PurchaseTime,
-          format: false,
-        }) as number),
+      sorter: true,
+      sortDirections: ["ascend"],
     },
     {
       title: "Tổng giá",
-      render: (_, { OrderDetails }) => {
-        const totalPrice = OrderDetails.reduce(
-          (prev, cur) => prev + cur.TotalPrice,
-          0,
-        );
-        return <div>{formatCurrency(totalPrice)}</div>;
+      render: (_, { order }) => {
+        return <div>{formatCurrency(order?.totalPrice)}</div>;
       },
     },
     {
       title: "",
       key: "actions",
-      render: (_, { OrderId }) => <ViewDetailButton OrderId={OrderId} />,
+      render: (_, { order }) => <ViewDetailButton orderId={order?.orderId} />,
     },
   ];
   return (
     <>
       <Table
         columns={contractListColumns}
-        dataSource={props.orders}
-        rowKey={(record) => record.OrderId}
+        dataSource={state.currentOrderList.orders}
+        rowKey={(record) => record.order?.orderId}
+        loading={state.isFetching}
+        pagination={{
+          showSizeChanger: true,
+          total: state.currentOrderList.total,
+          pageSize: currentPageSize,
+          current: currentPage,
+          onChange: (pageIndex, pageSize) => {
+            goToPage(pageIndex);
+            setPageSize(pageSize);
+          },
+          showTotal: (total, range) =>
+            `${range[0]}-${range[1]} trong tổng ${total} đơn hàng`,
+          pageSizeOptions: [5, 10, 20, 50, 100],
+        }}
+        onChange={(_, __, sorter) => {
+          setTableParams({
+            sorter: {
+              "order.purchaseTime": Array.isArray(sorter)
+                ? undefined
+                : !(sorter.order === "ascend"),
+            },
+          });
+        }}
       />
     </>
   );
 }
 
 type CustomerOrderTabProps = {
-  orders: Order[];
+  searchByPhone?: string;
+};
+
+type TableParams = {
+  sorter?: {
+    "order.purchaseTime": boolean | undefined;
+  };
 };

@@ -1,96 +1,66 @@
-import { Space, TabsProps } from "antd";
-import { requests } from "../../../constants/testData";
-import { Form } from "../../components/form";
-import { Input } from "../../components/inputs";
+import { Drawer, Space, TabsProps } from "antd";
 import { Tabs } from "../../components/tabs";
 import { useTitle } from "../../hooks/useTitle";
 import NewRequestTab from "../../ui/manager_ui/RequestManagementPage/NewRequestTab";
+import { useState } from "react";
+import RequestDetails from "../../ui/manager_ui/RequestManagementPage/RequestDetails/RequestDetails";
+import { useRequest } from "../../hooks/useRequest";
+import { useSpecialUI } from "../../hooks/useSpecialUI";
+import ProcessingRequestTab from "../../ui/manager_ui/RequestManagementPage/ProcessingRequestTab";
+import CompletedRequestTab from "../../ui/manager_ui/RequestManagementPage/CompletedRequestTab";
+import CanceledRequestTab from "../../ui/manager_ui/RequestManagementPage/CanceledRequestTab";
 
 export default function RequestManagementPage() {
   useTitle({
     tabTitle: "Requests - EWMH",
     paths: [{ title: "Danh sách yêu cầu", path: "/requests" }],
   });
-  const [searchForm] = Form.useForm();
-
-  const initialValuesSearch = {
-    searchString: "",
-  };
-
-  const handleSearchSubmit = (values: any) => {
-    console.log(values);
-  };
+  const [open, setOpen] = useState(false);
+  const { state: requestState } = useRequest();
+  const { state: specialUIState } = useSpecialUI();
 
   const items: TabsProps["items"] = [
     {
       key: "1",
       label: "Yêu cầu mới",
-      children: (
-        <NewRequestTab
-          requests={requests.filter((value) => value.Status === 1)}
-        />
-      ),
+      children: <NewRequestTab status={0} setDrawerOpen={setOpen} />,
     },
     {
       key: "2",
-      label: "Đã được duyệt",
-      children: (
-        <NewRequestTab
-          requests={requests.filter((value) => value.Status === 2)}
-        />
-      ),
+      label: "Đang xử lý",
+      children: <ProcessingRequestTab status={1} setDrawerOpen={setOpen} />,
     },
     {
       key: "3",
       label: "Đã hoàn thành",
-      children: (
-        <NewRequestTab
-          requests={requests.filter((value) => value.Status === 3)}
-        />
-      ),
+      children: <CompletedRequestTab status={2} setDrawerOpen={setOpen} />,
     },
     {
       key: "4",
       label: "Đã hủy",
-      children: (
-        <NewRequestTab
-          requests={requests.filter((value) => value.Status === 4)}
-        />
-      ),
+      children: <CanceledRequestTab status={3} setDrawerOpen={setOpen} />,
     },
   ];
 
   return (
     <>
+      <Drawer
+        title="Thông tin yêu cầu"
+        placement="right"
+        open={open}
+        getContainer={false}
+        destroyOnClose
+        onClose={() => setOpen(false)}
+        width="100%"
+        style={{ height: "93vh" }}
+      >
+        <RequestDetails
+          loading={specialUIState.isLoading}
+          request={requestState.currentRequest}
+        />
+      </Drawer>
       <Space direction="vertical" size={20} className="w-full">
-        <div className="flex items-center justify-end">
-          <Form
-            form={searchForm}
-            initialValues={initialValuesSearch}
-            name="SearchForm"
-            onFinish={handleSearchSubmit}
-            className="w-1/2"
-          >
-            <Form.Item
-              noStyle
-              name="searchString"
-              rules={[
-                {
-                  type: "string",
-                  required: true,
-                  whitespace: true,
-                  message: "",
-                },
-              ]}
-            >
-              <Input.Search
-                placeholder="Tìm kiếm"
-                onSearch={() => searchForm.submit()}
-              />
-            </Form.Item>
-          </Form>
-        </div>
-        <Tabs defaultActiveKey="1" items={items} />
+        <Tabs defaultActiveKey="1" items={items} destroyInactiveTabPane />
       </Space>
     </>
   );

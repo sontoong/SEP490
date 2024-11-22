@@ -6,17 +6,24 @@ import {
 import { MenuProps } from "antd";
 import { Dropdown } from "../../../components/dropdown";
 import { useState } from "react";
-import { ViewRequestOrderDetailModal } from "./ViewRequestOrderDetailModal";
-import { useNavigate } from "react-router-dom";
+import { ViewRequestOrderDetailsModal } from "./ViewRequestOrderDetailsModal";
+import { RequestOrder } from "../../../models/order";
+import { useRequest } from "../../../hooks/useRequest";
 
-const RequestOrderDropdown = ({ OrderId }: { OrderId: string }) => {
-  const navigate = useNavigate();
+const RequestOrderDropdown = ({
+  requestOrder,
+  setOpen,
+}: {
+  requestOrder: RequestOrder;
+  setOpen: any;
+}) => {
+  const { handleGetDetailsOfRequest } = useRequest();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: "Xem chi tiết khách hàng",
+      label: "Xem chi tiết đơn hàng",
       icon: <EyeOutlined />,
       onClick: () => setIsModalVisible(true),
     },
@@ -24,7 +31,10 @@ const RequestOrderDropdown = ({ OrderId }: { OrderId: string }) => {
       key: "2",
       label: "Xem thông tin yêu cầu",
       icon: <DropboxOutlined />,
-      onClick: () => navigate(`/requests/156c9368-54da-424d-984b-5ea636639854`),
+      onClick: () => {
+        handleGetDetailsOfRequest({ RequestId: requestOrder.order.requestId });
+        setOpen(true);
+      },
     },
   ];
 
@@ -33,8 +43,8 @@ const RequestOrderDropdown = ({ OrderId }: { OrderId: string }) => {
       <Dropdown menu={{ items }} trigger={["click"]}>
         <EllipsisOutlined className="text-lg" />
       </Dropdown>
-      <ViewRequestOrderDetailModal
-        OrderId={OrderId}
+      <ViewRequestOrderDetailsModal
+        requestOrder={requestOrder}
         isModalVisible={isModalVisible}
         setIsModalVisible={setIsModalVisible}
       />

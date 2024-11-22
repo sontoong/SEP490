@@ -2,24 +2,24 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../services/agent";
 import { AxiosError } from "axios";
 import { User } from "../../models/user";
-// import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { excludedActionsPending } from "./specialUISlice";
 
 const token = localStorage.getItem("access_token");
 let initUser = {};
 if (token && token !== "undefined") {
-  // initUser = jwtDecode(token);
-  initUser = {
-    Role: "2",
-    AccountId: "1",
-    AvatarUrl: "",
-    DateOfBirth: "",
-    DisabledReason: "",
-    Email: "admin@gmail.com",
-    Fullname: "abc",
-    IsDisabled: false,
-    PhoneNumber: "13333333333",
-  };
+  initUser = jwtDecode(token);
+  // initUser = {
+  //   Role: "2",
+  //   AccountId: "1",
+  //   avatarUrl: "",
+  //   DateOfBirth: "",
+  //   DisabledReason: "",
+  //   email: "admin@gmail.com",
+  //   fullName: "abc",
+  //   isDisabled: false,
+  //   PhoneNumber: "13333333333",
+  // };
 } else {
   localStorage.clear();
 }
@@ -91,10 +91,10 @@ const authSlice = createSlice({
 export const login = createAsyncThunk<any, LoginParams>(
   "auth/send/login",
   async (data, { rejectWithValue }) => {
-    const { email, password } = data;
+    const { email_Or_Phone, password } = data;
     try {
-      const response = await agent.Auth.login({
-        email,
+      const response = await agent.Account.login({
+        email_Or_Phone,
         password,
       });
       return response;
@@ -108,6 +108,77 @@ export const login = createAsyncThunk<any, LoginParams>(
     }
   },
 );
+
+export const getAccountInfo = createAsyncThunk<any, void>(
+  "auth/fetch/getAccountInfo",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await agent.Account.getAccountInfo();
+      return response.response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
+export const logout = createAsyncThunk<any, void>(
+  "auth/send/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await agent.Account.logout({});
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
+export const sendPasswordResetLink = createAsyncThunk<
+  any,
+  SendPasswordResetLinkParams
+>("auth/send/sendPasswordResetLink", async (data, { rejectWithValue }) => {
+  const { email } = data;
+  try {
+    const response = await agent.Account.sendPasswordResetLink({ email });
+    return response.response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+});
+
+export const resetPassword = createAsyncThunk<any, ResetPasswordParams>(
+  "auth/send/resetPassword",
+  async (data, { rejectWithValue }) => {
+    const { password, token } = data;
+    try {
+      const response = await agent.Account.resetPassword({ password, token });
+      return response.response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
 export const { setCurrentUser } = authSlice.actions;
 
 export const isLoggedIn = () => {
@@ -117,6 +188,15 @@ export const isLoggedIn = () => {
 export default authSlice.reducer;
 
 export type LoginParams = {
+  email_Or_Phone: string;
+  password: string;
+};
+
+export type SendPasswordResetLinkParams = {
   email: string;
+};
+
+export type ResetPasswordParams = {
+  token: string;
   password: string;
 };

@@ -18,7 +18,7 @@ export default function LoginPage() {
   const [form] = Form.useForm();
 
   const initialValues: LoginParams = {
-    email: "",
+    email_Or_Phone: "",
     password: "",
   };
 
@@ -34,35 +34,38 @@ export default function LoginPage() {
       />
       <ScreenCard
         cardTitle={"Hệ thống quản lí EWMH"}
-        className="w-1/3"
+        className="w-[500px]"
         bordered={false}
       >
         <div className="px-5">
-          <Space direction="vertical" size="large" className="w-full">
-            <div>
-              <Form
-                form={form}
-                initialValues={initialValues}
-                name="LoginPage"
-                onFinish={handleSubmit}
-              >
+          <Form
+            form={form}
+            initialValues={initialValues}
+            name="LoginPage"
+            onFinish={handleSubmit}
+          >
+            <Space direction="vertical" size="large" className="w-full">
+              <div>
                 <Form.Item
-                  name="email"
+                  name="email_Or_Phone"
                   label={
                     <Space>
                       <UserOutlined />
-                      <span>Email</span>
+                      <span>Email / Số điện thoại</span>
                     </Space>
                   }
                   rules={[
                     {
-                      type: "email",
                       required: true,
                       whitespace: true,
+                      message: "Vui lòng nhập email hoặc số điện thoại",
                     },
                   ]}
                 >
-                  <Input placeholder="Nhập Email" />
+                  <Input
+                    placeholder="Nhập email hoặc số điện thoại"
+                    size="large"
+                  />
                 </Form.Item>
                 <Form.Item
                   name="password"
@@ -77,25 +80,28 @@ export default function LoginPage() {
                       type: "string",
                       required: true,
                       whitespace: true,
+                      message: "Vui lòng nhập mật khẩu",
                     },
                   ]}
                 >
-                  <Input.Password placeholder="Nhập mật khẩu" />
+                  <Input.Password placeholder="Nhập mật khẩu" size="large" />
                 </Form.Item>
-              </Form>
-              <Link to="/forgot-password">
-                <span className="underline">Đổi mật khẩu</span>
-              </Link>
-            </div>
-            <div className="flex justify-center">
-              <PrimaryButton.BoldText
-                text="Đăng nhập"
-                loading={stateAuth.isSending}
-                onClick={() => form.submit()}
-                className="w-full"
-              />
-            </div>
-          </Space>
+                <Link to="/forgot-password">
+                  <span className="underline">Đổi mật khẩu</span>
+                </Link>
+              </div>
+              <div className="flex justify-center">
+                <Form.Item className="w-full">
+                  <PrimaryButton.BoldText
+                    htmlType="submit"
+                    text="Đăng nhập"
+                    loading={stateAuth.isSending}
+                    className="w-full"
+                  />
+                </Form.Item>
+              </div>
+            </Space>
+          </Form>
         </div>
       </ScreenCard>
     </div>

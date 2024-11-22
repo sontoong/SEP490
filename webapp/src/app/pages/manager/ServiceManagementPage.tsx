@@ -7,11 +7,14 @@ import { Modal } from "../../components/modals";
 import { Avatar } from "../../components/avatar";
 import { WarningOutlined } from "@ant-design/icons";
 import { statusGenerator } from "../../utils/generators/status";
-import { servicePackages } from "../../../constants/testData";
 import { ServicePackage } from "../../models/service";
 import ServiceManagementDropdown from "../../ui/manager_ui/ServiceManagementPage/ServiceManagementDropdown";
 import CreateNewServicePackageModalButton from "../../ui/manager_ui/ServiceManagementPage/CreateNewServiceModalButton";
 import { formatCurrency } from "../../utils/helpers";
+import { useServicePackage } from "../../hooks/useServicePackage";
+import { usePagination } from "../../hooks/usePagination";
+import { useCallback, useEffect, useState } from "react";
+import htmlParse from "../../utils/htmlParser";
 
 export default function ServiceManagementPage() {
   useTitle({
@@ -20,16 +23,45 @@ export default function ServiceManagementPage() {
   });
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();
+  const {
+    state,
+    handleGetAllServicePackagePaginated,
+    handleDisableServicePackage,
+  } = useServicePackage();
+  const { currentPage, currentPageSize, setPageSize, goToPage } =
+    usePagination();
+  const [searchByName, setSearchByName] = useState<string>();
+  const [tableParams, setTableParams] = useState<TableParams>();
+
+  const fetchServicePackage = useCallback(() => {
+    handleGetAllServicePackagePaginated({
+      PageIndex: currentPage,
+      Pagesize: currentPageSize,
+      SearchByName: searchByName,
+      Status: tableParams?.filters?.status?.[0],
+    });
+  }, [
+    currentPage,
+    currentPageSize,
+    handleGetAllServicePackagePaginated,
+    searchByName,
+    tableParams?.filters?.status,
+  ]);
+
+  useEffect(() => {
+    fetchServicePackage();
+  }, [fetchServicePackage]);
 
   const initialValuesSearch = {
     searchString: "",
   };
 
-  const handleSearchSubmit = (values: any) => {
-    console.log(values);
+  const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
+    goToPage(1);
+    setSearchByName(searchString);
   };
 
-  function handleConfirmLock() {
+  function handleConfirmLock(servicePackageId: string) {
     modal.confirm({
       icon: <WarningOutlined />,
       width: "fit-content",
@@ -43,16 +75,15 @@ export default function ServiceManagementPage() {
         </div>
       ),
       onOk: async () => {
-        const sleep = (ms: number) => {
-          return new Promise((resolve) => setTimeout(resolve, ms));
-        };
-
-        await sleep(1000); // Example delay
+        await handleDisableServicePackage({
+          values: { ServicePackageId: servicePackageId, Status: true },
+        });
+        fetchServicePackage();
       },
     });
   }
 
-  function handleConfirmUnlock() {
+  function handleConfirmUnlock(servicePackageId: string) {
     modal.confirm({
       icon: <WarningOutlined />,
       width: "fit-content",
@@ -65,7 +96,12 @@ export default function ServiceManagementPage() {
           <span>?</span>
         </div>
       ),
-      onOk() {},
+      onOk: async () => {
+        await handleDisableServicePackage({
+          values: { ServicePackageId: servicePackageId, Status: false },
+        });
+        fetchServicePackage();
+      },
     });
   }
 
@@ -73,59 +109,67 @@ export default function ServiceManagementPage() {
     {
       title: "Gói dịch vụ",
       dataIndex: "Name",
-      render: (_, { ImageUrl, Name, NumOfRequest }) => (
+      render: (_, { imageUrl, name, numOfRequest }) => (
         <Space direction="horizontal" size={15}>
-          <Avatar src={ImageUrl} size={60} shape="square" />
+          <Avatar src={imageUrl} size={60} shape="square" />
           <Space direction="vertical">
-            <div className="text-base font-bold">{Name}</div>
-            <div>{NumOfRequest} lần sửa</div>
+            <div className="text-base font-bold">{name}</div>
+            <div>{numOfRequest} lần sửa</div>
           </Space>
         </Space>
       ),
     },
     {
       title: "Mô tả",
-      dataIndex: "Description",
+      dataIndex: "description",
+      render: (value) => {
+        return htmlParse(value);
+      },
     },
     {
       title: "Giá",
-      dataIndex: ["ServicePackagePrices", "PriceByDate"],
+      dataIndex: "priceByDate",
       render: (value) => {
         return formatCurrency(value);
       },
     },
     {
       title: "Trạng thái",
-      dataIndex: "Status",
-      render: (_, { Status }) => {
-        const isDisabled = !Status;
+      dataIndex: "status",
+      render: (_, { status, servicePackageId }) => {
         return (
           <div
             onClick={() =>
-              isDisabled ? handleConfirmUnlock() : handleConfirmLock()
+              status
+                ? handleConfirmUnlock(servicePackageId)
+                : handleConfirmLock(servicePackageId)
             }
-            className="cursor-pointer"
+            className="w-fit cursor-pointer"
           >
-            {statusGenerator(isDisabled)}
+            {statusGenerator(status)}
           </div>
         );
       },
       filters: [
         {
           text: "Đang hoạt động",
-          value: "true",
+          value: false,
         },
         {
           text: "Vô hiệu hóa",
-          value: "false",
+          value: true,
         },
       ],
-      onFilter: (value, record) => record.Status.toString() === value,
     },
     {
       title: "",
       key: "actions",
-      render: (_, record) => <ServiceManagementDropdown record={record} />,
+      render: (_, record) => (
+        <ServiceManagementDropdown
+          record={record}
+          fetchServicePackage={fetchServicePackage}
+        />
+      ),
     },
   ];
 
@@ -149,26 +193,54 @@ export default function ServiceManagementPage() {
               rules={[
                 {
                   type: "string",
-                  required: true,
                   whitespace: true,
                   message: "",
                 },
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm"
+                placeholder="Tìm kiếm theo tên gói dịch vụ"
                 onSearch={() => searchForm.submit()}
+                onClear={() => {
+                  searchForm.setFieldValue("searchString", "");
+                  searchForm.submit();
+                }}
               />
             </Form.Item>
           </Form>
         </div>
         <Table
           columns={serviceListColumns}
-          dataSource={servicePackages}
-          rowKey={(record) => record.ServicePackageId}
+          dataSource={state.currentServicePackageList.servicePackages}
+          rowKey={(record) => record.servicePackageId}
+          loading={state.isFetching}
+          pagination={{
+            showSizeChanger: true,
+            total: state.currentServicePackageList.total,
+            pageSize: currentPageSize,
+            current: currentPage,
+            onChange: (pageIndex, pageSize) => {
+              goToPage(pageIndex);
+              setPageSize(pageSize);
+            },
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} trong tổng ${total} gói`,
+            pageSizeOptions: [5, 10, 20, 50, 100],
+          }}
+          onChange={(_, filters) => {
+            setTableParams({
+              filters: filters,
+            });
+          }}
         />
       </Space>
       {contextHolder}
     </>
   );
 }
+
+type TableParams = {
+  filters?: {
+    status?: boolean[];
+  };
+};

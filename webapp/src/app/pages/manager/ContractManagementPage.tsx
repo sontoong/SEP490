@@ -5,9 +5,11 @@ import { Contract } from "../../models/contract";
 import { contractStatusGenerator } from "../../utils/generators/contractStatus";
 import { Input } from "../../components/inputs";
 import { Table } from "../../components/table";
-import { calculateDateToNow, formatDateToLocal } from "../../utils/helpers";
-import { contracts, customers } from "../../../constants/testData";
+import { formatDateToLocal } from "../../utils/helpers";
 import ContractManagementDropdown from "../../ui/manager_ui/ContractManagementPage/ContractManagementDropdown";
+import { useCallback, useEffect, useState } from "react";
+import { usePagination } from "../../hooks/usePagination";
+import { useContract } from "../../hooks/useContract";
 
 export default function ContractManagementPage() {
   useTitle({
@@ -15,77 +17,82 @@ export default function ContractManagementPage() {
     paths: [{ title: "Danh sách hợp đồng", path: "/contracts" }],
   });
   const [searchForm] = Form.useForm();
+  const { state, handleGetAllContractPaginated } = useContract();
+  const { currentPage, currentPageSize, setPageSize, goToPage } =
+    usePagination();
+  const [searchByPhone, setSearchByPhone] = useState<string>();
+  const [tableParams, setTableParams] = useState<TableParams>();
+
+  const fetchContracts = useCallback(() => {
+    handleGetAllContractPaginated({
+      PageIndex: currentPage,
+      Pagesize: currentPageSize,
+      SearchByPhone: searchByPhone,
+      PurchaseTime_Des_Sort:
+        tableParams?.sorter?.["item.PurchaseTime_Des_Sort"],
+    });
+  }, [
+    currentPage,
+    currentPageSize,
+    handleGetAllContractPaginated,
+    searchByPhone,
+    tableParams?.sorter,
+  ]);
+
+  useEffect(() => {
+    fetchContracts();
+  }, [fetchContracts]);
 
   const initialValuesSearch = {
     searchString: "",
   };
 
-  const handleSearchSubmit = (values: any) => {
-    console.log(values);
+  const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
+    goToPage(1);
+    setSearchByPhone(searchString);
   };
 
   const contractListColumns: TableColumnsType<Contract> = [
     {
-      title: "Hợp đồng",
-      render: (_, { ContractId, ServicePackageId }) => (
-        <Space direction="vertical">
-          <div className="text-base font-bold">{ServicePackageId}</div>
-          <div className="text-base">{ContractId}</div>
-        </Space>
-      ),
+      title: "Mã hợp đồng",
+      dataIndex: ["item", "contractId"],
+    },
+    {
+      title: "Tên gói dịch vụ",
+      dataIndex: ["item", "name"],
+      // render: (_, { item }) => (
+      //   <Space direction="vertical">
+      //     <div className="text-base font-bold">{item.name}</div>
+      //   </Space>
+      // ),
     },
     {
       title: "Khách hàng",
-      dataIndex: "CustomerId",
+      dataIndex: ["getCusInfo", "0", "fullName"],
     },
     {
       title: "Thanh toán vào",
-      dataIndex: "PurchaseTime",
+      dataIndex: ["item", "purchaseTime"],
       render: (value) => <div>{formatDateToLocal(value)}</div>,
-      sorter: (a, b) =>
-        (calculateDateToNow({
-          time: a.PurchaseTime,
-          format: false,
-        }) as number) -
-        (calculateDateToNow({
-          time: b.PurchaseTime,
-          format: false,
-        }) as number),
+      sorter: true,
+      sortDirections: ["descend"],
     },
     {
       title: "Lần sửa còn",
-      dataIndex: "RemainingNumOfRequests",
+      dataIndex: ["item", "remainingNumOfRequests"],
     },
     {
       title: "Trạng thái",
-      dataIndex: "Status",
-      render: (_, { RemainingNumOfRequests }) => {
-        return <div>{contractStatusGenerator(RemainingNumOfRequests)}</div>;
-      },
-      filters: [
-        {
-          text: "Đang hoạt động",
-          value: "active",
-        },
-        {
-          text: "Vô hiệu hóa",
-          value: "inactive",
-        },
-      ],
-      onFilter: (value, record) => {
-        if (value === "inactive") {
-          return record.RemainingNumOfRequests === 0;
-        }
-        if (value === "active") {
-          return record.RemainingNumOfRequests !== 0;
-        }
-        return false;
+      render: (_, { item }) => {
+        return (
+          <div>{contractStatusGenerator(item.remainingNumOfRequests)}</div>
+        );
       },
     },
     {
       title: "",
       key: "actions",
-      render: () => <ContractManagementDropdown record={customers[0]} />,
+      render: (record) => <ContractManagementDropdown record={record} />,
     },
   ];
 
@@ -106,14 +113,13 @@ export default function ContractManagementPage() {
               rules={[
                 {
                   type: "string",
-                  required: true,
                   whitespace: true,
                   message: "",
                 },
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm"
+                placeholder="Tìm kiếm theo SĐT"
                 onSearch={() => searchForm.submit()}
               />
             </Form.Item>
@@ -121,10 +127,38 @@ export default function ContractManagementPage() {
         </div>
         <Table
           columns={contractListColumns}
-          dataSource={contracts}
-          rowKey={(record) => record.ContractId}
+          dataSource={state.currentContractList.contracts}
+          rowKey={(record) => record.item.contractId}
+          loading={state.isFetching}
+          pagination={{
+            showSizeChanger: true,
+            total: state.currentContractList.total,
+            pageSize: currentPageSize,
+            current: currentPage,
+            onChange: (pageIndex, pageSize) => {
+              goToPage(pageIndex);
+              setPageSize(pageSize);
+            },
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} trong tổng ${total} hợp đồng`,
+          }}
+          onChange={(_, __, sorter) => {
+            setTableParams({
+              sorter: {
+                "item.PurchaseTime_Des_Sort": Array.isArray(sorter)
+                  ? undefined
+                  : !(sorter.order === "descend"),
+              },
+            });
+          }}
         />
       </Space>
     </>
   );
 }
+
+type TableParams = {
+  sorter?: {
+    "item.PurchaseTime_Des_Sort"?: boolean | undefined;
+  };
+};

@@ -16,7 +16,7 @@ const PrivateRoute = ({
   requiredRoles,
 }: PrivateRouteProps) => {
   const isAuth = isLoggedIn();
-  const { Role } = useAppSelector((state) => state.auth.currentUser);
+  const { role } = useAppSelector((state) => state.auth.currentUser);
   // const user = localStorage.getItem('user');
   // const userObj = user ? JSON.parse(user) : {};
   // const isFirstLogin = userObj.user.isFirstLogin;
@@ -27,7 +27,7 @@ const PrivateRoute = ({
 
   if (inverted) {
     if (isAuth) {
-      switch (Role) {
+      switch (role) {
         case ROLE.admin:
           return <Navigate to="/user-management" />;
         case ROLE.manager:
@@ -40,7 +40,7 @@ const PrivateRoute = ({
     }
   }
 
-  if (Role && !requiredRoles?.some((r) => Role === r)) {
+  if (role && !requiredRoles?.some((r) => role === r)) {
     return <NotFoundPage />;
   }
 

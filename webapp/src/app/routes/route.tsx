@@ -29,10 +29,9 @@ import ProductManagementPage from "../pages/manager/ProductManagementPage";
 import ContractManagementPage from "../pages/manager/ContractManagementPage";
 import RequestManagementPage from "../pages/manager/RequestManagementPage";
 import OrderManagementPage from "../pages/manager/OrderManagementPage";
-import ChatPage from "../pages/manager/ChatPage";
 import RatingManagementPage from "../pages/manager/RatingManagementPage";
 import ApartmentManagementPage from "../pages/manager/ApartmentManagementPage";
-import RequestDetailsPage from "../pages/manager/RequestDetailsPage";
+import VerifyCustomerPage from "../pages/manager/VerifyCustomerPage";
 
 //other page
 import NotFoundPage from "../pages/404Page";
@@ -152,18 +151,18 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
       },
-      {
-        path: "requests/:requestId",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
-              <ManagerLayout>
-                <RequestDetailsPage />
-              </ManagerLayout>
-            </PrivateRoute>
-          </Suspense>
-        ),
-      },
+      // {
+      //   path: "requests/:requestId",
+      //   element: (
+      //     <Suspense fallback={<></>}>
+      //       <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+      //         <ManagerLayout>
+      //           <RequestDetailsPage />
+      //         </ManagerLayout>
+      //       </PrivateRoute>
+      //     </Suspense>
+      //   ),
+      // },
       {
         path: "orders",
         element: (
@@ -171,18 +170,6 @@ export const router = createBrowserRouter([
             <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
               <ManagerLayout>
                 <OrderManagementPage />
-              </ManagerLayout>
-            </PrivateRoute>
-          </Suspense>
-        ),
-      },
-      {
-        path: "chat",
-        element: (
-          <Suspense fallback={<></>}>
-            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
-              <ManagerLayout>
-                <ChatPage />
               </ManagerLayout>
             </PrivateRoute>
           </Suspense>
@@ -207,6 +194,18 @@ export const router = createBrowserRouter([
             <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
               <ManagerLayout>
                 <ApartmentManagementPage />
+              </ManagerLayout>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "customer-verify",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <VerifyCustomerPage />
               </ManagerLayout>
             </PrivateRoute>
           </Suspense>

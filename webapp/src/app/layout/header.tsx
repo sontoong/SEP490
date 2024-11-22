@@ -1,26 +1,33 @@
-import { LogoutOutlined, UserOutlined } from "@ant-design/icons";
-import { Avatar, Dropdown, Layout, Menu, MenuProps, Modal, Spin } from "antd";
+import { LogoutOutlined, WechatOutlined } from "@ant-design/icons";
+import { Dropdown, Layout, Menu, MenuProps, Modal, Spin } from "antd";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import { ROLE } from "../../constants/role";
+import { Avatar } from "../components/avatar";
 import { PrimaryButton } from "../components/buttons";
 import { useAuth } from "../hooks/useAuth";
-import { ensureBase64Avatar } from "../utils/helpers";
 import { isLoggedIn } from "../redux/slice/authSlice";
+import { Envs } from "../utils/env";
+import { validateImageString } from "../utils/helpers";
 
 const { Header } = Layout;
 
 export default function CustomHeader() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { state, handleLogout } = useAuth();
+  const { state, handleLogout, handleGetAccountInfo } = useAuth();
+
+  useEffect(() => {
+    handleGetAccountInfo();
+  }, [handleGetAccountInfo]);
 
   const logOut = () => {
     handleLogout();
   };
 
   function getHeaderItems(): MenuItem[] {
-    switch (state.currentUser.Role) {
+    switch (state.currentUser.role) {
       case ROLE.admin:
         return [];
       case ROLE.manager:
@@ -31,14 +38,25 @@ export default function CustomHeader() {
   }
 
   function getProfileDropdown(): MenuItem[] {
-    switch (state.currentUser.Role) {
+    switch (state.currentUser.role) {
       case ROLE.admin:
         return [
           generateItemProfile("Đăng xuất", "", <LogoutOutlined />, logOut),
         ];
       case ROLE.manager:
         return [
-          generateItemProfile("Đăng xuất", "", <LogoutOutlined />, logOut),
+          generateItemProfile("Chat", "chat", <WechatOutlined />, () =>
+            window.open(Envs.chat),
+          ),
+          {
+            type: "divider",
+          },
+          generateItemProfile(
+            "Đăng xuất",
+            "logout",
+            <LogoutOutlined />,
+            logOut,
+          ),
         ];
       default:
         return [
@@ -49,7 +67,7 @@ export default function CustomHeader() {
 
   return (
     <>
-      <Header className="sticky top-0 z-50 flex w-full items-center">
+      <Header className="sticky top-0 z-[999] flex w-full items-center">
         <img
           alt=""
           className="w-[150px] hover:cursor-pointer"
@@ -95,13 +113,13 @@ export default function CustomHeader() {
             <Avatar
               className="fixed right-4 top-3 cursor-pointer"
               size={"large"}
-              icon={<UserOutlined />}
-              src={ensureBase64Avatar(state.currentUser.AvatarUrl)}
+              src={validateImageString(state.currentUser.avatarUrl)}
+              loading={state.isFetching}
             />
           </Dropdown>
         )}
       </Header>
-      <Modal footer={null} closable={false} open={state.isFetching}>
+      <Modal footer={null} closable={false} open={state.isSending}>
         <div className="flex flex-col items-center justify-center">
           <Spin size="large"></Spin>
           <span>Đang đăng xuất...</span>

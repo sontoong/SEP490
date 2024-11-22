@@ -24,7 +24,10 @@ services:
     image: "${DOCKER_REPO:?error}-webapp:latest"
     container_name: webapp
     environment:
-      - MY_APP_API_END_POINT=${API_END_POINT}
+      - MY_APP_API_END_POINT_1=${API_END_POINT_1}
+      - MY_APP_API_END_POINT_2=${API_END_POINT_2}
+      - MY_APP_API_END_POINT_3=${API_END_POINT_3}
+      - MY_APP_CHAT_END_POINT=${CHAT_END_POINT}
       - MY_APP_ENVIRONMENT=Production
     build: 
       context: ./webapp

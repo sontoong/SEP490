@@ -8,10 +8,13 @@ import { WarningOutlined } from "@ant-design/icons";
 import { Worker } from "../../models/user";
 import { Avatar } from "../../components/avatar";
 import { statusGenerator } from "../../utils/generators/status";
-import { workers } from "../../../constants/testData";
 import WorkerManagementDropdown from "../../ui/manager_ui/WorkerManagementPage/WorkerManagementDropdown";
+import { useAccount } from "../../hooks/useAccount";
+import { usePagination } from "../../hooks/usePagination";
+import { useCallback, useEffect, useState } from "react";
 
 export default function WorkerManagementPage() {
+  // const { notification } = App.useApp();
   useTitle({
     tabTitle: "Workers - EWMH",
     paths: [{ title: "Danh sách nhân viên", path: "/workers" }],
@@ -19,13 +22,38 @@ export default function WorkerManagementPage() {
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();
   const [disableReasonForm] = Form.useForm();
+  const { state, handleGetAllWorkerPaginated } = useAccount();
+  const { currentPage, currentPageSize, setPageSize, goToPage } =
+    usePagination();
+  const [searchByPhone, setSearchByPhone] = useState<string>();
+  const [tableParams, setTableParams] = useState<TableParams>();
+
+  const fetchWorkerList = useCallback(() => {
+    handleGetAllWorkerPaginated({
+      PageIndex: currentPage,
+      Pagesize: currentPageSize,
+      SearchByPhone: searchByPhone,
+      IsDisabled: tableParams?.filters?.["item.isDisabled"]?.[0],
+    });
+  }, [
+    currentPage,
+    currentPageSize,
+    handleGetAllWorkerPaginated,
+    searchByPhone,
+    tableParams?.filters,
+  ]);
+
+  useEffect(() => {
+    fetchWorkerList();
+  }, [fetchWorkerList]);
 
   const initialValuesSearch = {
     searchString: "",
   };
 
-  const handleSearchSubmit = (values: any) => {
-    console.log(values);
+  const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
+    goToPage(1);
+    setSearchByPhone(searchString);
   };
 
   function handleConfirmLock() {
@@ -106,64 +134,85 @@ export default function WorkerManagementPage() {
   const workerListColumns: TableColumnsType<Worker> = [
     {
       title: "Họ và Tên",
-      dataIndex: "Fullname",
-      render: (_, { AvatarUrl, Fullname, Email }) => (
+      dataIndex: ["item", "fullName"],
+      render: (_, { item }) => (
         <Space direction="horizontal" size={15}>
-          <Avatar src={AvatarUrl} size={60} />
+          <Avatar src={item?.avatarUrl} size={60} />
           <Space direction="vertical">
-            <div className="text-base font-bold">{Fullname}</div>
-            <div>{Email}</div>
+            <div className="text-base font-bold">{item?.fullName}</div>
+            <div>{item?.email}</div>
           </Space>
         </Space>
       ),
     },
     {
       title: "SĐT",
-      dataIndex: "PhoneNumber",
+      dataIndex: ["item", "phoneNumber"],
     },
     {
       title: "Leader",
-      dataIndex: "LeaderId",
-      render: (value) =>
-        value ? (
-          <Tag color="green">{value}</Tag>
+      dataIndex: "leaderId",
+      render: (_, { getLeaderInfo }) =>
+        getLeaderInfo?.accountId ? (
+          <Tag color="green">{getLeaderInfo.fullName}</Tag>
         ) : (
           <Tag color="volcano">Không</Tag>
         ),
     },
     {
       title: "Trạng thái",
-      dataIndex: "IsDisabled",
-      render: (_, { IsDisabled, LeaderId }) => {
-        return LeaderId ? (
-          <div>{statusGenerator(IsDisabled)}</div>
+      dataIndex: ["item", "isDisabled"],
+      render: (isDisabled, { getLeaderInfo }) => {
+        return getLeaderInfo?.accountId ? (
+          <div
+          // className="w-fit cursor-pointer"
+          // onClick={() => {
+          //   notification.info({
+          //     message: "Nhân viên có liên kết với trưởng nhóm",
+          //     description: (
+          //       <>
+          //         Vui lòng bỏ gán nhân viên khỏi trưởng nhóm{" "}
+          //         <span className="font-bold">{getLeaderInfo.fullName}</span>{" "}
+          //         để có thể vô hiệu hóa tài khoản.
+          //       </>
+          //     ),
+          //     placement: "topRight",
+          //   });
+          // }}
+          >
+            {statusGenerator(isDisabled)}
+          </div>
         ) : (
           <div
             onClick={() =>
-              IsDisabled ? handleConfirmUnlock() : handleConfirmLock()
+              isDisabled ? handleConfirmUnlock() : handleConfirmLock()
             }
             className="cursor-pointer"
           >
-            {statusGenerator(IsDisabled)}
+            {statusGenerator(isDisabled)}
           </div>
         );
       },
       filters: [
         {
           text: "Hoạt động",
-          value: "false",
+          value: false,
         },
         {
           text: "Vô hiệu hóa",
-          value: "true",
+          value: true,
         },
       ],
-      onFilter: (value, record) => record.IsDisabled.toString() === value,
     },
     {
       title: "",
       key: "actions",
-      render: (_, record) => <WorkerManagementDropdown record={record} />,
+      render: (_, record) => (
+        <WorkerManagementDropdown
+          record={record}
+          callbackFn={() => fetchWorkerList()}
+        />
+      ),
     },
   ];
 
@@ -184,26 +233,54 @@ export default function WorkerManagementPage() {
               rules={[
                 {
                   type: "string",
-                  required: true,
                   whitespace: true,
                   message: "",
                 },
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm"
+                placeholder="Tìm kiếm theo email"
                 onSearch={() => searchForm.submit()}
+                onClear={() => {
+                  searchForm.setFieldValue("searchString", "");
+                  searchForm.submit();
+                }}
               />
             </Form.Item>
           </Form>
         </div>
         <Table
           columns={workerListColumns}
-          dataSource={workers}
-          rowKey={(record) => record.AccountId}
+          dataSource={state.currentWorkerList.users as Worker[]}
+          rowKey={(record) => record.item.accountId}
+          loading={state.isFetching}
+          pagination={{
+            showSizeChanger: true,
+            total: state.currentWorkerList.total,
+            pageSize: currentPageSize,
+            current: currentPage,
+            onChange: (pageIndex, pageSize) => {
+              goToPage(pageIndex);
+              setPageSize(pageSize);
+            },
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} trong tổng ${total} nhân viên`,
+            pageSizeOptions: [5, 10, 20, 50, 100],
+          }}
+          onChange={(_, filters) => {
+            setTableParams({
+              filters: filters,
+            });
+          }}
         />
       </Space>
       {contextHolder}
     </>
   );
 }
+
+type TableParams = {
+  filters?: {
+    "item.isDisabled"?: boolean[];
+  };
+};

@@ -8,20 +8,24 @@ import { useState } from "react";
 import { TextEditor } from "../../../components/rte";
 import { ImageUpload } from "../../../components/image-upload";
 import { UploadImage } from "../../../components/image-upload/image-upload";
+import { useProduct } from "../../../hooks/useProduct";
+import { AddProductParams } from "../../../redux/slice/productSlice";
+import { getFiles } from "../../../utils/helpers";
 
 export default function CreateNewProductModalButton() {
   const [createNewProductForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [images, setImages] = useState<UploadImage[]>([]);
+  const { state, handleAddProduct, handleGetAllProductPaginated } =
+    useProduct();
 
-  const initialValuesCreateNewProduct: any = {
+  const initialValuesCreateNewProduct: AddProductParams = {
     Name: "",
     Description: "",
-    NumOfRequest: 0,
-    Policy: "",
-    ProductPrices: {
-      PriceByDate: 0,
-    },
+    Image: { name: "" },
+    Price: 0,
+    InOfStock: 0,
+    WarantyMonths: 0,
   };
 
   const showModal = () => {
@@ -36,9 +40,18 @@ export default function CreateNewProductModalButton() {
     setIsModalVisible(false);
   };
 
-  const handleCreateNewProductSubmit = (values: any) => {
-    console.log(values);
-    setIsModalVisible(false);
+  const handleCreateNewProductSubmit = async (values: AddProductParams) => {
+    const Image = await getFiles(images);
+    await handleAddProduct({
+      values: {
+        ...values,
+        Image: Image[0],
+      },
+      callBackFn: () => {
+        setIsModalVisible(false);
+        handleGetAllProductPaginated({ PageIndex: 1, Pagesize: 8 });
+      },
+    });
   };
 
   return (
@@ -52,13 +65,18 @@ export default function CreateNewProductModalButton() {
         title={
           <Space className="text-base">
             <EditOutlined />
-            <div className="uppercase text-secondary">Cập nhật sẩn phẩm</div>
+            <div className="uppercase text-secondary">Tạo sản phẩm mới</div>
           </Space>
         }
         open={isModalVisible}
-        afterClose={createNewProductForm.resetFields}
+        afterClose={() => {
+          createNewProductForm.resetFields();
+          setImages([]);
+        }}
         onOk={handleOk}
         onCancel={handleCancel}
+        okButtonProps={{ loading: state.isSending }}
+        cancelButtonProps={{ disabled: state.isSending }}
         closeIcon={null}
         maskClosable={false}
         modalRender={(dom) => (
@@ -73,7 +91,7 @@ export default function CreateNewProductModalButton() {
         )}
       >
         <Space direction="vertical" className="w-full">
-          <ImageUpload images={images} setImages={setImages} />
+          <ImageUpload images={images} setImages={setImages} maxCount={1} />
           <Form.Item
             name="Name"
             label={<div className="text-sm text-secondary">Tên sản phẩm</div>}
@@ -82,10 +100,11 @@ export default function CreateNewProductModalButton() {
                 type: "string",
                 required: true,
                 whitespace: true,
+                min: 4,
               },
             ]}
           >
-            <Input placeholder="Nhập tên gói dịch vụ" />
+            <Input placeholder="Nhập tên sản phẩm" />
           </Form.Item>
           <Form.Item
             name="Description"
@@ -101,7 +120,7 @@ export default function CreateNewProductModalButton() {
             <TextEditor />
           </Form.Item>
           <Form.Item
-            name={["ProductPrices", "PriceByDate"]}
+            name="Price"
             label={<div className="text-sm text-secondary">Giá hiện tại</div>}
             rules={[{ type: "number", required: true, min: 1000 }]}
           >
@@ -112,7 +131,7 @@ export default function CreateNewProductModalButton() {
             />
           </Form.Item>
           <Form.Item
-            name="In_Of_stock"
+            name="InOfStock"
             label={<div className="text-sm text-secondary">Số lượng</div>}
             rules={[
               {
@@ -125,7 +144,7 @@ export default function CreateNewProductModalButton() {
             <InputNumber placeholder="Nhập số lượng" className="w-1/2" />
           </Form.Item>
           <Form.Item
-            name="WarrantyMonths"
+            name="WarantyMonths"
             label={
               <div className="text-sm text-secondary">Số tháng bảo hành</div>
             }

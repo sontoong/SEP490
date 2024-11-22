@@ -16,18 +16,24 @@ import Radio from "../../../components/radio/Radio";
 import { roleNameGenerator } from "../../../utils/generators/roleName";
 import { formatDateToLocal } from "../../../utils/helpers";
 import { User } from "../../../models/user";
+import { useAccount } from "../../../hooks/useAccount";
+import { ROLE } from "../../../../constants/role";
+import { CreatePersonnelAccountParams } from "../../../redux/slice/accountSlice";
+import dayjs from "dayjs";
 
 export default function CreateNewAccountModalButton() {
   const [form] = Form.useForm();
   const [modal, contextHolder] = Modal.useModal();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { handleCreatePersonnelAccount, handleGetAllAccountPaginated } =
+    useAccount();
 
-  const initialValues: any = {
-    Fullname: "",
-    Email: "",
-    PhoneNumber: "",
-    DateOfBirth: "",
-    Role: "3",
+  const initialValues: CreatePersonnelAccountParams = {
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+    dateOfBirth: "",
+    role: ROLE.leader,
   };
 
   const showModal = () => {
@@ -38,14 +44,6 @@ export default function CreateNewAccountModalButton() {
     form.submit();
   };
 
-  const handleCreateAccountModalCancel = () => {
-    setIsModalVisible(false);
-  };
-
-  const onFormFinish = (values: any) => {
-    handlePreviewDetail(values);
-  };
-
   const handlePreviewDetail = (values: User) => {
     modal.confirm({
       icon: <WarningOutlined />,
@@ -53,38 +51,36 @@ export default function CreateNewAccountModalButton() {
       title: <div className="text-sm">Bạn có muốn tạo tài khoản</div>,
       content: (
         <Space direction="vertical">
-          {/* <Avatar src={values.AvatarUrl} size={70} /> */}
-          <div className="text-lg font-bold">{values.Fullname}</div>
+          <div className="text-lg font-bold">{values.fullName}</div>
           <Space direction="horizontal" size={30} className="flex w-full">
             <Space direction="vertical" size={5}>
               <div>
-                <strong>Email:</strong> {values.Email}
+                <strong>email:</strong> {values.email}
               </div>
               <div>
-                <strong>SĐT:</strong> {values.PhoneNumber}
+                <strong>SĐT:</strong> {values.phoneNumber}
               </div>
             </Space>
             <Space direction="vertical" size={5}>
               <div>
-                <strong>Vai trò:</strong> {roleNameGenerator(values.Role)}
+                <strong>Vai trò:</strong> {roleNameGenerator(values.role)}
               </div>
               <div>
                 <strong>Ngày sinh:</strong>{" "}
-                {formatDateToLocal(values.DateOfBirth)}
+                {formatDateToLocal(values.dateOfBirth)}
               </div>
             </Space>
           </Space>
         </Space>
       ),
-      onCancel: () => {
-        setIsModalVisible(false);
-      },
       onOk: async () => {
-        const sleep = (ms: number) => {
-          return new Promise((resolve) => setTimeout(resolve, ms));
-        };
-
-        await sleep(1000); // Example delay
+        await handleCreatePersonnelAccount({
+          values: values,
+          callBackFn: () => {
+            setIsModalVisible(false);
+            handleGetAllAccountPaginated({ PageIndex: 1, Pagesize: 8 });
+          },
+        });
       },
     });
   };
@@ -107,9 +103,11 @@ export default function CreateNewAccountModalButton() {
         }
         maskClosable={false}
         open={isModalVisible}
-        afterClose={form.resetFields}
+        afterClose={() => {
+          form.resetFields();
+        }}
         onOk={handleCreateAccountModalOk}
-        onCancel={handleCreateAccountModalCancel}
+        onCancel={() => setIsModalVisible(false)}
         closeIcon={null}
         // confirmLoading={state.isSending}
         modalRender={(dom) => (
@@ -117,7 +115,7 @@ export default function CreateNewAccountModalButton() {
             form={form}
             initialValues={initialValues}
             name="CreateAccountForm"
-            onFinish={onFormFinish}
+            onFinish={(values) => handlePreviewDetail(values)}
             clearOnDestroy
           >
             {dom}
@@ -126,7 +124,7 @@ export default function CreateNewAccountModalButton() {
       >
         <div className="w-[100%]">
           <Form.Item
-            name="Fullname"
+            name="fullName"
             label="Họ và Tên"
             rules={[
               {
@@ -139,15 +137,15 @@ export default function CreateNewAccountModalButton() {
             <Input placeholder="Nhập họ và tên" size="large" />
           </Form.Item>
           <Form.Item
-            name="Email"
-            label="Email"
+            name="email"
+            label="email"
             rules={[{ type: "email", required: true }]}
           >
-            <Input placeholder="Nhập Email" size="large" />
+            <Input placeholder="Nhập email" size="large" />
           </Form.Item>
           <Space className="flex w-full justify-between">
             <Form.Item
-              name="PhoneNumber"
+              name="phoneNumber"
               label="SĐT"
               rules={[
                 { required: true, whitespace: true },
@@ -162,27 +160,31 @@ export default function CreateNewAccountModalButton() {
               <Input placeholder="Nhập SĐT" size="large" />
             </Form.Item>
             <Form.Item
-              name="DateOfBirth"
+              name="dateOfBirth"
               label="Ngày sinh"
               rules={[{ required: true }]}
             >
-              <InputDate placeholder="Chọn ngày sinh" size="large" />
+              <InputDate
+                placeholder="Chọn ngày sinh"
+                size="large"
+                minDate={dayjs("31-12-2000", "DD-MM-YYYY")}
+              />
             </Form.Item>
           </Space>
-          <Form.Item name="Role" label="Vai trò" rules={[{ required: true }]}>
+          <Form.Item name="role" label="Vai trò" rules={[{ required: true }]}>
             <Radio.ButtonGroup
               items={[
                 {
                   icon: <SolutionOutlined />,
                   enName: "Team Leader",
-                  vnName: "Leader",
-                  value: "3",
+                  vnName: "Trưởng nhóm",
+                  value: ROLE.leader,
                 },
                 {
                   icon: <TeamOutlined />,
                   enName: "Worker",
                   vnName: "Công nhân",
-                  value: "4",
+                  value: ROLE.worker,
                 },
               ]}
               render={(item) => (

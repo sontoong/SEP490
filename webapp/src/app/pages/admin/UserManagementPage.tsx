@@ -1,40 +1,71 @@
-import { Space, TableColumnsType, Tag } from "antd";
+import { App, Space, TableColumnsType, Tag } from "antd";
 import { Avatar } from "../../components/avatar";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
 import { Table } from "../../components/table";
 import { useTitle } from "../../hooks/useTitle";
-import { Customer, Leader, Worker } from "../../models/user";
 import CreateNewAccountModalButton from "../../ui/admin_ui/UserManagementPage/CreateNewAccountModalButton";
 import UserManagementDropdown from "../../ui/admin_ui/UserManagementPage/UserManagementDropdown";
 import { statusGenerator } from "../../utils/generators/status";
 import { roleNameGenerator } from "../../utils/generators/roleName";
 
-import { users } from "../../../constants/testData";
 import { Modal } from "../../components/modals";
 import { WarningOutlined } from "@ant-design/icons";
+import { ROLE } from "../../../constants/role";
+import { User } from "../../models/user";
+import { useAccount } from "../../hooks/useAccount";
+import { useCallback, useEffect, useState } from "react";
+import { usePagination } from "../../hooks/usePagination";
 
 export default function UserManagementPage() {
+  const { notification } = App.useApp();
   useTitle({ tabTitle: "User Management - EWMH" });
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();
   const [disableReasonForm] = Form.useForm();
+  const { state, handleGetAllAccountPaginated, handleDisableUser } =
+    useAccount();
+  const { currentPage, currentPageSize, setPageSize, goToPage } =
+    usePagination();
+  const [searchByEmail, setSearchByEmail] = useState<string>();
+  const [filters, setFilters] = useState<{
+    isDisabled?: boolean[];
+    role?: string[];
+  }>();
+
+  const fetchAccounts = useCallback(() => {
+    handleGetAllAccountPaginated({
+      PageIndex: currentPage,
+      Pagesize: currentPageSize,
+      SearchByEmail: searchByEmail,
+      IsDisabled: filters?.isDisabled?.[0],
+      Role: filters?.role?.[0],
+    });
+  }, [
+    currentPage,
+    currentPageSize,
+    filters?.isDisabled,
+    filters?.role,
+    handleGetAllAccountPaginated,
+    searchByEmail,
+  ]);
+
+  useEffect(() => {
+    fetchAccounts();
+  }, [fetchAccounts]);
 
   const initialValuesSearch = {
     searchString: "",
   };
 
-  const handleSearchSubmit = (values: any) => {
-    console.log(values);
+  const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
+    goToPage(1);
+    setSearchByEmail(searchString);
   };
 
-  function handleConfirmLock() {
+  function handleConfirmLock(accountId: string) {
     const initialValuesDisableReason = {
-      disableReason: "",
-    };
-
-    const handleConfirmLockSubmit = (values: any) => {
-      console.log(values);
+      disabledReason: "",
     };
 
     modal.confirm({
@@ -59,11 +90,10 @@ export default function UserManagementPage() {
             form={disableReasonForm}
             initialValues={initialValuesDisableReason}
             name="DisableReasonForm"
-            onFinish={handleConfirmLockSubmit}
           >
             <Form.Item
               noStyle
-              name="disableReason"
+              name="disabledReason"
               rules={[
                 {
                   type: "string",
@@ -76,17 +106,21 @@ export default function UserManagementPage() {
         </Space>
       ),
       onOk: async () => {
-        const sleep = (ms: number) => {
-          return new Promise((resolve) => setTimeout(resolve, ms));
-        };
+        await disableReasonForm.validateFields().then(async () => {
+          const values = disableReasonForm.getFieldsValue(true);
 
-        disableReasonForm.submit();
-        await sleep(1000); // Example delay
+          await handleDisableUser({
+            accountId: accountId,
+            disable: true,
+            disabledReason: values.disabledReason,
+          });
+          fetchAccounts();
+        });
       },
     });
   }
 
-  function handleConfirmUnlock() {
+  function handleConfirmUnlock(accountId: string) {
     modal.confirm({
       icon: <WarningOutlined />,
       width: "fit-content",
@@ -99,84 +133,115 @@ export default function UserManagementPage() {
           <span>?</span>
         </div>
       ),
-      onOk() {},
+      onOk: async () => {
+        await handleDisableUser({
+          accountId: accountId,
+          disable: false,
+          disabledReason: "",
+        });
+        fetchAccounts();
+      },
     });
   }
 
-  const userListColumns: TableColumnsType<Leader | Customer | Worker> = [
+  const userListColumns: TableColumnsType<User> = [
     {
       title: "Tên",
-      dataIndex: "Fullname",
-      render: (_, { AvatarUrl, Fullname, Email }) => (
+      dataIndex: "fullName",
+      render: (_, { avatarUrl, fullName, email }) => (
         <Space direction="horizontal" size={15}>
-          <Avatar src={AvatarUrl} size={60} />
+          <Avatar src={avatarUrl} size={60} />
           <Space direction="vertical">
-            <div className="text-base font-bold">{Fullname}</div>
-            <div>{Email}</div>
+            <div className="text-base font-bold">{fullName}</div>
+            <div>{email}</div>
           </Space>
         </Space>
       ),
     },
     {
       title: "Vai trò",
-      dataIndex: "Role",
-      render: (_, { Role }) => (
-        <div className="text-sm">{roleNameGenerator(Role)}</div>
+      dataIndex: "role",
+      render: (_, { role }) => (
+        <div className="text-sm">{roleNameGenerator(role)}</div>
       ),
       filters: [
         {
           text: "Quản trị viên",
-          value: "1",
+          value: ROLE.admin,
         },
         {
           text: "Quản lý",
-          value: "2",
+          value: ROLE.manager,
         },
         {
-          text: "Leader",
-          value: "3",
+          text: "Trưởng nhóm",
+          value: ROLE.leader,
         },
         {
           text: "Nhân viên",
-          value: "4",
+          value: ROLE.worker,
         },
         {
           text: "Khách hàng",
-          value: "5",
+          value: ROLE.customer,
         },
       ],
-      onFilter: (value, record) => record.Role === value,
     },
     {
       title: "Trạng thái",
-      dataIndex: "IsDisabled",
-      render: (_, { IsDisabled }) => {
+      dataIndex: "isDisabled",
+      render: (_, { isDisabled, accountId, role }) => {
         return (
-          <div
-            onClick={() =>
-              IsDisabled ? handleConfirmUnlock() : handleConfirmLock()
-            }
-            className="cursor-pointer"
-          >
-            {statusGenerator(IsDisabled)}
-          </div>
+          <>
+            {[ROLE.customer].includes(role) ? (
+              <div
+                onClick={() =>
+                  isDisabled
+                    ? handleConfirmUnlock(accountId)
+                    : handleConfirmLock(accountId)
+                }
+                className="w-fit cursor-pointer"
+              >
+                {statusGenerator(isDisabled)}
+              </div>
+            ) : (
+              <div
+                className="w-fit cursor-pointer"
+                onClick={() => {
+                  notification.info({
+                    message: "Không thể vô hiệu hóa tài khoản",
+                    description: (
+                      <>
+                        Không thể vô hiệu hóa tài khoản có chức vụ{" "}
+                        <span className="font-bold">
+                          {roleNameGenerator(role)}
+                        </span>
+                      </>
+                    ),
+                    placement: "topRight",
+                  });
+                }}
+              >
+                {statusGenerator(isDisabled)}
+              </div>
+            )}
+          </>
         );
       },
       filters: [
         {
           text: "Hoạt động",
-          value: "false",
+          value: false,
         },
         {
           text: "Vô hiệu hóa",
-          value: "true",
+          value: true,
         },
       ],
-      onFilter: (value, record) => record.IsDisabled.toString() === value,
     },
     {
       title: "Ghi chú",
-      dataIndex: "DisabledReason",
+      dataIndex: "disabledReason",
     },
     {
       title: "",
@@ -192,7 +257,7 @@ export default function UserManagementPage() {
           <CreateNewAccountModalButton />
         </div>
         <div className="flex items-center justify-between">
-          <div className="text-2xl font-semibold text-primary">
+          <div className="text-3xl font-semibold text-primary">
             Danh sách người dùng
           </div>
           <Form
@@ -208,23 +273,39 @@ export default function UserManagementPage() {
               rules={[
                 {
                   type: "string",
-                  required: true,
                   whitespace: true,
                   message: "",
                 },
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm"
+                placeholder="Tìm kiếm theo email"
                 onSearch={() => searchForm.submit()}
+                onClear={() => {
+                  searchForm.setFieldValue("searchString", "");
+                  searchForm.submit();
+                }}
               />
             </Form.Item>
           </Form>
         </div>
         <Table
           columns={userListColumns}
-          dataSource={users}
-          rowKey={(record) => record.AccountId}
+          dataSource={state.currentUserList.users}
+          rowKey={(record) => record.accountId}
+          loading={state.isFetching}
+          pagination={{
+            total: state.currentUserList.total,
+            pageSize: currentPageSize,
+            current: currentPage,
+            onChange: (pageIndex, pageSize) => {
+              goToPage(pageIndex);
+              setPageSize(pageSize);
+            },
+          }}
+          onChange={(_, filters) => {
+            setFilters(filters);
+          }}
         />
       </Space>
       {contextHolder}

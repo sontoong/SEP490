@@ -8,9 +8,9 @@ import {
   FileTextOutlined,
   DropboxOutlined,
   ShoppingCartOutlined,
-  WechatOutlined,
   LikeOutlined,
   HomeOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { ConfigProvider, Layout, Menu, MenuProps } from "antd";
 import React, { useEffect, useState } from "react";
@@ -19,6 +19,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { cn } from "../../utils/cn";
 import logo from "../../../assets/images/logo.png";
 import logo2 from "../../../assets/images/logo2.png";
+import { ROLE } from "../../../constants/role";
 
 const { Sider } = Layout;
 
@@ -42,8 +43,8 @@ export default function MySider() {
   }, []);
 
   const getSiderItems = (): MenuItem[] => {
-    switch (state.currentUser.Role) {
-      case "2":
+    switch (state.currentUser.role) {
+      case ROLE.manager:
         return [
           getItem(
             "Thống kê",
@@ -93,7 +94,6 @@ export default function MySider() {
             () => navigate("/orders"),
             <ShoppingCartOutlined />,
           ),
-          getItem("Chat", "/chat", () => navigate("/chat"), <WechatOutlined />),
           getItem(
             "Đánh giá",
             "/ratings",
@@ -105,6 +105,12 @@ export default function MySider() {
             "/apartments",
             () => navigate("/apartments"),
             <HomeOutlined />,
+          ),
+          getItem(
+            "Chờ duyệt",
+            "/customer-verify",
+            () => navigate("/customer-verify"),
+            <UserOutlined />,
           ),
         ];
       default:

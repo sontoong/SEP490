@@ -8,20 +8,26 @@ import { useState } from "react";
 import { TextEditor } from "../../../components/rte";
 import { ImageUpload } from "../../../components/image-upload";
 import { UploadImage } from "../../../components/image-upload/image-upload";
+import { useServicePackage } from "../../../hooks/useServicePackage";
+import { AddServicePackageParams } from "../../../redux/slice/servicePackageSlice";
+import { getFiles } from "../../../utils/helpers";
 
 export default function CreateNewServicePackageModalButton() {
   const [createNewServicePackageForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [images, setImages] = useState<UploadImage[]>([]);
+  const {
+    state,
+    handleAddServicePackage,
+    handleGetAllServicePackagePaginated,
+  } = useServicePackage();
 
-  const initialValuesCreateNewService: any = {
+  const initialValuesCreateNewService: AddServicePackageParams = {
     Name: "",
     Description: "",
     NumOfRequest: 0,
-    Policy: "",
-    ServicePackagePrices: {
-      PriceByDate: 0,
-    },
+    Image: { name: "" },
+    Price: 0,
   };
 
   const showModal = () => {
@@ -36,9 +42,20 @@ export default function CreateNewServicePackageModalButton() {
     setIsModalVisible(false);
   };
 
-  const handleCreateNewServiceSubmit = (values: any) => {
-    console.log(values);
-    setIsModalVisible(false);
+  const handleCreateNewServiceSubmit = async (
+    values: AddServicePackageParams,
+  ) => {
+    const Image = await getFiles(images);
+    await handleAddServicePackage({
+      values: {
+        ...values,
+        Image: Image[0],
+      },
+      callBackFn: () => {
+        setIsModalVisible(false);
+        handleGetAllServicePackagePaginated({ PageIndex: 1, Pagesize: 8 });
+      },
+    });
   };
 
   return (
@@ -52,20 +69,25 @@ export default function CreateNewServicePackageModalButton() {
         title={
           <Space className="text-base">
             <EditOutlined />
-            <div className="uppercase text-secondary">Cập nhật gói dịch vụ</div>
+            <div className="uppercase text-secondary">Tạo gói dịch vụ mới</div>
           </Space>
         }
         open={isModalVisible}
-        afterClose={createNewServicePackageForm.resetFields}
+        afterClose={() => {
+          createNewServicePackageForm.resetFields();
+          setImages([]);
+        }}
         onOk={handleOk}
         onCancel={handleCancel}
+        okButtonProps={{ loading: state.isSending }}
+        cancelButtonProps={{ disabled: state.isSending }}
         closeIcon={null}
         maskClosable={false}
         modalRender={(dom) => (
           <Form
             form={createNewServicePackageForm}
             initialValues={initialValuesCreateNewService}
-            name="UpdateServiceForm"
+            name="CreateNewServiceForm"
             onFinish={handleCreateNewServiceSubmit}
           >
             {dom}
@@ -120,7 +142,7 @@ export default function CreateNewServicePackageModalButton() {
             <InputNumber placeholder="Nhập số lần sửa chữa" className="w-1/2" />
           </Form.Item>
           <Form.Item
-            name={["ServicePackagePrices", "PriceByDate"]}
+            name="Price"
             label={<div className="text-sm text-secondary">Giá gói (VND)</div>}
             rules={[{ type: "number", required: true, min: 1000 }]}
           >
@@ -129,19 +151,6 @@ export default function CreateNewServicePackageModalButton() {
               className="w-1/2"
               step={1000}
             />
-          </Form.Item>
-          <Form.Item
-            name="Policy"
-            label={<div className="text-sm text-secondary">Chính sách</div>}
-            rules={[
-              {
-                type: "string",
-                required: true,
-                whitespace: true,
-              },
-            ]}
-          >
-            <TextEditor />
           </Form.Item>
         </Space>
       </Modal>

@@ -15,7 +15,13 @@ import { useState } from "react";
 import ChangeLeaderModal from "./ChangeLeaderModal";
 import { Grid } from "../../../components/grids";
 
-const WorkerManagementDropdown = ({ record }: { record: Worker }) => {
+const WorkerManagementDropdown = ({
+  record,
+  callbackFn,
+}: {
+  record: Worker;
+  callbackFn: () => void;
+}) => {
   const [modal, contextHolder] = Modal.useModal();
   const [isChangeLeaderModalOpen, setIsChangeLeaderModalOpen] = useState(false);
 
@@ -40,7 +46,7 @@ const WorkerManagementDropdown = ({ record }: { record: Worker }) => {
       width: 700,
       title: (
         <div className="text-sm uppercase text-secondary">
-          Thông tin của {record.Fullname}
+          Thông tin của {record.item?.fullName}
         </div>
       ),
       content: (
@@ -48,13 +54,15 @@ const WorkerManagementDropdown = ({ record }: { record: Worker }) => {
           className="text-sm"
           items={[
             <Space direction="vertical" size={10}>
-              <Avatar src={record.AvatarUrl} size={70} />
+              <Avatar src={record.item?.avatarUrl} size={150} />
               <div>
-                <strong>Họ và Tên:</strong> {record.Fullname}
+                <strong>Họ và Tên:</strong> {record.item?.fullName}
               </div>
               <div>
-                <strong>Leader:</strong>{" "}
-                {record.LeaderId ? record.LeaderId : "N/A"}
+                <strong>Trưởng nhóm:</strong>{" "}
+                {record.getLeaderInfo?.accountId
+                  ? record.getLeaderInfo?.fullName
+                  : "N/A"}
               </div>
             </Space>,
             <Space direction="vertical" size={15}>
@@ -66,21 +74,21 @@ const WorkerManagementDropdown = ({ record }: { record: Worker }) => {
                   <Space direction="horizontal" size={3}>
                     <PhoneFilled />
                     <strong>SĐT:</strong>
-                    <span>{record.Fullname}</span>
+                    <span>{record.item?.phoneNumber}</span>
                   </Space>
                 </div>
                 <div>
                   <Space direction="horizontal" size={3}>
                     <CalendarFilled />
                     <strong>Ngày sinh:</strong>
-                    <span>{record.DateOfBirth}</span>
+                    <span>{record.item?.dateOfBirth}</span>
                   </Space>
                 </div>
                 <div>
                   <Space direction="horizontal" size={3}>
                     <MailFilled />
                     <strong>Email:</strong>
-                    <span>{record.Email}</span>
+                    <span className="break-all">{record.item.email}</span>
                   </Space>
                 </div>
               </Space>
@@ -100,6 +108,9 @@ const WorkerManagementDropdown = ({ record }: { record: Worker }) => {
       <ChangeLeaderModal
         open={isChangeLeaderModalOpen}
         setIsModalOpen={setIsChangeLeaderModalOpen}
+        workerId={record.item?.accountId}
+        leaderId={record.getLeaderInfo?.accountId}
+        callbackFn={callbackFn}
       />
       {contextHolder}
     </>

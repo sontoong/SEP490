@@ -5,14 +5,16 @@ import { Input } from "../../components/inputs";
 import { Table } from "../../components/table";
 import { useTitle } from "../../hooks/useTitle";
 import { statusGenerator } from "../../utils/generators/status";
-
-import { leaders } from "../../../constants/testData";
 import { Leader } from "../../models/user";
 import LeaderManagementDropdown from "../../ui/manager_ui/LeaderManagementPage/LeaderManagementDropdown";
 import { Modal } from "../../components/modals";
 import { WarningOutlined } from "@ant-design/icons";
+import { useAccount } from "../../hooks/useAccount";
+import { usePagination } from "../../hooks/usePagination";
+import { useCallback, useEffect, useState } from "react";
 
 export default function LeaderManagementPage() {
+  // const { notification } = App.useApp();
   useTitle({
     tabTitle: "Leaders - EWMH",
     paths: [{ title: "Danh sách trưởng nhóm", path: "/leaders" }],
@@ -20,22 +22,44 @@ export default function LeaderManagementPage() {
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();
   const [disableReasonForm] = Form.useForm();
+  const { state, handleGetAllLeaderPaginated, handleDisableUser } =
+    useAccount();
+  const { currentPage, currentPageSize, setPageSize, goToPage } =
+    usePagination();
+  const [searchByName, setSearchByName] = useState<string>();
+  const [tableParams, setTableParams] = useState<TableParams>();
+
+  const fetchLeaders = useCallback(() => {
+    handleGetAllLeaderPaginated({
+      PageIndex: currentPage,
+      Pagesize: currentPageSize,
+      SearchByEmail: searchByName,
+      IsDisabled: tableParams?.filters?.isDisabled?.[0],
+    });
+  }, [
+    currentPage,
+    currentPageSize,
+    handleGetAllLeaderPaginated,
+    searchByName,
+    tableParams?.filters?.isDisabled,
+  ]);
+
+  useEffect(() => {
+    fetchLeaders();
+  }, [fetchLeaders]);
 
   const initialValuesSearch = {
     searchString: "",
   };
 
-  const handleSearchSubmit = (values: any) => {
-    console.log(values);
+  const handleSearchSubmit = ({ searchString }: typeof initialValuesSearch) => {
+    goToPage(1);
+    setSearchByName(searchString);
   };
 
-  function handleConfirmLock() {
+  function handleConfirmLock(accountId: string) {
     const initialValuesDisableReason = {
       disableReason: "",
-    };
-
-    const handleConfirmLockSubmit = (values: any) => {
-      console.log(values);
     };
 
     modal.confirm({
@@ -60,7 +84,6 @@ export default function LeaderManagementPage() {
             form={disableReasonForm}
             initialValues={initialValuesDisableReason}
             name="DisableReasonForm"
-            onFinish={handleConfirmLockSubmit}
           >
             <Form.Item
               noStyle
@@ -77,17 +100,21 @@ export default function LeaderManagementPage() {
         </Space>
       ),
       onOk: async () => {
-        const sleep = (ms: number) => {
-          return new Promise((resolve) => setTimeout(resolve, ms));
-        };
+        await disableReasonForm.validateFields().then(async () => {
+          const values = disableReasonForm.getFieldsValue(true);
 
-        disableReasonForm.submit();
-        await sleep(1000); // Example delay
+          await handleDisableUser({
+            accountId: accountId,
+            disable: true,
+            disabledReason: values.disabledReason,
+          });
+          fetchLeaders();
+        });
       },
     });
   }
 
-  function handleConfirmUnlock() {
+  function handleConfirmUnlock(accountId: string) {
     modal.confirm({
       icon: <WarningOutlined />,
       width: "fit-content",
@@ -100,44 +127,72 @@ export default function LeaderManagementPage() {
           <span>?</span>
         </div>
       ),
-      onOk() {},
+      onOk: async () => {
+        await handleDisableUser({
+          accountId: accountId,
+          disable: false,
+          disabledReason: "",
+        });
+        fetchLeaders();
+      },
     });
   }
 
   const leaderListColumns: TableColumnsType<Leader> = [
     {
       title: "Họ và Tên",
-      dataIndex: "Fullname",
-      render: (_, { AvatarUrl, Fullname, Email }) => (
+      dataIndex: "fullName",
+      render: (_, { avatarUrl, fullName, email }) => (
         <Space direction="horizontal" size={15}>
-          <Avatar src={AvatarUrl} size={60} />
+          <Avatar src={avatarUrl} size={60} />
           <Space direction="vertical">
-            <div className="text-base font-bold">{Fullname}</div>
-            <div>{Email}</div>
+            <div className="text-base font-bold">{fullName}</div>
+            <div>{email}</div>
           </Space>
         </Space>
       ),
     },
     {
       title: "SĐT",
-      dataIndex: "PhoneNumber",
+      dataIndex: "phoneNumber",
     },
     {
       title: "Chung cư",
-      dataIndex: "ApartmentAreaName",
+      dataIndex: "name",
     },
     {
       title: "Trạng thái",
-      dataIndex: "IsDisabled",
-      render: (_, { IsDisabled }) => {
-        return (
+      dataIndex: "isDisabled",
+      render: (_, { isDisabled, accountId, areaId }) => {
+        return areaId ? (
           <div
-            onClick={() =>
-              IsDisabled ? handleConfirmUnlock() : handleConfirmLock()
-            }
-            className="cursor-pointer"
+          // className="w-fit cursor-pointer"
+          // onClick={() => {
+          //   notification.info({
+          //     message: "Trưởng nhóm có liên kết với chung cư",
+          //     description: (
+          //       <>
+          //         Vui lòng thay trưởng nhóm của chung cư{" "}
+          //         <span className="font-bold">{name}</span> để có thể vô
+          //         hiệu hóa tài khoản.
+          //       </>
+          //     ),
+          //     placement: "topRight",
+          //   });
+          // }}
           >
-            {statusGenerator(IsDisabled)}
+            {statusGenerator(isDisabled)}
+          </div>
+        ) : (
+          <div
+            className="w-fit cursor-pointer"
+            onClick={() =>
+              isDisabled
+                ? handleConfirmUnlock(accountId)
+                : handleConfirmLock(accountId)
+            }
+          >
+            {statusGenerator(isDisabled)}
           </div>
         );
       },
@@ -151,7 +206,7 @@ export default function LeaderManagementPage() {
           value: "true",
         },
       ],
-      onFilter: (value, record) => record.IsDisabled.toString() === value,
+      onFilter: (value, record) => record.isDisabled.toString() === value,
     },
     {
       title: "",
@@ -177,26 +232,54 @@ export default function LeaderManagementPage() {
               rules={[
                 {
                   type: "string",
-                  required: true,
                   whitespace: true,
                   message: "",
                 },
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm"
+                placeholder="Tìm kiếm theo email"
                 onSearch={() => searchForm.submit()}
+                onClear={() => {
+                  searchForm.setFieldValue("searchString", "");
+                  searchForm.submit();
+                }}
               />
             </Form.Item>
           </Form>
         </div>
         <Table
           columns={leaderListColumns}
-          dataSource={leaders}
-          rowKey={(record) => record.AccountId}
+          dataSource={state.currentLeaderList.users as Leader[]}
+          rowKey={(record) => record.accountId}
+          loading={state.isFetching}
+          pagination={{
+            showSizeChanger: true,
+            total: state.currentLeaderList.total,
+            pageSize: currentPageSize,
+            current: currentPage,
+            onChange: (pageIndex, pageSize) => {
+              goToPage(pageIndex);
+              setPageSize(pageSize);
+            },
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} trong tổng ${total} trưởng nhóm`,
+            pageSizeOptions: [5, 10, 20, 50, 100],
+          }}
+          onChange={(_, filters) => {
+            setTableParams({
+              filters: filters,
+            });
+          }}
         />
       </Space>
       {contextHolder}
     </>
   );
 }
+
+type TableParams = {
+  filters?: {
+    isDisabled?: boolean[];
+  };
+};

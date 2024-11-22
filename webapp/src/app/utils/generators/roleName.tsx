@@ -1,14 +1,16 @@
+import { ROLE } from "../../../constants/role";
+
 export function roleNameGenerator(roleId?: string) {
   switch (roleId) {
-    case "1":
+    case ROLE.admin:
       return "Quản trị viên";
-    case "2":
+    case ROLE.manager:
       return "Quản lý";
-    case "3":
-      return "Leader";
-    case "4":
+    case ROLE.leader:
+      return "Trưởng nhóm";
+    case ROLE.worker:
       return "Nhân viên";
-    case "5":
+    case ROLE.customer:
       return "Khách hàng";
     default:
       return "Unknown";

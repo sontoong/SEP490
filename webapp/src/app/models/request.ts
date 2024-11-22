@@ -1,38 +1,60 @@
+import { Contract } from "./contract";
+import { Feedback } from "./feedback";
+import { User } from "./user";
+
 export type Request = {
-  RequestId: string;
-  LeaderId: string;
-  CustomerId: string;
-  Start: string;
-  End: string;
-  CustomerProblem: string;
-  Conclusion: string;
-  Status: number;
-  CategoryRequest: number;
-  TotalPrice: number;
-  FileUrl: string;
-  RequestDetails: RequestDetails[];
-  PriceRequests: PriceRequest[];
-  Feedback: Feedback;
+  request: RequestDetails;
+  customer_Leader: CustomerLeader[];
+  workerList: { getWokerInfo: User; isLead: boolean }[];
+  productList: Product[];
 };
 
 type RequestDetails = {
-  RequestDetailId: string;
-  RequestId: string;
-  ProductId: string;
-  Quantity: number;
+  requestId: string;
+  leaderId: string;
+  customerId: string;
+  contractId: string | null;
+  roomId: string;
+  start: string;
+  end: string | null;
+  customerProblem: string;
+  conclusion: string | null;
+  status: number;
+  categoryRequest: number;
+  purchaseTime: string | null;
+  totalPrice: number | null;
+  fileUrl: string | null;
+  orderCode: string | null;
+  isOnlinePayment: boolean | null;
+  contract: Contract | null;
+  customer: User | null;
+  feedbacks: Feedback[];
+  leader: User | null;
+  priceRequests: any[];
+  requestPrice: number;
+};
+
+type CustomerLeader = {
+  accountId: string;
+  fullName: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  avatarUrl: string;
+  dateOfBirth: string;
+  isDisabled: boolean;
+  disabledReason: string | null;
+  role: "CUSTOMER" | "LEADER";
+  customers: any | null;
+  leaders: any | null;
+};
+
+type Product = {
+  name: string;
+  imageUrl: string;
+  price: number;
+  quantity: number;
+  totalPrice: number;
+  description: string;
   isCustomerPaying: boolean;
-  Description: string;
-};
-
-type PriceRequest = {
-  PriceRequestId: string;
-  Date: string;
-  PriceByDate: number;
-};
-
-type Feedback = {
-  FeedbackId: string;
-  Content: string;
-  Rate: number;
-  Status: boolean;
 };

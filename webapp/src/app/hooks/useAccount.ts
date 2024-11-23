@@ -321,11 +321,26 @@ export function useAccount() {
         if (callBackFn) {
           callBackFn();
         }
-        notification.success({
-          message: "Success",
-          description: "Duyệt tài khoản thành công",
-          placement: "topRight",
-        });
+        switch (values.isApproval) {
+          case true:
+            notification.success({
+              message: "Success",
+              description: "Duyệt tài khoản thành công",
+              placement: "topRight",
+            });
+            break;
+
+          case false:
+            notification.success({
+              message: "Success",
+              description: "Từ chối duyệt tài khoản thành công",
+              placement: "topRight",
+            });
+            break;
+
+          default:
+            break;
+        }
       } else {
         if (resultAction.payload) {
           notification.error({

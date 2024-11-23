@@ -151,6 +151,12 @@ export default function VerifyCustomerModalButton({
                 </div>
                 <div>
                   <Space direction="horizontal" size={3}>
+                    <strong>Cmt/cccd:</strong>
+                    <span>{customer.get.cmT_CCCD}</span>
+                  </Space>
+                </div>
+                <div>
+                  <Space direction="horizontal" size={3}>
                     <PhoneFilled />
                     <strong>SĐT:</strong>
                     <span>{customer.get.phoneNumber}</span>

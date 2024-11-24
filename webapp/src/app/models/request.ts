@@ -2,6 +2,11 @@ import { Contract } from "./contract";
 import { Feedback } from "./feedback";
 import { User } from "./user";
 
+export type RequestValues = {
+  requestPrice: number;
+  [key: string]: number;
+};
+
 export type Request = {
   request: RequestDetails;
   customer_Leader: CustomerLeader[];

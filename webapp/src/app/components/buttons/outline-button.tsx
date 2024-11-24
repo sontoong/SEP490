@@ -40,10 +40,33 @@ function OutlineButtonBoldText({ text, ...rest }: CustomButtonProps) {
   );
 }
 
+function IconButton({ icon, ...rest }: CustomIconButtonProps) {
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Button: {
+            algorithm: true,
+            defaultColor: "#FF7A00",
+            defaultBorderColor: "#FF7A00",
+          },
+        },
+      }}
+    >
+      <Button icon={icon} type="default" size="large" {...rest} />
+    </ConfigProvider>
+  );
+}
+
 OutlineButton.BoldText = OutlineButtonBoldText;
+OutlineButton.Icon = IconButton;
 
 export default OutlineButton;
 
 type CustomButtonProps = ButtonProps & {
   text?: string;
+};
+
+type CustomIconButtonProps = Omit<ButtonProps, "children"> & {
+  icon?: React.ReactNode;
 };

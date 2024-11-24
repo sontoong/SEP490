@@ -122,10 +122,15 @@ export default function UpdateProductModal({
               type: "string",
               required: true,
               whitespace: true,
+              message: "Tên sản phẩm không được để trống",
+            },
+            {
+              min: 4,
+              message: "Tên sản phẩm phải có ít nhất 4 ký tự",
             },
           ]}
         >
-          <Input placeholder="Nhập tên gói dịch vụ" />
+          <Input placeholder="Nhập tên sản phẩm" size="large" />
         </Form.Item>
         <Form.Item
           name="Description"
@@ -135,6 +140,7 @@ export default function UpdateProductModal({
               type: "string",
               required: true,
               whitespace: true,
+              message: "Mô tả không được để trống",
             },
           ]}
         >
@@ -143,12 +149,20 @@ export default function UpdateProductModal({
         <Form.Item
           name="Price"
           label={<div className="text-sm text-secondary">Giá hiện tại</div>}
-          rules={[{ type: "number", required: true, min: 1000 }]}
+          rules={[
+            {
+              type: "number",
+              required: true,
+              min: 2000,
+              message: "Giá sản phẩm phải ít nhất 2.000đ",
+            },
+          ]}
         >
           <InputNumber.Currency
             placeholder="Nhập giá của gói"
             className="w-1/2"
             step={1000}
+            size="large"
           />
         </Form.Item>
         <Form.Item
@@ -159,10 +173,15 @@ export default function UpdateProductModal({
               type: "number",
               min: 0,
               required: true,
+              message: "Số lượng không hợp lệ",
             },
           ]}
         >
-          <InputNumber placeholder="Nhập số lượng" className="w-1/2" />
+          <InputNumber
+            placeholder="Nhập số lượng"
+            className="w-1/2"
+            size="large"
+          />
         </Form.Item>
         <Form.Item
           name="WarantyMonths"
@@ -174,10 +193,15 @@ export default function UpdateProductModal({
               type: "number",
               min: 0,
               required: true,
+              message: "Số tháng bảo hành không hợp lệ",
             },
           ]}
         >
-          <InputNumber placeholder="Nhập số tháng" className="w-1/2" />
+          <InputNumber
+            placeholder="Nhập số tháng"
+            className="w-1/2"
+            size="large"
+          />
         </Form.Item>
       </Space>
     </Modal>

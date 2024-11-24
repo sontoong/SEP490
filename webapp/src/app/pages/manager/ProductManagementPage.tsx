@@ -14,6 +14,7 @@ import { formatCurrency } from "../../utils/helpers";
 import { useCallback, useEffect, useState } from "react";
 import { usePagination } from "../../hooks/usePagination";
 import { useProduct } from "../../hooks/useProduct";
+import { productStatusGenerator } from "../../utils/generators/productStatus";
 
 export default function ProductManagementPage() {
   useTitle({
@@ -128,6 +129,12 @@ export default function ProductManagementPage() {
     {
       title: "Số lượng",
       dataIndex: "inOfStock",
+    },
+    {
+      title: "Tình trạng",
+      render: (_, { inOfStock }) => {
+        return <div>{productStatusGenerator(inOfStock)}</div>;
+      },
     },
     {
       title: "Trạng thái",

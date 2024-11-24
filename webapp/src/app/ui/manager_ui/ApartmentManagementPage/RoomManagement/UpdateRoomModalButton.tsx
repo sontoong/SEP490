@@ -1,24 +1,24 @@
-import { Space } from "antd";
-import { Form } from "../../../components/form";
-import { Modal } from "../../../components/modals";
 import { EditOutlined, HomeOutlined } from "@ant-design/icons";
+import { Space } from "antd";
 import { useState } from "react";
-import { Input } from "../../../components/inputs";
-import { useApartment } from "../../../hooks/useApartment";
+import { Form } from "../../../../components/form";
+import { Input } from "../../../../components/inputs";
+import { Modal } from "../../../../components/modals";
+import { useApartment } from "../../../../hooks/useApartment";
 
-export default function EditRoomModalButton({
+export default function UpdateRoomModalButton({
   areaId,
   oldRoomId,
 }: {
   areaId: string;
   oldRoomId: string;
 }) {
-  const [addRoomForm] = Form.useForm();
+  const [updateRoomForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { state, handleUpdateRoom, handleGetAllRoomsPaginated } =
     useApartment();
 
-  const initialValuesCreateNewApartment: any = {
+  const initialValuesUpdateRoom: any = {
     newRoomId: oldRoomId,
   };
 
@@ -27,7 +27,7 @@ export default function EditRoomModalButton({
   };
 
   const handleOk = async () => {
-    addRoomForm.submit();
+    updateRoomForm.submit();
   };
 
   const handleCancel = () => {
@@ -60,7 +60,7 @@ export default function EditRoomModalButton({
           </Space>
         }
         open={isModalVisible}
-        afterClose={addRoomForm.resetFields}
+        afterClose={updateRoomForm.resetFields}
         onOk={handleOk}
         onCancel={handleCancel}
         okButtonProps={{ loading: state.isSending }}
@@ -69,9 +69,9 @@ export default function EditRoomModalButton({
         maskClosable={false}
         modalRender={(dom) => (
           <Form
-            form={addRoomForm}
-            initialValues={initialValuesCreateNewApartment}
-            name="AddRoomForm"
+            form={updateRoomForm}
+            initialValues={initialValuesUpdateRoom}
+            name="UpdateRoomForm"
             onFinish={handleUpdateRoomSubmit}
           >
             {dom}
@@ -79,19 +79,17 @@ export default function EditRoomModalButton({
         )}
       >
         <Space direction="vertical" className="w-full">
-          <div>
-            <Form.Item
-              name="newRoomId"
-              label={<div className="text-sm text-secondary">Số phòng</div>}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input placeholder="Nhập số phòng mới" size="large" />
-            </Form.Item>
-          </div>
+          <Form.Item
+            name="newRoomId"
+            label={<div className="text-sm text-secondary">Số phòng</div>}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input placeholder="Nhập số phòng mới" size="large" />
+          </Form.Item>
         </Space>
       </Modal>
     </>

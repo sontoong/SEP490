@@ -41,11 +41,44 @@ function PrimaryButtonBoldText({ text, bgColor, ...rest }: CustomButtonProps) {
   );
 }
 
+function IconButton({ bgColor, icon, ...rest }: CustomIconButtonProps) {
+  const { token } = theme.useToken();
+
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Button: {
+            colorPrimary:
+              bgColor === "transparent"
+                ? token.colorPrimary
+                : (bgColor ?? token.colorPrimary),
+            algorithm: true,
+          },
+        },
+      }}
+    >
+      <Button
+        icon={icon}
+        type={bgColor === "transparent" ? "text" : "primary"}
+        size="large"
+        {...rest}
+      />
+    </ConfigProvider>
+  );
+}
+
 PrimaryButton.BoldText = PrimaryButtonBoldText;
+PrimaryButton.Icon = IconButton;
 
 export default PrimaryButton;
 
 type CustomButtonProps = Omit<ButtonProps, "children"> & {
   text?: string;
   bgColor?: string;
+};
+
+type CustomIconButtonProps = Omit<ButtonProps, "children"> & {
+  icon?: React.ReactNode;
+  bgColor?: "transparent" | string;
 };

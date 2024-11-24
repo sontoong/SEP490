@@ -9,13 +9,30 @@ import { useSpecialUI } from "../../hooks/useSpecialUI";
 import ProcessingRequestTab from "../../ui/manager_ui/RequestManagementPage/ProcessingRequestTab";
 import CompletedRequestTab from "../../ui/manager_ui/RequestManagementPage/CompletedRequestTab";
 import CanceledRequestTab from "../../ui/manager_ui/RequestManagementPage/CanceledRequestTab";
+import { EditFilled } from "@ant-design/icons";
+import { PrimaryButton } from "../../components/buttons";
+import { ViewRequestValuesModal } from "../../ui/manager_ui/RequestManagementPage/RequestPrice/ViewRequestValuesModal";
 
 export default function RequestManagementPage() {
   useTitle({
     tabTitle: "Requests - EWMH",
-    paths: [{ title: "Danh sách yêu cầu", path: "/requests" }],
+    paths: [
+      {
+        title: "Danh sách yêu cầu",
+        path: "/requests",
+        actions: [
+          <PrimaryButton.Icon
+            icon={<EditFilled />}
+            bgColor="transparent"
+            onClick={() => setIsViewRequestValuesModalVisible(true)}
+          />,
+        ],
+      },
+    ],
   });
   const [open, setOpen] = useState(false);
+  const [isViewRequestValuesModalVisible, setIsViewRequestValuesModalVisible] =
+    useState<boolean>(false);
   const { state: requestState } = useRequest();
   const { state: specialUIState } = useSpecialUI();
 
@@ -44,6 +61,10 @@ export default function RequestManagementPage() {
 
   return (
     <>
+      <ViewRequestValuesModal
+        isModalVisible={isViewRequestValuesModalVisible}
+        setIsModalVisible={setIsViewRequestValuesModalVisible}
+      />
       <Drawer
         title="Thông tin yêu cầu"
         placement="right"

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../services/agent";
 import { AxiosError } from "axios";
 import { excludedActionsPending } from "./specialUISlice";
-import { Request } from "../../models/request";
+import { Request, RequestValues } from "../../models/request";
 
 export type TRequest = {
   newRequestList: { requests: Request[]; total: number };
@@ -12,6 +12,7 @@ export type TRequest = {
   todaysRequestList: { requests: Request[]; total: number };
   currentRequestList: { requests: Request[]; total: number };
   currentRequest: Request;
+  requestValues: RequestValues;
   isFetching: boolean;
   isSending: boolean;
 };
@@ -52,6 +53,7 @@ const initialState: TRequest = {
       requestPrice: 0,
     },
   },
+  requestValues: { requestPrice: 0 },
   isFetching: false,
   isSending: false,
 };
@@ -102,6 +104,12 @@ const requestSlice = createSlice({
     ) => {
       state.currentRequest = action.payload;
     },
+    setRequestValues: (
+      state,
+      action: PayloadAction<TRequest["requestValues"]>,
+    ) => {
+      state.requestValues = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -129,7 +137,10 @@ const requestSlice = createSlice({
       .addMatcher(
         (action) =>
           action.type.startsWith("request/send/") &&
-          action.type.endsWith("/fulfilled"),
+          action.type.endsWith("/fulfilled") &&
+          !["request/send/updatePriceOfRequest/fulfilled"].includes(
+            action.type,
+          ),
         () => {
           return { ...initialState };
         },
@@ -216,6 +227,43 @@ export const getDetailsOfRequest = createAsyncThunk<
   }
 });
 
+export const getCurrentPriceOfRequest = createAsyncThunk<any, void>(
+  "request/fetch/getCurrentPriceOfRequest",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await agent.Request.getCurrentPriceOfRequest();
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
+export const updatePriceOfRequest = createAsyncThunk<
+  any,
+  UpdatePriceOfRequestParams
+>("request/send/updatePriceOfRequest", async (data, { rejectWithValue }) => {
+  const { price } = data;
+  try {
+    const response = await agent.Request.updatePriceOfRequest({
+      price,
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+});
+
 export const {
   setNewRequestList,
   setCompletedRequestList,
@@ -224,6 +272,7 @@ export const {
   setCurrentRequest,
   setTodaysRequestList,
   setCurrentRequestList,
+  setRequestValues,
 } = requestSlice.actions;
 
 export default requestSlice.reducer;
@@ -241,4 +290,8 @@ export type GetAllTodaysRequestsPaginatedParams = {
 
 export type GetDetailsOfRequestParams = {
   RequestId: string;
+};
+
+export type UpdatePriceOfRequestParams = {
+  price: number;
 };

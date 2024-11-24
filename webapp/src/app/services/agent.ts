@@ -135,9 +135,10 @@ const Request = {
   getDetailsOfRequest: (params: any) =>
     requestRequests.get(`${REQUEST_BASE}/25`, params),
   updatePriceOfRequest: (data: any) =>
-    requestRequests.put(`${REQUEST_BASE}/25`, data),
+    requestRequests.put(`${REQUEST_BASE}/26`, data),
   getAllTodaysRequestsPaginated: (params: any) =>
     requestRequests.get(`${REQUEST_BASE}/27`, params),
+  getCurrentPriceOfRequest: () => requestRequests.get(`${REQUEST_BASE}/28`),
 };
 
 const STATISTIC_BASE = "Transaction";

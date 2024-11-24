@@ -13,6 +13,7 @@ export const excludedActions = [
   "order/fetch/getOrderDetails",
   "feedback/fetch/getFeedbackDetails",
   "request/fetch/getDetailsOfRequest",
+  "request/fetch/getCurrentPriceOfRequest",
 ];
 export const excludedActionsPending = excludedActions.map(
   (action) => `${action}/pending`,

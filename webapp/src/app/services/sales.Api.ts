@@ -75,10 +75,6 @@ saleApi.interceptors.response.use(
   },
   (error) => {
     NProgress.done();
-    if (error.response && [401].includes(error.response.status)) {
-      localStorage.clear();
-      window.location.href = "/login";
-    }
     if (["ECONNABORTED"].includes(error.code)) {
       const reformatError = new AxiosError(
         "Connection Timeout.", // New error message
@@ -88,6 +84,30 @@ saleApi.interceptors.response.use(
         error.response,
       );
       reformatError.stack = error.stack; // Preserve stack trace
+
+      return Promise.reject(reformatError);
+    }
+    if (error.response && [401].includes(error.response.status)) {
+      localStorage.clear();
+      window.location.href = "/login";
+    }
+    if (
+      error.response &&
+      error.response.data.errors &&
+      [400].includes(error.response.status)
+    ) {
+      const reformatError = new AxiosError(
+        Object.entries(error.response.data.errors)
+          .map(
+            ([field, messages]) =>
+              `${field}: ${(messages as string[]).join(", ")}`,
+          )
+          .join("; "),
+        error.code,
+        error.config,
+        error.request,
+      );
+      reformatError.stack = error.stack;
 
       return Promise.reject(reformatError);
     }

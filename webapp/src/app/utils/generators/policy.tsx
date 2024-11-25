@@ -28,7 +28,6 @@ export function formatPolicy(policyText?: string): Categories {
       }
     }
   });
-  console.log(categories);
   return categories;
 }
 

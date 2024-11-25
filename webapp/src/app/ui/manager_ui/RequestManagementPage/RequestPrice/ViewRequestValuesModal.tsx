@@ -76,7 +76,7 @@ export function ViewRequestValuesModal({
             }))}
             rowKey={(record) => record.key}
             loading={specialUIState.isLoading}
-            pagination={false}
+            pagination={{ hideOnSinglePage: true }}
           />
         </Space>
       </Modal>

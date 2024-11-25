@@ -43,6 +43,26 @@ const baseRequests = (baseURL: string) => {
 
         return Promise.reject(reformatError);
       }
+      if (
+        error.response &&
+        error.response.data.errors &&
+        [400].includes(error.response.status)
+      ) {
+        const reformatError = new AxiosError(
+          Object.entries(error.response.data.errors)
+            .map(
+              ([field, messages]) =>
+                `${field}: ${(messages as string[]).join(", ")}`,
+            )
+            .join("; "),
+          error.code,
+          error.config,
+          error.request,
+        );
+        reformatError.stack = error.stack;
+
+        return Promise.reject(reformatError);
+      }
       return Promise.reject(error);
     },
   );

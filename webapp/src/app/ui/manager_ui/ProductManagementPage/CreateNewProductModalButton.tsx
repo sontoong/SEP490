@@ -1,4 +1,4 @@
-import { Input, Space } from "antd";
+import { App, Input, Space } from "antd";
 import { Form } from "../../../components/form";
 import { Modal } from "../../../components/modals";
 import { InputNumber } from "../../../components/inputs";
@@ -13,6 +13,7 @@ import { AddProductParams } from "../../../redux/slice/productSlice";
 import { getFiles } from "../../../utils/helpers";
 
 export default function CreateNewProductModalButton() {
+  const { notification } = App.useApp();
   const [createNewProductForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [images, setImages] = useState<UploadImage[]>([]);
@@ -41,11 +42,18 @@ export default function CreateNewProductModalButton() {
   };
 
   const handleCreateNewProductSubmit = async (values: AddProductParams) => {
-    const Image = await getFiles(images);
+    const Images = await getFiles(images);
+    if (Images.length === 0) {
+      notification.error({
+        message: "Vui lòng chọn ít nhất 1 ảnh",
+      });
+      return;
+    }
+
     await handleAddProduct({
       values: {
         ...values,
-        Image: Image[0],
+        Image: Images[0],
       },
       callBackFn: () => {
         setIsModalVisible(false);

@@ -80,8 +80,8 @@ export default function ViewServicePackageDetailsModal({
           <div className="text-lg font-bold uppercase">Chính sách</div>
           <div>
             {formatPolicy(state.currentServicePackage.policy).general.map(
-              (value) => (
-                <div>{`- ${value}`}</div>
+              (value, index) => (
+                <div key={index}>{`- ${value}`}</div>
               ),
             )}
             <div className="py-3 font-bold uppercase">Sửa chữa điện</div>
@@ -92,8 +92,8 @@ export default function ViewServicePackageDetailsModal({
             ))}
             <div className="py-3 font-bold uppercase">Sửa chữa nước</div>
             {formatPolicy(state.currentServicePackage.policy).repairs.water.map(
-              (value) => (
-                <div>{`+ ${value}`}</div>
+              (value, index) => (
+                <div key={index}>{`+ ${value}`}</div>
               ),
             )}
           </div>

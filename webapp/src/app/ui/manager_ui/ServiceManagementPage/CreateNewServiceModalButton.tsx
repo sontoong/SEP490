@@ -1,4 +1,4 @@
-import { Input, Space } from "antd";
+import { App, Input, Space } from "antd";
 import { Form } from "../../../components/form";
 import { Modal } from "../../../components/modals";
 import { InputNumber } from "../../../components/inputs";
@@ -13,6 +13,7 @@ import { AddServicePackageParams } from "../../../redux/slice/servicePackageSlic
 import { getFiles } from "../../../utils/helpers";
 
 export default function CreateNewServicePackageModalButton() {
+  const { notification } = App.useApp();
   const [createNewServicePackageForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [images, setImages] = useState<UploadImage[]>([]);
@@ -45,11 +46,18 @@ export default function CreateNewServicePackageModalButton() {
   const handleCreateNewServiceSubmit = async (
     values: AddServicePackageParams,
   ) => {
-    const Image = await getFiles(images);
+    const Images = await getFiles(images);
+    if (Images.length === 0) {
+      notification.error({
+        message: "Vui lòng chọn ít nhất 1 ảnh",
+      });
+      return;
+    }
+
     await handleAddServicePackage({
       values: {
         ...values,
-        Image: Image[0],
+        Image: Images[0],
       },
       callBackFn: () => {
         setIsModalVisible(false);

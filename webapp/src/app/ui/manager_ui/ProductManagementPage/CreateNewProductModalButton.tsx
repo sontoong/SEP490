@@ -126,7 +126,7 @@ export default function CreateNewProductModalButton() {
           </Form.Item>
           <Form.Item
             name="Price"
-            label={<div className="text-sm text-secondary">Giá hiện tại</div>}
+            label={<div className="text-sm text-secondary">Giá sản phẩm</div>}
             rules={[
               {
                 type: "number",

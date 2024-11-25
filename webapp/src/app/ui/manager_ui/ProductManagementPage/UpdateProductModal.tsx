@@ -1,4 +1,4 @@
-import { Space } from "antd";
+import { App, Space } from "antd";
 import { Modal } from "../../../components/modals";
 import { Form } from "../../../components/form";
 import { Input, InputNumber } from "../../../components/inputs";
@@ -19,6 +19,7 @@ export default function UpdateProductModal({
   product,
   fetchProducts,
 }: UpdateProductModalProps) {
+  const { notification } = App.useApp();
   const [updateProductForm] = Form.useForm();
   const [images, setImages] = useState<UploadImage[]>([]);
   const { state, handleGetProduct, handleUpdateProduct } = useProduct();
@@ -67,12 +68,19 @@ export default function UpdateProductModal({
   };
 
   const handleUpdateProductSubmit = async (values: any) => {
-    const Image = await getFiles(images);
+    const Images = await getFiles(images);
+    if (Images.length === 0) {
+      notification.error({
+        message: "Vui lòng chọn ít nhất 1 ảnh",
+      });
+      return;
+    }
+
     handleUpdateProduct({
       values: {
         ...values,
         ProductId: state.currentProduct.productId,
-        Image: Image[0],
+        Image: Images[0],
       },
       callBackFn: () => {
         setIsModalOpen(false);

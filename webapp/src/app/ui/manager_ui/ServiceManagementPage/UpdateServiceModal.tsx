@@ -1,4 +1,4 @@
-import { Space } from "antd";
+import { App, Space } from "antd";
 import { Modal } from "../../../components/modals";
 import { Form } from "../../../components/form";
 import { Input, InputNumber } from "../../../components/inputs";
@@ -19,6 +19,7 @@ export default function UpdateServiceModal({
   record,
   fetchServicePackage,
 }: UpdateServiceModalProps) {
+  const { notification } = App.useApp();
   const [updateServiceForm] = Form.useForm();
   const [images, setImages] = useState<UploadImage[]>([]);
   const { state, handleGetServicePackage, handleUpdateServicePackage } =
@@ -66,12 +67,19 @@ export default function UpdateServiceModal({
   };
 
   const handleUpdateServiceSubmit = async (values: any) => {
-    const Image = await getFiles(images);
+    const Images = await getFiles(images);
+    if (Images.length === 0) {
+      notification.error({
+        message: "Vui lòng chọn ít nhất 1 ảnh",
+      });
+      return;
+    }
+
     handleUpdateServicePackage({
       values: {
         ...values,
         ServicePackageId: state.currentServicePackage.servicePackageId,
-        Image: Image[0],
+        Image: Images[0],
       },
       callBackFn: () => {
         setIsModalOpen(false);

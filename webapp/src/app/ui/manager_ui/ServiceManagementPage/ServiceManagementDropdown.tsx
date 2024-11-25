@@ -4,7 +4,7 @@ import { Dropdown } from "../../../components/dropdown";
 import { ServicePackage } from "../../../models/service";
 import { useState } from "react";
 import UpdateServiceModal from "./UpdateServiceModal";
-import ViewServicePackageDetailsModal from "./ViewServiceManagementDetailsModal";
+import ViewServicePackageDetailsModal from "./ViewServicePackageDetailsModal";
 
 const ServiceManagementDropdown = ({
   record,

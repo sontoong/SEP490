@@ -15,6 +15,10 @@ import {
   setCanceledRequestList,
   setCurrentRequestList,
   setTodaysRequestList,
+  getCurrentPriceOfRequest,
+  updatePriceOfRequest,
+  UpdatePriceOfRequestParams,
+  setRequestValues,
 } from "../redux/slice/requestSlice";
 
 export function useRequest() {
@@ -143,10 +147,70 @@ export function useRequest() {
     [dispatch, notification],
   );
 
+  const handleGetCurrentPriceOfRequest = useCallback(async () => {
+    const resultAction = await dispatch(getCurrentPriceOfRequest());
+    if (getCurrentPriceOfRequest.fulfilled.match(resultAction)) {
+      dispatch(setRequestValues(resultAction.payload));
+    } else {
+      if (resultAction.payload) {
+        notification.error({
+          message: "Lỗi",
+          description: `${resultAction.payload}`,
+          placement: "topRight",
+        });
+      } else {
+        notification.error({
+          message: "Lỗi",
+          description: resultAction.error.message,
+          placement: "topRight",
+        });
+      }
+    }
+  }, [dispatch, notification]);
+
+  const handleUpdatePriceOfRequest = useCallback(
+    async ({
+      values,
+      callBackFn,
+    }: {
+      values: UpdatePriceOfRequestParams;
+      callBackFn?: () => void;
+    }) => {
+      const resultAction = await dispatch(updatePriceOfRequest(values));
+      if (updatePriceOfRequest.fulfilled.match(resultAction)) {
+        if (callBackFn) {
+          callBackFn();
+        }
+        notification.success({
+          message: "Success",
+          description: "Cập nhật giá yêu cầu thành công",
+          placement: "topRight",
+        });
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Lỗi",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Lỗi",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleGetAllRequestPaginated,
     handleGetAllTodaysRequestsPaginated,
     handleGetDetailsOfRequest,
+    handleGetCurrentPriceOfRequest,
+    handleUpdatePriceOfRequest,
   };
 }

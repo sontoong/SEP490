@@ -1,16 +1,16 @@
 import { HomeOutlined } from "@ant-design/icons";
-import { Modal } from "../../../components/modals";
+import { Modal } from "../../../../components/modals";
 import { Space, TableColumnsType } from "antd";
-import { PrimaryButton } from "../../../components/buttons";
+import { PrimaryButton } from "../../../../components/buttons";
 import AddRoomModalButton from "./AddRoomModalButton";
-import { Table } from "../../../components/table";
-import { Room } from "../../../models/room";
-import { customerNameGenerator } from "../../../utils/generators/name";
+import { Table } from "../../../../components/table";
+import { Room } from "../../../../models/room";
+import { customerNameGenerator } from "../../../../utils/generators/name";
 import EditRoomModalButton from "./UpdateRoomModalButton";
 import { useCallback, useEffect } from "react";
-import { useApartment } from "../../../hooks/useApartment";
-import { useSpecialUI } from "../../../hooks/useSpecialUI";
-import { usePagination } from "../../../hooks/usePagination";
+import { useApartment } from "../../../../hooks/useApartment";
+import { useSpecialUI } from "../../../../hooks/useSpecialUI";
+import { usePagination } from "../../../../hooks/usePagination";
 
 export function ViewApartmentDetailModal({
   apartmentId,

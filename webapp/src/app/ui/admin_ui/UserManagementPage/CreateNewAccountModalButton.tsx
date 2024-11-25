@@ -138,7 +138,7 @@ export default function CreateNewAccountModalButton() {
           </Form.Item>
           <Form.Item
             name="email"
-            label="email"
+            label="Email"
             rules={[{ type: "email", required: true }]}
           >
             <Input placeholder="Nhập email" size="large" />
@@ -167,7 +167,8 @@ export default function CreateNewAccountModalButton() {
               <InputDate
                 placeholder="Chọn ngày sinh"
                 size="large"
-                minDate={dayjs("31-12-2000", "DD-MM-YYYY")}
+                minDate={dayjs("31-12-1939", "DD-MM-YYYY")}
+                maxDate={dayjs("31-12-2000", "DD-MM-YYYY")}
               />
             </Form.Item>
           </Space>

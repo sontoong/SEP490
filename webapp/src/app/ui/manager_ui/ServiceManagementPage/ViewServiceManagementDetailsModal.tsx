@@ -8,8 +8,8 @@ import { Avatar } from "../../../components/avatar";
 import { BookOutlined } from "@ant-design/icons";
 import { formatCurrency } from "../../../utils/helpers";
 import { PrimaryButton } from "../../../components/buttons";
-import htmlParse from "../../../utils/htmlParser";
 import { Divider } from "../../../components/divider";
+import { formatPolicy } from "../../../utils/generators/policy";
 
 export default function ViewServicePackageDetailsModal({
   open = false,
@@ -78,7 +78,25 @@ export default function ViewServicePackageDetailsModal({
         <Divider type="horizontal" className="bg-black" />
         <Space direction="vertical" size={5}>
           <div className="text-lg font-bold uppercase">Chính sách</div>
-          <div>{htmlParse(state.currentServicePackage.policy)}</div>
+          <div>
+            {formatPolicy(state.currentServicePackage.policy).general.map(
+              (value) => (
+                <div>{`- ${value}`}</div>
+              ),
+            )}
+            <div className="py-3 font-bold uppercase">Sửa chữa điện</div>
+            {formatPolicy(
+              state.currentServicePackage.policy,
+            ).repairs.electricity.map((value) => (
+              <div>{`+ ${value}`}</div>
+            ))}
+            <div className="py-3 font-bold uppercase">Sửa chữa nước</div>
+            {formatPolicy(state.currentServicePackage.policy).repairs.water.map(
+              (value) => (
+                <div>{`+ ${value}`}</div>
+              ),
+            )}
+          </div>
         </Space>
       </Space>
     </Modal>

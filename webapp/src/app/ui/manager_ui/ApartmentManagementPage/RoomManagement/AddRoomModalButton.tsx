@@ -1,7 +1,7 @@
 import { Space, Typography } from "antd";
-import { Form } from "../../../components/form";
-import { Modal } from "../../../components/modals";
-import { PrimaryButton } from "../../../components/buttons";
+import { Form } from "../../../../components/form";
+import { Modal } from "../../../../components/modals";
+import { PrimaryButton } from "../../../../components/buttons";
 import {
   CloseOutlined,
   HomeOutlined,
@@ -9,9 +9,9 @@ import {
   SmileOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
-import { Input } from "../../../components/inputs";
-import { AddRoomsParams } from "../../../redux/slice/apartmentSlice";
-import { useApartment } from "../../../hooks/useApartment";
+import { Input } from "../../../../components/inputs";
+import { AddRoomsParams } from "../../../../redux/slice/apartmentSlice";
+import { useApartment } from "../../../../hooks/useApartment";
 
 const { Text } = Typography;
 
@@ -24,7 +24,7 @@ export default function AddRoomModalButton({
   const { state, handleAddRooms, handleGetAllRoomsPaginated } = useApartment();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const initialValuesAddNewApartment: AddRoomsParams = {
+  const initialValuesAddNewRoom: AddRoomsParams = {
     areaId: "",
     roomIds: [],
   };
@@ -80,7 +80,7 @@ export default function AddRoomModalButton({
         modalRender={(dom) => (
           <Form
             form={addRoomForm}
-            initialValues={initialValuesAddNewApartment}
+            initialValues={initialValuesAddNewRoom}
             name="AddRoomForm"
             onFinish={(values) => {
               const { roomId, roomIds } = values;

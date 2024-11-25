@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useAppDispatch } from "../redux/hook";
-import { setHeaderTitle } from "../redux/slice/headerSlice";
+import { HeaderState, setHeaderTitle } from "../redux/slice/headerSlice";
 
 type HeaderTitle = {
   tabTitle: string;
-  paths?: { title?: string; path?: string }[];
+  paths?: HeaderState["paths"];
 };
 
 export function useTitle({ tabTitle, paths }: HeaderTitle) {

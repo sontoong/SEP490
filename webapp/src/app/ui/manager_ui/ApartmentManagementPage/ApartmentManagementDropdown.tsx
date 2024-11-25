@@ -2,7 +2,7 @@ import { EditOutlined, EllipsisOutlined, EyeOutlined } from "@ant-design/icons";
 import { MenuProps } from "antd";
 import { Dropdown } from "../../../components/dropdown";
 import { useState } from "react";
-import { ViewApartmentDetailModal } from "./ViewApartmentDetailModal";
+import { ViewApartmentDetailModal } from "./RoomManagement/ViewApartmentDetailModal";
 import { Apartment } from "../../../models/apartment";
 import UpdateApartmentModal from "./UpdateApartmentModal";
 

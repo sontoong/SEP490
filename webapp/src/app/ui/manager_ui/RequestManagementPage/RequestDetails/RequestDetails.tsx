@@ -13,6 +13,7 @@ import { PrimaryButton } from "../../../../components/buttons";
 import RequestProductList from "./RequestProductList";
 import { useEffect } from "react";
 import { Skeleton } from "../../../../components/skeletons";
+import { isNull } from "lodash";
 
 export default function RequestDetails({
   request,
@@ -170,7 +171,7 @@ export default function RequestDetails({
           <Space className="flex justify-between text-sm">
             <div className="font-bold">Tổng giá: </div>
             <div className="font-bold">
-              {request?.request.totalPrice === 0
+              {isNull(request?.request.totalPrice)
                 ? "Miễn phí"
                 : formatCurrency(request?.request.totalPrice)}
             </div>

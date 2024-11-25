@@ -106,10 +106,11 @@ export default function CreateNewServicePackageModalButton() {
                 type: "string",
                 required: true,
                 whitespace: true,
+                message: "Vui lòng nhập tên gói dịch vụ",
               },
             ]}
           >
-            <Input placeholder="Nhập tên gói dịch vụ" />
+            <Input placeholder="Nhập tên gói dịch vụ" size="large" />
           </Form.Item>
           <Form.Item
             name="Description"
@@ -119,6 +120,7 @@ export default function CreateNewServicePackageModalButton() {
                 type: "string",
                 required: true,
                 whitespace: true,
+                message: "Vui lòng nhập mô tả",
               },
             ]}
           >
@@ -134,22 +136,34 @@ export default function CreateNewServicePackageModalButton() {
                 type: "number",
                 min: 1,
                 required: true,
-                message: "Số lần sửa chữa không hợp lệ",
                 whitespace: true,
+                message: "Số lần sửa chữa không hợp lệ",
               },
             ]}
           >
-            <InputNumber placeholder="Nhập số lần sửa chữa" className="w-1/2" />
+            <InputNumber
+              placeholder="Nhập số lần sửa chữa"
+              className="w-1/2"
+              size="large"
+            />
           </Form.Item>
           <Form.Item
             name="Price"
             label={<div className="text-sm text-secondary">Giá gói (VND)</div>}
-            rules={[{ type: "number", required: true, min: 1000 }]}
+            rules={[
+              {
+                type: "number",
+                required: true,
+                min: 2000,
+                message: "Giá gói phải ít nhất 2.000đ",
+              },
+            ]}
           >
             <InputNumber.Currency
               placeholder="Nhập giá của gói"
               className="w-1/2"
               step={1000}
+              size="large"
             />
           </Form.Item>
         </Space>

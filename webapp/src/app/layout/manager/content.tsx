@@ -1,7 +1,7 @@
 import React from "react";
 import { useAppSelector } from "../../redux/hook";
 import { Breadcrumb } from "../../components/breadcrumb";
-import { Layout } from "antd";
+import { Layout, Space } from "antd";
 
 const { Content } = Layout;
 
@@ -21,11 +21,19 @@ export default function MyContent({ children }: { children: React.ReactNode }) {
             />
           </div>
         )}
-        {currentPath.title && (
-          <div className="pb-10 text-5xl font-semibold text-primary">
-            {currentPath.title}
-          </div>
-        )}
+        <div className="flex items-center pb-10">
+          {currentPath.title && (
+            <div className="text-5xl font-semibold text-primary">
+              {currentPath.title}
+            </div>
+          )}
+          <Space className="ml-5">
+            {currentPath.actions &&
+              currentPath.actions.map((action: React.ReactNode, index) => (
+                <React.Fragment key={index}>{action}</React.Fragment>
+              ))}
+          </Space>
+        </div>
         <main className="justify-center bg-white">{children}</main>
       </div>
     </Content>

@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ReactNode } from "react";
 
-interface HeaderState {
-  paths?: { title?: string; path?: string }[];
-}
+export type HeaderState = {
+  paths?: { title?: string; path?: string; actions?: ReactNode[] }[];
+};
 
 const initialState: HeaderState = {
   paths: [{ title: "", path: "" }],

@@ -67,7 +67,7 @@ export function useApartment() {
         }
         notification.success({
           message: "Success",
-          description: "Thêm phòng thành công",
+          description: "Thêm căn hộ thành công",
           placement: "topRight",
         });
       } else {
@@ -104,7 +104,7 @@ export function useApartment() {
         }
         notification.success({
           message: "Success",
-          description: "Cập nhật phòng thành công",
+          description: "Cập nhật căn hộ thành công",
           placement: "topRight",
         });
       } else {

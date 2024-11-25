@@ -131,12 +131,11 @@ export default function VerifyCustomerModalButton({
             text="Duyệt tài khoản"
             onClick={() => handleApprove()}
             size="middle"
-            disabled={accountState.isSending}
+            loading={accountState.isSending}
           />,
         ]}
         onCancel={() => setIsModalVisible(false)}
         width={800}
-        confirmLoading={accountState.isSending}
       >
         <Grid
           className="text-sm"
@@ -187,11 +186,10 @@ export default function VerifyCustomerModalButton({
                   <strong>Tên chung cư:</strong> {customer.apartment[0]?.name}
                 </div>
                 <div>
-                  {customer.get.roomIds.map((room) => (
-                    <div key={room}>
-                      <strong>Phòng:</strong> {room}
-                    </div>
-                  ))}
+                  <strong>Căn hộ: </strong>
+                  <span>
+                    {customer.get.roomIds.map((room) => room).join(", ")}
+                  </span>
                 </div>
               </Space>
             </Space>,

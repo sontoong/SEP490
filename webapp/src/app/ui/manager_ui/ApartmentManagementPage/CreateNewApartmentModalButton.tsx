@@ -7,14 +7,13 @@ import {
   PhoneFilled,
   PlusCircleOutlined,
 } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextEditor } from "../../../components/rte";
 import { ImageUpload } from "../../../components/image-upload";
 import { UploadImage } from "../../../components/image-upload/image-upload";
 import { InputSelect } from "../../../components/inputs";
 import { Avatar } from "../../../components/avatar";
 import { useAccount } from "../../../hooks/useAccount";
-import agent from "../../../services/agent";
 import { Leader } from "../../../models/user";
 import { AddApartmentParams } from "../../../redux/slice/apartmentSlice";
 import { getFiles } from "../../../utils/helpers";
@@ -26,7 +25,7 @@ export default function CreateNewApartmentModalButton() {
   const [createNewApartmentForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [images, setImages] = useState<UploadImage[]>([]);
-  const { state: accountState } = useAccount();
+  const { state: accountState, handleGetAllFreeLeaders } = useAccount();
   const {
     state: apartmentState,
     handleAddApartment,
@@ -42,21 +41,27 @@ export default function CreateNewApartmentModalButton() {
     LeaderId: undefined,
   };
 
-  async function fetchFreeLeaderList(
-    email: string,
-  ): Promise<{ label: string; value: string }[]> {
-    return agent.Account.getAllFreeLeaders().then((body) => {
-      const trimmedEmail = email.trim();
-      if (!trimmedEmail) return [];
+  // async function fetchFreeLeaderList(
+  //   email: string,
+  // ): Promise<{ label: string; value: string }[]> {
+  //   return agent.Account.getAllFreeLeaders().then((body) => {
+  //     const trimmedEmail = email.trim();
+  //     // if (!trimmedEmail) return [];
 
-      return body
-        .filter((leader: Leader) => leader.email.includes(trimmedEmail))
-        .map((leader: Leader) => ({
-          label: `${leader.fullName} - ${leader.email} ${leader.areaId ? `(${leader.name})` : ""}`,
-          value: leader.accountId,
-        }));
-    });
-  }
+  //     return body
+  //       .filter((leader: Leader) => leader.email.includes(trimmedEmail))
+  //       .map((leader: Leader) => ({
+  //         label: `${leader.fullName} - ${leader.email} ${leader.areaId ? `(${leader.name})` : ""}`,
+  //         value: leader.accountId,
+  //       }));
+  //   });
+  // }
+
+  useEffect(() => {
+    if (isModalVisible) {
+      handleGetAllFreeLeaders();
+    }
+  }, [handleGetAllFreeLeaders, isModalVisible]);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -213,12 +218,26 @@ export default function CreateNewApartmentModalButton() {
               ]}
               style={{ marginBottom: 10 }}
             >
-              <InputSelect.Debounce
+              {/* <InputSelect.Debounce
                 className="w-full"
                 placeholder="Tìm kiếm bằng email"
+                onFocus={() => fetchFreeLeaderList("")}
                 fetchOptions={fetchFreeLeaderList}
                 allowClear
                 size="large"
+              /> */}
+              <InputSelect
+                className="w-full"
+                placeholder="Chọn trưởng nhóm"
+                options={(accountState.freeLeaderList.users as Leader[]).map(
+                  (leader) => ({
+                    label: `${leader.fullName} - ${leader.email} ${leader.areaId ? `(${leader.name})` : ""}`,
+                    value: leader.accountId,
+                  }),
+                )}
+                loading={accountState.isFetching}
+                size="large"
+                allowClear
               />
             </Form.Item>
             <Form.Item
@@ -227,7 +246,7 @@ export default function CreateNewApartmentModalButton() {
               {({ getFieldValue }) => {
                 const leaderIdForm = getFieldValue("LeaderId");
                 const currentLeader = (
-                  accountState.currentLeaderList.users as Leader[]
+                  accountState.freeLeaderList.users as Leader[]
                 ).find((leader) => leader.accountId === leaderIdForm) as Leader;
 
                 return leaderIdForm ? (
@@ -250,7 +269,7 @@ export default function CreateNewApartmentModalButton() {
                           </div>
                           <Space>
                             <div>
-                              <span className="font-bold">email: </span>
+                              <span className="font-bold">Email: </span>
                               <span>{currentLeader?.email}</span>
                             </div>
                             <div>

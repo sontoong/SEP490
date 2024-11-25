@@ -56,7 +56,7 @@ export default function UpdateRoomModalButton({
         title={
           <Space className="text-base">
             <HomeOutlined />
-            <div className="uppercase text-secondary">Cập nhật số phòng</div>
+            <div className="uppercase text-secondary">Cập nhật số căn hộ</div>
           </Space>
         }
         open={isModalVisible}
@@ -81,14 +81,14 @@ export default function UpdateRoomModalButton({
         <Space direction="vertical" className="w-full">
           <Form.Item
             name="newRoomId"
-            label={<div className="text-sm text-secondary">Số phòng</div>}
+            label={<div className="text-sm text-secondary">Số căn hộ</div>}
             rules={[
               {
                 required: true,
               },
             ]}
           >
-            <Input placeholder="Nhập số phòng mới" size="large" />
+            <Input placeholder="Nhập số căn hộ mới" size="large" />
           </Form.Item>
         </Space>
       </Modal>

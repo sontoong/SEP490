@@ -42,7 +42,7 @@ export function ViewApartmentDetailModal({
 
   const roomListColumns: TableColumnsType<Room> = [
     {
-      title: "Số phòng",
+      title: "Số căn hộ",
       dataIndex: "roomId",
     },
     {
@@ -67,7 +67,7 @@ export function ViewApartmentDetailModal({
           <Space className="text-base">
             <HomeOutlined />
             <div className="uppercase text-secondary">
-              Số phòng của chung cư
+              Số căn hộ của chung cư
             </div>
           </Space>
         }

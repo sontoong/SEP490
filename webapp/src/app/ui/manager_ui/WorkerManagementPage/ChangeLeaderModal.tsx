@@ -110,7 +110,7 @@ export default function ChangeLeaderModal({
         >
           <InputSelect
             className="w-full"
-            placeholder="Chọn leader"
+            placeholder="Chọn trưởng nhóm"
             options={(accountState.currentLeaderList.users as Leader[]).map(
               (leader) => ({
                 label: `${leader.fullName} - ${leader.email} ${leader.areaId ? `(${leader.name})` : ""}`,

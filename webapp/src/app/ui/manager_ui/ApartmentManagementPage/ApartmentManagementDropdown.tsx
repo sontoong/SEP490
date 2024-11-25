@@ -21,7 +21,7 @@ const ApartmentManagementDropdown = ({
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: "Xem số phòng",
+      label: "Xem các căn hộ",
       icon: <EyeOutlined />,
       onClick: () => setIsViewApartmentDetailModalVisible(true),
     },

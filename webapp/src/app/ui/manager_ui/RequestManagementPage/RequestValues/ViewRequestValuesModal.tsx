@@ -8,6 +8,7 @@ import { useSpecialUI } from "../../../../hooks/useSpecialUI";
 import { useRequest } from "../../../../hooks/useRequest";
 import { formatCurrency } from "../../../../utils/helpers";
 import { DollarCircleOutlined } from "@ant-design/icons";
+import { requestValuesGenerator } from "../../../../utils/generators/requestValues";
 
 export function ViewRequestValuesModal({
   isModalVisible,
@@ -33,6 +34,13 @@ export function ViewRequestValuesModal({
     {
       title: "Tên",
       dataIndex: "name",
+      render: (_, { name }) => <div>{requestValuesGenerator(name).name}</div>,
+    },
+    {
+      title: "Mô tả",
+      render: (_, { name }) => (
+        <div>{requestValuesGenerator(name).description}</div>
+      ),
     },
     {
       title: "Giá hiện tại",
@@ -66,6 +74,7 @@ export function ViewRequestValuesModal({
           />,
         ]}
         closeIcon={null}
+        width={800}
       >
         <Space direction="vertical" size={20} className="w-full">
           <Table

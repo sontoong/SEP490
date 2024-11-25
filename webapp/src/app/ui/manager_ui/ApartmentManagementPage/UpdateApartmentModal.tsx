@@ -215,7 +215,7 @@ export default function UpdateApartmentModal({
             >
               <InputSelect
                 className="w-full"
-                placeholder="Chọn leader"
+                placeholder="Chọn trưởng nhóm"
                 options={(accountState.currentLeaderList.users as Leader[])
                   .filter(
                     (leader) =>
@@ -259,7 +259,7 @@ export default function UpdateApartmentModal({
                           </div>
                           <Space>
                             <div>
-                              <span className="font-bold">email: </span>
+                              <span className="font-bold">Email: </span>
                               <span>{currentLeader?.email}</span>
                             </div>
                             <div>

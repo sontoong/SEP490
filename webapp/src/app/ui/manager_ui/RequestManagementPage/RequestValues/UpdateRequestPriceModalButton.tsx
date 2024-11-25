@@ -1,5 +1,5 @@
 import { Space } from "antd";
-import { EditOutlined, HomeOutlined } from "@ant-design/icons";
+import { DollarCircleOutlined, EditOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Form } from "../../../../components/form";
 import { Modal } from "../../../../components/modals";
@@ -55,8 +55,8 @@ export default function EditRequestPriceModalButton({
       <Modal
         title={
           <Space className="text-base">
-            <HomeOutlined />
-            <div className="uppercase text-secondary">Cập nhật số phòng</div>
+            <DollarCircleOutlined />
+            <div className="uppercase text-secondary">Cập nhật giá</div>
           </Space>
         }
         open={isModalVisible}

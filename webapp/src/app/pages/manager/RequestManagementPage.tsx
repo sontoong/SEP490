@@ -11,7 +11,7 @@ import CompletedRequestTab from "../../ui/manager_ui/RequestManagementPage/Compl
 import CanceledRequestTab from "../../ui/manager_ui/RequestManagementPage/CanceledRequestTab";
 import { EditFilled } from "@ant-design/icons";
 import { PrimaryButton } from "../../components/buttons";
-import { ViewRequestValuesModal } from "../../ui/manager_ui/RequestManagementPage/RequestPrice/ViewRequestValuesModal";
+import { ViewRequestValuesModal } from "../../ui/manager_ui/RequestManagementPage/RequestValues/ViewRequestValuesModal";
 
 export default function RequestManagementPage() {
   useTitle({

@@ -6,7 +6,6 @@ import {
   CloseOutlined,
   HomeOutlined,
   PlusCircleOutlined,
-  SmileOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
 import { Input } from "../../../../components/inputs";
@@ -58,7 +57,7 @@ export default function AddRoomModalButton({
   return (
     <>
       <PrimaryButton
-        text="Thêm phòng mới"
+        text="Thêm căn hộ mới"
         icon={<PlusCircleOutlined />}
         onClick={showModal}
       />
@@ -66,7 +65,7 @@ export default function AddRoomModalButton({
         title={
           <Space className="text-base">
             <HomeOutlined />
-            <div className="uppercase text-secondary">Thêm phòng mới</div>
+            <div className="uppercase text-secondary">Thêm căn hộ mới</div>
           </Space>
         }
         open={isModalVisible}
@@ -101,7 +100,7 @@ export default function AddRoomModalButton({
           <Space direction="vertical" className="w-full">
             <Form.Item
               name="roomId"
-              label={<div className="text-sm text-secondary">Số phòng</div>}
+              label={<div className="text-sm text-secondary">Số căn hộ</div>}
               rules={[
                 {
                   type: "string",
@@ -112,7 +111,7 @@ export default function AddRoomModalButton({
               className="mb-0"
             >
               <Input
-                placeholder="Nhập số phòng"
+                placeholder="Nhập số căn hộ"
                 size="large"
                 className="w-full"
               />
@@ -129,13 +128,13 @@ export default function AddRoomModalButton({
                     >
                       <PrimaryButton
                         htmlType="submit"
-                        text="Thêm phòng"
+                        text="Thêm căn hộ"
                         className="w-full"
                         icon={<PlusCircleOutlined />}
                         bgColor="#4cc9c7"
                       />
                     </Form.Item>
-                    <div>{`Danh sách phòng (${fields.length} phòng)`}</div>
+                    <div>{`Danh sách căn hộ (${fields.length} căn hộ)`}</div>
                     {fields.length ? (
                       fields.map((field) => (
                         <Space className="w-fit" key={field.key}>
@@ -161,7 +160,7 @@ export default function AddRoomModalButton({
                       ))
                     ) : (
                       <Text className="ant-form-text" type="secondary">
-                        ( <SmileOutlined /> Chưa có phòng. )
+                        ( Chưa có căn hộ. )
                       </Text>
                     )}
                   </div>

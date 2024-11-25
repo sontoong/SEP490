@@ -68,7 +68,7 @@ export default function VerifyCustomerPage() {
       dataIndex: ["apartment", "0", "name"],
     },
     {
-      title: "Phòng",
+      title: "Căn hộ",
       dataIndex: ["get", "roomIds"],
       render: (_, { get }) => (
         <>

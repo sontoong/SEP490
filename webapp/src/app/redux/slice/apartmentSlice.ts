@@ -165,7 +165,7 @@ export const addRooms = createAsyncThunk<any, AddRoomsParams>(
     const { areaId, roomIds } = data;
     try {
       if (roomIds.length === 0) {
-        return rejectWithValue("Chưa chọn phòng");
+        return rejectWithValue("Chưa chọn căn hộ");
       }
       const response = await agent.Apartment.addRooms({
         areaId,

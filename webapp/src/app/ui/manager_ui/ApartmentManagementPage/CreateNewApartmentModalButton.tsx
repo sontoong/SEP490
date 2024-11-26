@@ -77,7 +77,7 @@ export default function CreateNewApartmentModalButton() {
 
   const handleCreateNewServiceSubmit = async (values: any) => {
     const Images = await getFiles(images);
-    if (Images.length === 0) {
+    if (images.length === 0) {
       notification.error({
         message: "Vui lòng chọn ít nhất 1 ảnh",
       });

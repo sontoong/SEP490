@@ -43,7 +43,7 @@ export default function CreateNewProductModalButton() {
 
   const handleCreateNewProductSubmit = async (values: AddProductParams) => {
     const Images = await getFiles(images);
-    if (Images.length === 0) {
+    if (images.length === 0) {
       notification.error({
         message: "Vui lòng chọn ít nhất 1 ảnh",
       });
@@ -130,7 +130,7 @@ export default function CreateNewProductModalButton() {
               },
             ]}
           >
-            <TextEditor />
+            <TextEditor placeholder="Nhập mô tả" />
           </Form.Item>
           <Form.Item
             name="Price"

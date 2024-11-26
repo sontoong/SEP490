@@ -87,8 +87,8 @@ export default function ViewServicePackageDetailsModal({
             <div className="py-3 font-bold uppercase">Sửa chữa điện</div>
             {formatPolicy(
               state.currentServicePackage.policy,
-            ).repairs.electricity.map((value) => (
-              <div>{`+ ${value}`}</div>
+            ).repairs.electricity.map((value, index) => (
+              <div key={index}>{`+ ${value}`}</div>
             ))}
             <div className="py-3 font-bold uppercase">Sửa chữa nước</div>
             {formatPolicy(state.currentServicePackage.policy).repairs.water.map(

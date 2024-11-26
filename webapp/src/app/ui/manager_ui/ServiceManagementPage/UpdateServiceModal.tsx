@@ -68,7 +68,7 @@ export default function UpdateServiceModal({
 
   const handleUpdateServiceSubmit = async (values: any) => {
     const Images = await getFiles(images);
-    if (Images.length === 0) {
+    if (images.length === 0) {
       notification.error({
         message: "Vui lòng chọn ít nhất 1 ảnh",
       });
@@ -147,7 +147,7 @@ export default function UpdateServiceModal({
             },
           ]}
         >
-          <TextEditor />
+          <TextEditor placeholder="Nhập mô tả" />
         </Form.Item>
         <Form.Item
           name="NumOfRequest"

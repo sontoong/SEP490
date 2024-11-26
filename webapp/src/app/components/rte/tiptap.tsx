@@ -5,10 +5,18 @@ import TextEditorMenuBar from "./tiptap-menubar";
 import { useEffect } from "react";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Form } from "../form";
+import clsx from "clsx";
 
 export default function Tiptap(props: TextEditorProps) {
   const { status } = Form.Item.useStatus();
-  console.log(status);
+  const editorClass = clsx(
+    "px-3 transition duration-300 min-h-[150px] cursor-text rounded-lg border border-solid hover:ring-1 focus-within:outline-none text-[16px]",
+    {
+      "!ring-[#ff4d4f] border-[#ff4d4f] hover:border-red-300 hover:ring-0 focus-within:!border-[#ff4d4f]":
+        status === "error",
+      "border-gray-200 ring-primary focus-within:ring-1": status !== "error",
+    },
+  );
 
   const editor = useEditor({
     extensions: [
@@ -27,11 +35,7 @@ export default function Tiptap(props: TextEditorProps) {
     },
     editorProps: {
       attributes: {
-        class: `px-3 transition duration-300 min-h-[150px] cursor-text rounded-lg border border-gray-200 border-solid hover:ring-1 focus-within:outline-none ring-primary text-[16px] ${
-          status === "error"
-            ? "!ring-[#ff4d4f] border-[#ff4d4f] hover:border-red-300 hover:ring-0 focus-within:!border-[#ff4d4f]"
-            : "border-gray-200 ring-primary focus-within:ring-1"
-        }`,
+        class: editorClass,
       },
     },
   });

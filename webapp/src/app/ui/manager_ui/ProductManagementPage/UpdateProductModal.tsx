@@ -69,7 +69,7 @@ export default function UpdateProductModal({
 
   const handleUpdateProductSubmit = async (values: any) => {
     const Images = await getFiles(images);
-    if (Images.length === 0) {
+    if (images.length === 0) {
       notification.error({
         message: "Vui lòng chọn ít nhất 1 ảnh",
       });
@@ -152,7 +152,7 @@ export default function UpdateProductModal({
             },
           ]}
         >
-          <TextEditor />
+          <TextEditor placeholder="Nhập mô tả" />
         </Form.Item>
         <Form.Item
           name="Price"

@@ -95,6 +95,7 @@ export default function ChangeLeaderModal({
           {dom}
         </Form>
       )}
+      width={650}
     >
       <Space direction="vertical" className="w-full" size={0}>
         <Form.Item
@@ -118,6 +119,7 @@ export default function ChangeLeaderModal({
               }),
             )}
             loading={specialUIState.isLoading}
+            disabled={specialUIState.isLoading}
             size="large"
             allowClear
           />

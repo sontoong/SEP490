@@ -15,6 +15,7 @@ import { UpdateApartmentParams } from "../../../redux/slice/apartmentSlice";
 import { useAccount } from "../../../hooks/useAccount";
 import { Skeleton } from "../../../components/skeletons";
 import { Leader } from "../../../models/user";
+import { useSpecialUI } from "../../../hooks/useSpecialUI";
 
 export default function UpdateApartmentModal({
   apartment,
@@ -30,6 +31,7 @@ export default function UpdateApartmentModal({
     handleUpdateApartment,
     handleGetAllApartmentsPaginated,
   } = useApartment();
+  const { state: specialUIState } = useSpecialUI();
 
   useEffect(() => {
     if (isModalVisible) {
@@ -199,7 +201,7 @@ export default function UpdateApartmentModal({
               },
             ]}
           >
-            <TextEditor />
+            <TextEditor placeholder="Nhập mô tả" />
           </Form.Item>
           <Space direction="vertical" className="w-full" size={0}>
             <Form.Item
@@ -225,7 +227,8 @@ export default function UpdateApartmentModal({
                     label: `${leader.fullName} - ${leader.email}`,
                     value: leader?.accountId,
                   }))}
-                loading={accountState.isFetching}
+                loading={specialUIState.isLoading}
+                disabled={accountState.isFetching}
                 allowClear
                 size="large"
               />

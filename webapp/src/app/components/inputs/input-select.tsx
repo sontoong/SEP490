@@ -3,7 +3,15 @@ import { useMemo, useRef, useState } from "react";
 import debounce from "lodash/debounce";
 
 export function CustomSelect(props: CustomSelectProps) {
-  return <Select optionFilterProp="label" showSearch allowClear {...props} />;
+  return (
+    <Select
+      optionFilterProp="label"
+      showSearch
+      allowClear
+      notFoundContent={props.loading ? <Spin size="small" /> : null}
+      {...props}
+    />
+  );
 }
 
 export function CustomSelectTag(props: CustomSelectProps) {
@@ -13,6 +21,7 @@ export function CustomSelectTag(props: CustomSelectProps) {
       showSearch
       mode="multiple"
       allowClear
+      notFoundContent={props.loading ? <Spin size="small" /> : null}
       {...props}
     />
   );

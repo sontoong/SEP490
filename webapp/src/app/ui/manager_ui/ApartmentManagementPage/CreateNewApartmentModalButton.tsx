@@ -19,6 +19,7 @@ import { AddApartmentParams } from "../../../redux/slice/apartmentSlice";
 import { getFiles } from "../../../utils/helpers";
 import { useApartment } from "../../../hooks/useApartment";
 import { Skeleton } from "../../../components/skeletons";
+import { useSpecialUI } from "../../../hooks/useSpecialUI";
 
 export default function CreateNewApartmentModalButton() {
   const { notification } = App.useApp();
@@ -31,6 +32,7 @@ export default function CreateNewApartmentModalButton() {
     handleAddApartment,
     handleGetAllApartmentsPaginated,
   } = useApartment();
+  const { state: specialUIState } = useSpecialUI();
 
   const initialValuesCreateNewApartment: Partial<AddApartmentParams> = {
     Name: "",
@@ -77,7 +79,7 @@ export default function CreateNewApartmentModalButton() {
 
   const handleCreateNewServiceSubmit = async (values: any) => {
     const Images = await getFiles(images);
-    if (Images.length === 0) {
+    if (images.length === 0) {
       notification.error({
         message: "Vui lòng chọn ít nhất 1 ảnh",
       });
@@ -235,7 +237,7 @@ export default function CreateNewApartmentModalButton() {
                     value: leader.accountId,
                   }),
                 )}
-                loading={accountState.isFetching}
+                loading={specialUIState.isLoading}
                 size="large"
                 allowClear
               />

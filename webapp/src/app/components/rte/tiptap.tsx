@@ -4,8 +4,11 @@ import StarterKit from "@tiptap/starter-kit";
 import TextEditorMenuBar from "./tiptap-menubar";
 import { useEffect } from "react";
 import Placeholder from "@tiptap/extension-placeholder";
+import { Form } from "../form";
 
 export default function Tiptap(props: TextEditorProps) {
+  const { status } = Form.Item.useStatus();
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -13,7 +16,7 @@ export default function Tiptap(props: TextEditorProps) {
       Placeholder.configure({
         placeholder: props.placeholder,
         emptyEditorClass:
-          "cursor-text before:content-[attr(data-placeholder)] before:absolute before:top-4 before:left-3 before:text-slate-400 before:text-[17px] before:opacity-50 before-pointer-events-none",
+          "cursor-text before:content-[attr(data-placeholder)] before:absolute before:top-4 before:left-3 before:text-slate-400 before:text-[16px] before:opacity-50 before-pointer-events-none",
       }),
     ],
     content: props.value,
@@ -23,8 +26,11 @@ export default function Tiptap(props: TextEditorProps) {
     },
     editorProps: {
       attributes: {
-        class:
-          "px-3 transition duration-300 min-h-[150px] cursor-text rounded-md border border-gray-200 border-solid   hover:ring-1 focus-within:outline-none focus-within:ring-1 ring-primary text-[17px]",
+        class: `px-3 transition duration-300 min-h-[150px] cursor-text rounded-md border border-gray-200 border-solid   hover:ring-1 focus-within:outline-none focus-within:ring-1 ring-primary text-[16px] ${
+          status === "error"
+            ? "border-red-500 focus-within:ring-red-500"
+            : "border-gray-200 ring-primary"
+        }`,
       },
     },
   });

@@ -4,8 +4,11 @@ import StarterKit from "@tiptap/starter-kit";
 import TextEditorMenuBar from "./tiptap-menubar";
 import { useEffect } from "react";
 import Placeholder from "@tiptap/extension-placeholder";
+import { Form } from "../form";
 
 export default function Tiptap(props: TextEditorProps) {
+  const { status } = Form.Item.useStatus();
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -23,8 +26,11 @@ export default function Tiptap(props: TextEditorProps) {
     },
     editorProps: {
       attributes: {
-        class:
-          "px-3 transition duration-300 min-h-[150px] cursor-text rounded-md border border-gray-200 border-solid   hover:ring-1 focus-within:outline-none focus-within:ring-1 ring-primary text-[16px]",
+        class: `px-3 transition duration-300 min-h-[150px] cursor-text rounded-md border border-gray-200 border-solid   hover:ring-1 focus-within:outline-none focus-within:ring-1 ring-primary text-[16px] ${
+          status === "error"
+            ? "border-red-500 focus-within:ring-red-500"
+            : "border-gray-200 ring-primary"
+        }`,
       },
     },
   });

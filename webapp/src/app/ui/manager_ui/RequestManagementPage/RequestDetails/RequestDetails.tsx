@@ -118,15 +118,19 @@ export default function RequestDetails({
           </div>
         </Space>
       </div>
-      <Collapse
-        items={[
-          {
-            label: "Danh sách nhân viên",
-            children: <WorkerTable workers={request?.workerList} />,
-          },
-        ]}
-        fontSize={18}
-      />
+      {request?.request.status && [1, 2].includes(request?.request.status) ? (
+        <Collapse
+          items={[
+            {
+              label: "Danh sách nhân viên",
+              children: <WorkerTable workers={request?.workerList} />,
+            },
+          ]}
+          fontSize={18}
+        />
+      ) : (
+        <></>
+      )}
       <div className="text-sm">
         <div className="font-bold">Mô tả vấn đề của khách hàng: </div>
         <div>{request?.request.customerProblem}</div>
@@ -137,28 +141,36 @@ export default function RequestDetails({
           {request?.request.conclusion ? request.request.conclusion : "Chưa có"}
         </div>
       </div>
-      <PrimaryButton
-        text="Tải hóa đơn"
-        icon={<DownloadOutlined />}
-        className="w-full"
-        onClick={() => {
-          if (request?.request.fileUrl) {
-            window.open(request?.request.fileUrl);
-          }
-        }}
-        disabled={!request?.request.fileUrl}
-      />
-      <Collapse
-        items={[
-          {
-            label: "Đơn hàng của yêu cầu",
-            children: <RequestProductList products={request?.productList} />,
-            forceRender: true,
-          },
-        ]}
-        fontSize={18}
-      />
-      {request?.request.status === 2 ? (
+      {request?.request.status && [2].includes(request?.request.status) ? (
+        <PrimaryButton
+          text="Tải hóa đơn"
+          icon={<DownloadOutlined />}
+          className="w-full"
+          onClick={() => {
+            if (request?.request.fileUrl) {
+              window.open(request?.request.fileUrl);
+            }
+          }}
+          disabled={!request?.request.fileUrl}
+        />
+      ) : (
+        <></>
+      )}
+      {request?.request.status && [2].includes(request?.request.status) ? (
+        <Collapse
+          items={[
+            {
+              label: "Đơn hàng của yêu cầu",
+              children: <RequestProductList products={request?.productList} />,
+              forceRender: true,
+            },
+          ]}
+          fontSize={18}
+        />
+      ) : (
+        <></>
+      )}
+      {request?.request.status && [2].includes(request?.request.status) ? (
         <>
           <Space className="flex justify-between text-sm">
             <div className="font-bold">Giá gửi yêu cầu: </div>

@@ -19,7 +19,7 @@ import { productStatusGenerator } from "../../utils/generators/productStatus";
 export default function ProductManagementPage() {
   useTitle({
     tabTitle: "Products - EWMH",
-    paths: [{ title: "Danh sách sản phẩms", path: "/products" }],
+    paths: [{ title: "Danh sách sản phẩm", path: "/products" }],
   });
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();

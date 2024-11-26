@@ -8,6 +8,7 @@ import { Form } from "../form";
 
 export default function Tiptap(props: TextEditorProps) {
   const { status } = Form.Item.useStatus();
+  console.log(status);
 
   const editor = useEditor({
     extensions: [

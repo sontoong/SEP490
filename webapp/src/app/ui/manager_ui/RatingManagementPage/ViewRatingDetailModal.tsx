@@ -53,7 +53,7 @@ export function ViewRatingDetailModal({
         ]}
         loading={specialUIState.isLoading}
         closeIcon={null}
-        width={700}
+        width={800}
       >
         <Grid
           className="text-sm"
@@ -82,10 +82,16 @@ export function ViewRatingDetailModal({
                 </Space>
               </div>
               <div>
-                <Space direction="horizontal" size={3}>
+                <Space
+                  direction="horizontal"
+                  size={3}
+                  className="flex items-start"
+                >
                   <EnvironmentFilled />
-                  <strong>Địa chỉ:</strong>
-                  <span>{feedbackState.currentFeedback.customerAddress}</span>
+                  <strong className="whitespace-nowrap">Địa chỉ:</strong>
+                  <span className="break-words">
+                    {feedbackState.currentFeedback.customerAddress}
+                  </span>
                 </Space>
               </div>
               <div>

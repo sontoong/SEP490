@@ -26,10 +26,10 @@ export default function Tiptap(props: TextEditorProps) {
     },
     editorProps: {
       attributes: {
-        class: `px-3 transition duration-300 min-h-[150px] cursor-text rounded-md border border-gray-200 border-solid   hover:ring-1 focus-within:outline-none focus-within:ring-1 ring-primary text-[16px] ${
+        class: `px-3 transition duration-300 min-h-[150px] cursor-text rounded-lg border border-gray-200 border-solid hover:ring-1 focus-within:outline-none ring-primary text-[16px] ${
           status === "error"
-            ? "border-red-500 focus-within:ring-red-500"
-            : "border-gray-200 ring-primary"
+            ? "!ring-[#ff4d4f] border-[#ff4d4f] hover:border-red-300 hover:ring-0 focus-within:!border-[#ff4d4f]"
+            : "border-gray-200 ring-primary focus-within:ring-1"
         }`,
       },
     },

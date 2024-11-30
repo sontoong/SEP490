@@ -68,7 +68,7 @@ export default function ContractManagementPage() {
     },
     {
       title: "Khách hàng",
-      dataIndex: ["getCusInfo", "0", "fullName"],
+      dataIndex: ["getCusInfo", "fullName"],
     },
     {
       title: "Thanh toán vào",
@@ -78,14 +78,27 @@ export default function ContractManagementPage() {
       sortDirections: ["descend"],
     },
     {
+      title: "Tổng lần sửa",
+      dataIndex: ["item", "numOfRequest"],
+    },
+    {
       title: "Lần sửa còn",
       dataIndex: ["item", "remainingNumOfRequests"],
+    },
+    {
+      title: "Hạn sử dụng",
+      dataIndex: ["item", "expireDate"],
+      render: (value) => <div>{formatDateToLocal(value)}</div>,
     },
     {
       title: "Trạng thái",
       render: (_, { item }) => {
         return (
-          <div>{contractStatusGenerator(item.remainingNumOfRequests)}</div>
+          <div>
+            {contractStatusGenerator({
+              remaining: item.remainingNumOfRequests,
+            })}
+          </div>
         );
       },
     },

@@ -133,11 +133,12 @@ export const getTodaysOrdersPaginated = createAsyncThunk<
   any,
   GetTodaysOrderPaginatedParams
 >("order/fetch/getTodaysOrdersPaginated", async (data, { rejectWithValue }) => {
-  const { PageIndex, Pagesize } = data;
+  const { PageIndex, Pagesize, Date } = data;
   try {
     const response = await agent.Order.getTodaysOrdersPaginated({
       PageIndex,
       Pagesize,
+      Date,
     });
     return response;
   } catch (error) {
@@ -215,6 +216,7 @@ export type GetAllOrderPaginatedParams = {
 export type GetTodaysOrderPaginatedParams = {
   PageIndex: number;
   Pagesize: number;
+  Date: string;
 };
 
 export type GetOrderParams = {

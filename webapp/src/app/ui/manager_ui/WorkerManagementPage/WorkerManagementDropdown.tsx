@@ -34,7 +34,7 @@ const WorkerManagementDropdown = ({
     },
     {
       key: "2",
-      label: "Giao cho Leader",
+      label: "Giao cho Trưởng nhóm",
       onClick: () => setIsChangeLeaderModalOpen(true),
       icon: <EditOutlined />,
     },
@@ -85,7 +85,11 @@ const WorkerManagementDropdown = ({
                   </Space>
                 </div>
                 <div>
-                  <Space direction="horizontal" size={3}>
+                  <Space
+                    direction="horizontal"
+                    size={3}
+                    className="flex items-start"
+                  >
                     <MailFilled />
                     <strong>Email:</strong>
                     <span className="break-all">{record.item.email}</span>

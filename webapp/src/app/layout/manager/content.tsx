@@ -21,19 +21,20 @@ export default function MyContent({ children }: { children: React.ReactNode }) {
             />
           </div>
         )}
-        <div className="flex items-center pb-10">
-          {currentPath.title && (
+        {currentPath.title && (
+          <div className="flex items-center pb-10">
             <div className="text-5xl font-semibold text-primary">
               {currentPath.title}
             </div>
-          )}
-          <Space className="ml-5">
-            {currentPath.actions &&
-              currentPath.actions.map((action: React.ReactNode, index) => (
-                <React.Fragment key={index}>{action}</React.Fragment>
-              ))}
-          </Space>
-        </div>
+
+            <Space className="ml-5">
+              {currentPath.actions &&
+                currentPath.actions.map((action: React.ReactNode, index) => (
+                  <React.Fragment key={index}>{action}</React.Fragment>
+                ))}
+            </Space>
+          </div>
+        )}
         <main className="justify-center bg-white">{children}</main>
       </div>
     </Content>

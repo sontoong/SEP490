@@ -61,17 +61,40 @@ export const formatDate = (isoString: string) => {
 
 export const formatDateToLocal = (
   dateStr?: string,
+  includeTime?: boolean,
   locale: string = "vi-VN",
 ) => {
   if (isNonValue(dateStr)) return "";
 
   const date = new Date(dateStr);
-  const options: Intl.DateTimeFormatOptions = {
+
+  if (includeTime) {
+    const timeOptions: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    };
+
+    const formatter = new Intl.DateTimeFormat(locale, timeOptions);
+    const formatted = formatter.format(date);
+
+    const formattedWithComma = formatted.replace(
+      /(\d{2}:\d{2}:\d{2})\s(\d{2}\/\d{2}\/\d{4})/,
+      "$1, $2",
+    );
+    return formattedWithComma;
+  }
+
+  const dayOptions: Intl.DateTimeFormatOptions = {
     day: "numeric",
     month: "short",
     year: "numeric",
   };
-  const formatter = new Intl.DateTimeFormat(locale, options);
+  const formatter = new Intl.DateTimeFormat(locale, dayOptions);
   return formatter.format(date);
 };
 

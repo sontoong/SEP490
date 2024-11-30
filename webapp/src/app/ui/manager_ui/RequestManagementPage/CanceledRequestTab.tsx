@@ -51,12 +51,16 @@ export default function CanceledRequestTab(props: NewRequestTabProps) {
     {
       title: "Bắt đầu",
       dataIndex: ["request", "start"],
-      render: (value) => <div>{formatDateToLocal(value)}</div>,
+      render: (value) => (
+        <div>{value ? formatDateToLocal(value, true) : "N/A"}</div>
+      ),
     },
     {
       title: "Kết thúc",
       dataIndex: ["request", "end"],
-      render: (value) => <div>{value ? formatDateToLocal(value) : "N/A"}</div>,
+      render: (value) => (
+        <div>{value ? formatDateToLocal(value, true) : "N/A"}</div>
+      ),
     },
     {
       title: "Trạng thái",

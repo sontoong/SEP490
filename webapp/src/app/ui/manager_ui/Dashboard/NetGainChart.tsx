@@ -4,5 +4,15 @@ import { useDashboard } from "../../../hooks/useDashboard";
 export default function NetGainChart() {
   const { state } = useDashboard();
 
-  return <ColumnChart data={state.netGainChart} loading={state.isFetching} />;
+  return (
+    <div>
+      {/* <div className="mb-10 text-sm font-semibold">
+        Tổng cộng: {formatCurrency(state.netGainChart.total)}
+      </div> */}
+      <ColumnChart
+        data={state.netGainChart.values.chartValues}
+        loading={state.isFetching}
+      />
+    </div>
+  );
 }

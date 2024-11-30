@@ -34,6 +34,8 @@ const Account = {
   getAllWorkerPaginated: (params: any) =>
     userRequests.get(`${ACCOUNT_BASE}/19`, params),
   getAllFreeLeaders: () => userRequests.get(`${ACCOUNT_BASE}/21`),
+  getAllWorkerFromLeader: (params: any) =>
+    userRequests.get(`${ACCOUNT_BASE}/22`, params),
 };
 
 const APARTMENT_BASE = "apartment";

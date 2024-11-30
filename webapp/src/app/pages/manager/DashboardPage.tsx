@@ -63,7 +63,7 @@ export default function DashboardPage() {
           <div className="text-5xl font-semibold text-primary">Thống kê</div>
           <Row gutter={20}>
             <Col span={18}>
-              <Card title="Trung bình doanh thu năm nay">
+              <Card title="Số lần sử dụng dịch vụ năm nay">
                 <RevenueChart />
               </Card>
             </Col>
@@ -89,13 +89,13 @@ export default function DashboardPage() {
         </Space>
         <Space direction="vertical" size={20} className="relative w-full">
           <div className="text-5xl font-semibold text-primary">
-            Danh sách yêu cầu trong hôm nay
+            Danh sách yêu cầu hôm nay
           </div>
           <TodaysRequestTable setDrawerOpen={setOpen} />
         </Space>
         <Space direction="vertical" size={20} className="relative w-full">
           <div className="text-5xl font-semibold text-primary">
-            Danh sách đơn hàng trong hôm nay
+            Danh sách đơn hàng hôm nay
           </div>
           <TodaysOrderTab />
         </Space>

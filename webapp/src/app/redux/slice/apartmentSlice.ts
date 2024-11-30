@@ -35,6 +35,7 @@ const initialState: TApartment = {
     leaderId: "",
     managementCompany: "",
     name: "",
+    roomIds: [],
   },
   currentRoomList: { rooms: [], total: 0 },
   isFetching: false,

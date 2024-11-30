@@ -19,6 +19,7 @@ export function useDashboard() {
     async (value: GetStatisticsParams) => {
       const resultAction = await dispatch(getStatistics(value));
       if (getStatistics.fulfilled.match(resultAction)) {
+        //Pie Chart
         const revenueChart: PieChartValue[] = resultAction.payload[0]
           .map((item: any) => {
             if (item.x === new Date().getFullYear()) {
@@ -30,6 +31,20 @@ export function useDashboard() {
             return null;
           })
           .filter((item: any) => item !== null);
+
+        const revenueLabelValues: PieChartValue[] = resultAction.payload[0]
+          .map((item: any) => {
+            if (item.x === new Date().getFullYear()) {
+              return {
+                name: item.name,
+                value: item.u,
+              };
+            }
+            return null;
+          })
+          .filter((item: any) => item !== null);
+
+        //Column Chart
         const netGainChart: ColumnChartValue[] = resultAction.payload[0].map(
           (item: any) => {
             return {
@@ -40,8 +55,35 @@ export function useDashboard() {
           },
         );
 
-        dispatch(setRevenueChart(revenueChart));
-        dispatch(setNetGainChart(netGainChart));
+        dispatch(
+          setRevenueChart({
+            values: {
+              chartValues: revenueChart,
+              labelValues: revenueLabelValues,
+            },
+            total: resultAction.payload[0].map((item: any) => {
+              if (item.x === new Date().getFullYear()) {
+                return {
+                  total: item.v,
+                };
+              }
+              return null;
+            })[0].total,
+          }),
+        );
+        dispatch(
+          setNetGainChart({
+            values: { chartValues: netGainChart, labelValues: [] },
+            total: resultAction.payload[0].map((item: any) => {
+              if (item.x === new Date().getFullYear()) {
+                return {
+                  total: item.r,
+                };
+              }
+              return null;
+            })[0].total,
+          }),
+        );
         dispatch(setExtraStats(resultAction.payload[1]));
       } else {
         if (resultAction.payload) {

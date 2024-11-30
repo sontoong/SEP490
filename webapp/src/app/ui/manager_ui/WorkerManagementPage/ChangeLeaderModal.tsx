@@ -74,7 +74,7 @@ export default function ChangeLeaderModal({
       title={
         <Space className="text-base">
           <EditOutlined />
-          <div className="uppercase text-secondary">Giao cho trưởng nhóm</div>
+          <div className="uppercase text-secondary">Chọn trưởng nhóm</div>
         </Space>
       }
       open={open}

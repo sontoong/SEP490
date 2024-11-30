@@ -16,6 +16,7 @@ export default function TodaysOrderTab() {
     handleGetTodaysOrderPaginated({
       PageIndex: currentPage,
       Pagesize: currentPageSize,
+      Date: new Date().toISOString(),
     });
   }, [currentPage, currentPageSize, handleGetTodaysOrderPaginated]);
 
@@ -42,7 +43,7 @@ export default function TodaysOrderTab() {
     {
       title: "Ngày đặt",
       dataIndex: ["order", "purchaseTime"],
-      render: (value) => <div>{formatDateToLocal(value)}</div>,
+      render: (value) => <div>{formatDateToLocal(value, true)}</div>,
       sorter: true,
       sortDirections: ["ascend"],
     },

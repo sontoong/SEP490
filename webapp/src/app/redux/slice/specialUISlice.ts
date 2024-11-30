@@ -14,6 +14,7 @@ export const excludedActions = [
   "feedback/fetch/getFeedbackDetails",
   "request/fetch/getDetailsOfRequest",
   "request/fetch/getCurrentPriceOfRequest",
+  "account/fetch/getAllWorkerFromLeader",
 ];
 export const excludedActionsPending = excludedActions.map(
   (action) => `${action}/pending`,

@@ -5,8 +5,14 @@ import { excludedActionsPending } from "./specialUISlice";
 import { ColumnChartValue, PieChartValue } from "../../models/chart";
 
 export type TDashboard = {
-  netGainChart: ColumnChartValue[];
-  revenueChart: PieChartValue[];
+  netGainChart: {
+    values: { chartValues: ColumnChartValue[]; labelValues: object[] };
+    total: number;
+  };
+  revenueChart: {
+    values: { chartValues: PieChartValue[]; labelValues: object[] };
+    total: number;
+  };
   extraStats: {
     name: string;
     currentMonthCount: number;
@@ -18,8 +24,8 @@ export type TDashboard = {
 };
 
 const initialState: TDashboard = {
-  netGainChart: [],
-  revenueChart: [],
+  netGainChart: { values: { chartValues: [], labelValues: [] }, total: 0 },
+  revenueChart: { values: { chartValues: [], labelValues: [] }, total: 0 },
   extraStats: [],
   isFetching: false,
   isSending: false,

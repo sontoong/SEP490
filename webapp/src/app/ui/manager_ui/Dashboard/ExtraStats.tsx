@@ -35,14 +35,32 @@ export default function ExtraStats() {
               <Card
                 key={index}
                 title={
-                  <>
-                    Số <span className="lowercase">{item.name}</span> mới tháng{" "}
-                    {new Date().getMonth() + 1}
-                  </>
+                  item.name === "Yêu cầu" ? (
+                    <>
+                      Số <span className="lowercase">{item.name}</span> mới
+                      tháng {new Date().getMonth() + 1}
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      Số lần mua <span className="lowercase">
+                        {item.name}
+                      </span>{" "}
+                      mới tháng {new Date().getMonth() + 1}
+                    </>
+                  )
                 }
               >
                 <Statistic
-                  title={<div>{`${item.currentMonthCount} ${item.name}`}</div>}
+                  title={
+                    <>
+                      {item.currentMonthCount}{" "}
+                      <span className="lowercase">{item.name}</span> (
+                      {item.previousMonthCount}{" "}
+                      <span className="lowercase">{item.name}</span> tháng
+                      trước)
+                    </>
+                  }
                   value={item.change}
                   precision={2}
                   valueStyle={{ color: color }}

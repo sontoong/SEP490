@@ -21,6 +21,7 @@ export default function TodaysRequestTable(props: TodaysRequestTableProps) {
     handleGetAllTodaysRequestsPaginated({
       PageIndex: currentPage,
       Pagesize: currentPageSize,
+      Date: new Date().toISOString(),
     });
   }, [currentPage, currentPageSize, handleGetAllTodaysRequestsPaginated]);
 
@@ -43,7 +44,7 @@ export default function TodaysRequestTable(props: TodaysRequestTableProps) {
     {
       title: "Bắt đầu",
       dataIndex: ["request", "start"],
-      render: (value) => <div>{formatDateToLocal(value)}</div>,
+      render: (value) => <div>{formatDateToLocal(value, true)}</div>,
     },
     {
       title: "Kết thúc",

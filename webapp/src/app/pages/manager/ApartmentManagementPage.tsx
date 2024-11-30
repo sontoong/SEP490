@@ -1,7 +1,7 @@
 import { EnvironmentFilled } from "@ant-design/icons";
 import { Form } from "../../components/form";
 import { useTitle } from "../../hooks/useTitle";
-import { Space, TableColumnsType, Typography } from "antd";
+import { Drawer, Space, TableColumnsType, Typography } from "antd";
 import { Avatar } from "../../components/avatar";
 import { Table } from "../../components/table";
 import { Apartment } from "../../models/apartment";
@@ -13,6 +13,8 @@ import { useApartment } from "../../hooks/useApartment";
 import { usePagination } from "../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
 import htmlParse from "../../utils/htmlParser";
+import ApartmentDetails from "../../ui/manager_ui/ApartmentManagementPage/ApartmentDetails/ApartmentDetails";
+import { useSpecialUI } from "../../hooks/useSpecialUI";
 
 const { Paragraph } = Typography;
 
@@ -22,10 +24,13 @@ export default function ApartmentManagementPage() {
     paths: [{ title: "Danh sách chung cư", path: "/apartments" }],
   });
   const [searchForm] = Form.useForm();
-  const { state, handleGetAllApartmentsPaginated } = useApartment();
+  const { state: apartmentState, handleGetAllApartmentsPaginated } =
+    useApartment();
+  const { state: specialUIState } = useSpecialUI();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
     usePagination();
   const [searchByName, setSearchByName] = useState<string>();
+  const [open, setOpen] = useState(false);
 
   const fetchApartments = useCallback(() => {
     handleGetAllApartmentsPaginated({
@@ -96,12 +101,32 @@ export default function ApartmentManagementPage() {
     {
       title: "",
       key: "actions",
-      render: (_, record) => <ApartmentManagementDropdown apartment={record} />,
+      render: (_, record) => (
+        <ApartmentManagementDropdown
+          apartment={record}
+          setDrawerOpen={setOpen}
+        />
+      ),
     },
   ];
 
   return (
     <>
+      <Drawer
+        title="Thông tin chung cư"
+        placement="right"
+        open={open}
+        getContainer={false}
+        destroyOnClose
+        onClose={() => setOpen(false)}
+        width="100%"
+        style={{ height: "93vh" }}
+      >
+        <ApartmentDetails
+          loading={specialUIState.isLoading}
+          apartment={apartmentState.currentApartment}
+        />
+      </Drawer>
       <Space direction="vertical" size={20} className="w-full">
         <div className="flex justify-end">
           <CreateNewApartmentModalButton />
@@ -138,12 +163,12 @@ export default function ApartmentManagementPage() {
         </div>
         <Table
           columns={apartmentListColumns}
-          dataSource={state.currentApartmentList.apartments}
+          dataSource={apartmentState.currentApartmentList.apartments}
           rowKey={(record) => record.areaId}
-          loading={state.isFetching}
+          loading={apartmentState.isFetching}
           pagination={{
             showSizeChanger: true,
-            total: state.currentApartmentList.total,
+            total: apartmentState.currentApartmentList.total,
             pageSize: currentPageSize,
             current: currentPage,
             onChange: (pageIndex, pageSize) => {

@@ -1,7 +1,7 @@
 import { PieChart } from "../../../components/charts";
 import { useDashboard } from "../../../hooks/useDashboard";
 
-export const RevenueChart = () => {
+export function RevenueChart() {
   const { state } = useDashboard();
 
   return (
@@ -20,4 +20,4 @@ export const RevenueChart = () => {
       />
     </>
   );
-};
+}

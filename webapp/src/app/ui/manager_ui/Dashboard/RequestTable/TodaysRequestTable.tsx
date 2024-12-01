@@ -1,14 +1,14 @@
-import { Table } from "../../../components/table";
+import { Table } from "../../../../components/table";
 import { TableColumnsType } from "antd";
-import { Request } from "../../../models/request";
+import { Request } from "../../../../models/request";
 import {
   requestStatusGenerator,
   requestTypeGenerator,
-} from "../../../utils/generators/requestStatus";
-import { formatDateToLocal } from "../../../utils/helpers";
+} from "../../../../utils/generators/requestStatus";
+import { formatDateToLocal } from "../../../../utils/helpers";
 import { EyeOutlined } from "@ant-design/icons";
-import { useRequest } from "../../../hooks/useRequest";
-import { usePagination } from "../../../hooks/usePagination";
+import { useRequest } from "../../../../hooks/useRequest";
+import { usePagination } from "../../../../hooks/usePagination";
 import { useCallback, useEffect } from "react";
 
 export default function TodaysRequestTable(props: TodaysRequestTableProps) {
@@ -29,7 +29,7 @@ export default function TodaysRequestTable(props: TodaysRequestTableProps) {
     fetchRequests();
   }, [fetchRequests]);
 
-  const contractListColumns: TableColumnsType<Request> = [
+  const todaysRequestListColumns: TableColumnsType<Request> = [
     {
       title: "Khách hàng",
       render: (_, { customer_Leader }) => (
@@ -75,7 +75,7 @@ export default function TodaysRequestTable(props: TodaysRequestTableProps) {
   ];
   return (
     <Table
-      columns={contractListColumns}
+      columns={todaysRequestListColumns}
       dataSource={state.todaysRequestList.requests}
       rowKey={(record) => record.request.requestId}
       loading={state.isFetching}

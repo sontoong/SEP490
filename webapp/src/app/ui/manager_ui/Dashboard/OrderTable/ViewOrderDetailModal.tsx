@@ -5,15 +5,15 @@ import {
   PhoneFilled,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import { Modal } from "../../../components/modals";
+import { Modal } from "../../../../components/modals";
 import { Space } from "antd";
-import { Avatar } from "../../../components/avatar";
-import { formatCurrency, formatDateToLocal } from "../../../utils/helpers";
-import { Grid } from "../../../components/grids";
-import { List } from "../../../components/list";
-import { PrimaryButton } from "../../../components/buttons";
-import { useOrder } from "../../../hooks/useOrder";
-import { useSpecialUI } from "../../../hooks/useSpecialUI";
+import { Avatar } from "../../../../components/avatar";
+import { formatCurrency, formatDateToLocal } from "../../../../utils/helpers";
+import { Grid } from "../../../../components/grids";
+import { List } from "../../../../components/list";
+import { PrimaryButton } from "../../../../components/buttons";
+import { useOrder } from "../../../../hooks/useOrder";
+import { useSpecialUI } from "../../../../hooks/useSpecialUI";
 
 export function ViewDetailButton({ orderId }: { orderId: string }) {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);

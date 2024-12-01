@@ -1,18 +1,21 @@
 import { Space } from "antd";
-import { Request } from "../../../../models/request";
+import { Request } from "../../../../../models/request";
 import {
   requestStatusGenerator,
   requestTypeGenerator,
-} from "../../../../utils/generators/requestStatus";
-import { formatCurrency, formatDateToLocal } from "../../../../utils/helpers";
-import { Avatar } from "../../../../components/avatar";
+} from "../../../../../utils/generators/requestStatus";
+import {
+  formatCurrency,
+  formatDateToLocal,
+} from "../../../../../utils/helpers";
+import { Avatar } from "../../../../../components/avatar";
 import { DownloadOutlined } from "@ant-design/icons";
-import { Collapse } from "../../../../components/collapse";
+import { Collapse } from "../../../../../components/collapse";
 import WorkerTable from "./WorkerTable";
-import { PrimaryButton } from "../../../../components/buttons";
+import { PrimaryButton } from "../../../../../components/buttons";
 import RequestProductList from "./RequestProductList";
 import { useEffect } from "react";
-import { Skeleton } from "../../../../components/skeletons";
+import { Skeleton } from "../../../../../components/skeletons";
 
 export default function RequestDetails({
   request,

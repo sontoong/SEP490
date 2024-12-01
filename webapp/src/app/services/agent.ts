@@ -78,6 +78,8 @@ const Product = {
   getProduct: (params: any) => saleRequests.get(`${PRODUCT_BASE}/4`, params),
   getAllProductPaginated: (params: any) =>
     saleRequests.get(`${PRODUCT_BASE}/5`, params),
+  getRevenueAndNumberOfPurchaseOfProduct: (params: any) =>
+    saleRequests.get(`${PRODUCT_BASE}/6`, params),
 };
 
 const SERVICEPAKAGE_BASE = "service-package";
@@ -104,6 +106,8 @@ const ServicePackage = {
     saleRequests.del(`${SERVICEPAKAGE_BASE}/10`, data),
   getAllContractsPaginated: (params: any) =>
     saleRequests.get(`${SERVICEPAKAGE_BASE}/14`, params),
+  getRevenueAndNumberOfPurchaseOfServicePackage: (params: any) =>
+    saleRequests.get(`${SERVICEPAKAGE_BASE}/18`, params),
 };
 
 //Requests.Api

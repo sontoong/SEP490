@@ -1,9 +1,9 @@
 import { Space } from "antd";
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import { List } from "../../../../components/list";
-import { Request } from "../../../../models/request";
-import { formatCurrency } from "../../../../utils/helpers";
-import { Avatar } from "../../../../components/avatar";
+import { List } from "../../../../../components/list";
+import { Request } from "../../../../../models/request";
+import { formatCurrency } from "../../../../../utils/helpers";
+import { Avatar } from "../../../../../components/avatar";
 
 export default function RequestProductList({
   products,

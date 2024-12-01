@@ -52,7 +52,7 @@ export function ViewRoomsModal({
     {
       title: "Khách hàng",
       render: (_, { customer, customerEmail }) => {
-        return (
+        return customerEmail ? (
           <div
             className="w-fit cursor-pointer"
             onClick={() => {
@@ -62,6 +62,8 @@ export function ViewRoomsModal({
           >
             {customerNameGenerator(customer)}
           </div>
+        ) : (
+          <div className="w-fit">{customerNameGenerator(customer)}</div>
         );
       },
     },

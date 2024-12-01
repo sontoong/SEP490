@@ -2,12 +2,13 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../services/agent";
 import { AxiosError } from "axios";
 import { excludedActionsPending } from "./specialUISlice";
-import { Product } from "../../models/product";
+import { Product, TopProduct } from "../../models/product";
 import { UploadImage } from "../../components/image-upload/image-upload";
 
 export type TProduct = {
   currentProductList: { products: Product[]; total: number };
   currentProduct: Product;
+  topProductList: TopProduct[];
   isFetching: boolean;
   isSending: boolean;
 };
@@ -26,6 +27,7 @@ const initialState: TProduct = {
     productPriceId: "",
     warantyMonths: undefined,
   },
+  topProductList: [],
   isFetching: false,
   isSending: false,
 };
@@ -45,6 +47,12 @@ const productSlice = createSlice({
       action: PayloadAction<TProduct["currentProduct"]>,
     ) => {
       state.currentProduct = action.payload;
+    },
+    setTopProductList: (
+      state,
+      action: PayloadAction<TProduct["topProductList"]>,
+    ) => {
+      state.topProductList = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -221,7 +229,32 @@ export const disableProduct = createAsyncThunk<any, DisableProductParams>(
   },
 );
 
-export const { setCurrentProductList, setCurrentProduct } =
+export const getRevenueAndNumberOfPurchaseOfProduct = createAsyncThunk<
+  any,
+  GetRevenueAndNumberOfPurchaseOfProductParams
+>(
+  "product/fetch/getRevenueAndNumberOfPurchaseOfProduct",
+  async (data, { rejectWithValue }) => {
+    const { NumOfTop, ProductId } = data;
+    try {
+      const response =
+        await agent.Product.getRevenueAndNumberOfPurchaseOfProduct({
+          NumOfTop,
+          ProductId,
+        });
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
+export const { setCurrentProductList, setCurrentProduct, setTopProductList } =
   productSlice.actions;
 
 export default productSlice.reducer;
@@ -235,6 +268,11 @@ export type GetAllProductPaginatedParams = {
 };
 
 export type GetProductParams = {
+  ProductId: string;
+};
+
+export type GetRevenueAndNumberOfPurchaseOfProductParams = {
+  NumOfTop: number;
   ProductId: string;
 };
 

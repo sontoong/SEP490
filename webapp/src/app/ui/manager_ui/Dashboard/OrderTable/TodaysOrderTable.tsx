@@ -1,13 +1,13 @@
-import { Table } from "../../../components/table";
+import { Table } from "../../../../components/table";
 import { TableColumnsType } from "antd";
-import { formatCurrency, formatDateToLocal } from "../../../utils/helpers";
-import { Order } from "../../../models/order";
+import { formatCurrency, formatDateToLocal } from "../../../../utils/helpers";
+import { Order } from "../../../../models/order";
 import { ViewDetailButton } from "./ViewOrderDetailModal";
-import { useOrder } from "../../../hooks/useOrder";
-import { usePagination } from "../../../hooks/usePagination";
+import { useOrder } from "../../../../hooks/useOrder";
+import { usePagination } from "../../../../hooks/usePagination";
 import { useCallback, useEffect } from "react";
 
-export default function TodaysOrderTab() {
+export default function TodaysOrderTable() {
   const { state, handleGetTodaysOrderPaginated } = useOrder();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
     usePagination();
@@ -24,7 +24,7 @@ export default function TodaysOrderTab() {
     fetchOrders();
   }, [fetchOrders]);
 
-  const contractListColumns: TableColumnsType<Order> = [
+  const todaysOrderListColumns: TableColumnsType<Order> = [
     {
       title: "Mã đơn hàng",
       dataIndex: ["order", "orderId"],
@@ -62,7 +62,7 @@ export default function TodaysOrderTab() {
   return (
     <>
       <Table
-        columns={contractListColumns}
+        columns={todaysOrderListColumns}
         dataSource={state.currentOrderList.orders}
         rowKey={(record) => record.order?.orderId}
         loading={state.isFetching}

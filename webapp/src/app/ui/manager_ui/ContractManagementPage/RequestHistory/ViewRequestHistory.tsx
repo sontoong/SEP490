@@ -1,7 +1,7 @@
-import { Button, Empty, Space } from "antd";
+import { Empty, Space } from "antd";
 import { Modal } from "../../../../components/modals";
 import { Contract } from "../../../../models/contract";
-import { HistoryOutlined } from "@ant-design/icons";
+import { HistoryOutlined, RightOutlined } from "@ant-design/icons";
 import { PrimaryButton } from "../../../../components/buttons";
 import { formatDateToLocal } from "../../../../utils/helpers";
 import { useRequest } from "../../../../hooks/useRequest";
@@ -26,6 +26,7 @@ export default function ViewRequestHistoryModal({
 
   return (
     <>
+      {/* Model request list */}
       <Modal
         title={
           <Space className="text-base">
@@ -48,21 +49,28 @@ export default function ViewRequestHistoryModal({
         {contract.requestIdList.length ? (
           <Space direction="vertical" className="w-full text-sm">
             {contract.requestIdList.map((request, index) => (
-              <Button
+              <div
                 key={index}
-                type="default"
-                block
-                size="large"
+                className="flex cursor-pointer justify-between rounded-lg p-3 hover:bg-gray-100"
                 onClick={() => handleViewDetail(request.requestId)}
               >
-                {formatDateToLocal(request.start)}
-              </Button>
+                <div className="w-full">
+                  <div className="w-1/4">
+                    Yêu cầu {contract.requestIdList.length - index}
+                  </div>
+                  <div className="w-3/4">
+                    {formatDateToLocal(request.start)}
+                  </div>
+                </div>
+                <RightOutlined />
+              </div>
             ))}
           </Space>
         ) : (
           <Empty />
         )}
       </Modal>
+      {/* Modal request details */}
       <Modal
         title={
           <Space className="text-base">

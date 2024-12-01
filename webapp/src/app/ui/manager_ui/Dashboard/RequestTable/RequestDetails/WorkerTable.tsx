@@ -1,9 +1,9 @@
 import { Space, TableColumnsType } from "antd";
 import { StarFilled } from "@ant-design/icons";
-import { Avatar } from "../../../../components/avatar";
-import { Table } from "../../../../components/table";
-import { Request } from "../../../../models/request";
-import { User } from "../../../../models/user";
+import { Avatar } from "../../../../../components/avatar";
+import { Table } from "../../../../../components/table";
+import { Request } from "../../../../../models/request";
+import { User } from "../../../../../models/user";
 
 export default function WorkerTable({
   workers,

@@ -201,7 +201,7 @@ export default function UpdateApartmentModal({
               },
             ]}
           >
-            <TextEditor placeholder="Nhập mô tả" />
+            <TextEditor placeholder="Nhập mô tả" limit={250} />
           </Form.Item>
           <Space direction="vertical" className="w-full" size={0}>
             <Form.Item

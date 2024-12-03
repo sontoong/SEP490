@@ -8,28 +8,33 @@ import { Avatar } from "../../../components/avatar";
 import { ToolOutlined } from "@ant-design/icons";
 import { formatCurrency } from "../../../utils/helpers";
 import { PrimaryButton } from "../../../components/buttons";
-import htmlParse from "../../../utils/htmlParser";
 
-export default function ViewProductDetailsModal({
+export default function ViewProductStatisticsModal({
   open = false,
   setIsModalOpen,
   product,
 }: ViewProductModalProps) {
-  const { state, handleGetProduct } = useProduct();
+  const { state: productState, handleGetRevenueAndNumberOfPurchaseOfProduct } =
+    useProduct();
   const { state: specialUIState } = useSpecialUI();
 
   useEffect(() => {
     if (open) {
-      handleGetProduct({ ProductId: product.productId });
+      handleGetRevenueAndNumberOfPurchaseOfProduct({
+        ProductId: product.productId,
+        NumOfTop: 1,
+      });
     }
-  }, [handleGetProduct, product.productId, open]);
+  }, [handleGetRevenueAndNumberOfPurchaseOfProduct, product.productId, open]);
+
+  const topProduct = productState.topProductList[0] || {};
 
   return (
     <Modal
       title={
         <Space className="text-base">
           <ToolOutlined />
-          <div className="uppercase text-secondary">Thông tin sản phẩm</div>
+          <div className="uppercase text-secondary">Thống kê sản phẩm</div>
         </Space>
       }
       open={open}
@@ -49,37 +54,33 @@ export default function ViewProductDetailsModal({
         <Space direction="vertical" size={5} className="w-full">
           <div className="flex gap-5">
             <div>
-              <Avatar
-                src={state.currentProduct.imageUrl}
-                size={200}
-                shape="square"
-              />
+              <Avatar src={product.imageUrl} size={200} shape="square" />
             </div>
             <div>
               <div>
                 <span className="font-bold">Tên sản phẩm: </span>
-                {state.currentProduct.name}
+                {product.name}
               </div>
               <div>
                 <span className="font-bold">Giá hiện tại: </span>
-                {formatCurrency(state.currentProduct.priceByDate)}
+                {formatCurrency(product.priceByDate)}
               </div>
               <div>
                 <span className="font-bold">Số lượng trong kho: </span>
-                {state.currentProduct.inOfStock}
-              </div>
-              <div>
-                <span className="font-bold">Bảo hành: </span>
-                {state.currentProduct.warantyMonths} tháng
+                {product.inOfStock}
               </div>
             </div>
           </div>
-        </Space>
-        <Space direction="vertical" size={5}>
-          <div>
-            <div className="font-bold">Mô tả: </div>
-            {htmlParse(state.currentProduct.description)}
-          </div>
+          <Space size={25} className="flex w-full justify-between">
+            <div>
+              <span className="font-bold">Số lượng đã bán: </span>
+              {topProduct.totalPurchasedQuantity || 0}
+            </div>
+            <div>
+              <span className="font-bold">Tổng doanh thu: </span>
+              {formatCurrency(topProduct.totalRevenue)}
+            </div>
+          </Space>
         </Space>
       </Space>
     </Modal>

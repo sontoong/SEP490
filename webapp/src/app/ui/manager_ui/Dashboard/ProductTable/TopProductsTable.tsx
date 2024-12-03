@@ -5,10 +5,12 @@ import { useCallback, useEffect } from "react";
 import { Avatar } from "../../../../components/avatar";
 import { useProduct } from "../../../../hooks/useProduct";
 import { TopProduct } from "../../../../models/product";
+import { useSpecialUI } from "../../../../hooks/useSpecialUI";
 
 export default function TopProductsTable() {
   const { state: productState, handleGetRevenueAndNumberOfPurchaseOfProduct } =
     useProduct();
+  const { state: specialUIState } = useSpecialUI();
 
   const fetchTopProducts = useCallback(() => {
     handleGetRevenueAndNumberOfPurchaseOfProduct({
@@ -64,7 +66,7 @@ export default function TopProductsTable() {
         columns={topProductListColumns}
         dataSource={productState.topProductList}
         rowKey={(record) => record.productId}
-        loading={productState.isFetching}
+        loading={specialUIState.isLoading}
         pagination={{ hideOnSinglePage: true }}
       />
     </>

@@ -1,11 +1,12 @@
+import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
+import CharacterCount from "@tiptap/extension-character-count";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import TextEditorMenuBar from "./tiptap-menubar";
-import { useEffect } from "react";
-import Placeholder from "@tiptap/extension-placeholder";
-import { Form } from "../form";
 import clsx from "clsx";
+import { useEffect } from "react";
+import { Form } from "../form";
+import TextEditorMenuBar from "./tiptap-menubar";
 
 export default function Tiptap(props: TextEditorProps) {
   const { status } = Form.Item.useStatus();
@@ -27,6 +28,9 @@ export default function Tiptap(props: TextEditorProps) {
         emptyEditorClass:
           "cursor-text before:content-[attr(data-placeholder)] before:absolute before:top-4 before:left-3 before:text-slate-400 before:text-[16px] before:opacity-50 before-pointer-events-none",
       }),
+      CharacterCount.configure({
+        limit: props.limit,
+      }),
     ],
     content: props.value,
     onUpdate: ({ editor }) => {
@@ -46,10 +50,20 @@ export default function Tiptap(props: TextEditorProps) {
     }
   }, [editor, props.value]);
 
+  if (!editor) {
+    return null;
+  }
+
   return (
     <div>
       <TextEditorMenuBar editor={editor} />
       <EditorContent editor={editor} />
+      {props.limit && (
+        <div>
+          {editor.storage.characterCount.characters()} / {props.limit}{" "}
+          characters
+        </div>
+      )}
     </div>
   );
 }
@@ -58,4 +72,5 @@ type TextEditorProps = {
   value?: string;
   onChange?: (content: string) => void;
   placeholder?: string;
+  limit?: number;
 };

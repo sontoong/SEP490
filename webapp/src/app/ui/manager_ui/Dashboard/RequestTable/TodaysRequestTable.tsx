@@ -89,7 +89,7 @@ export default function TodaysRequestTable(props: TodaysRequestTableProps) {
           setPageSize(pageSize);
         },
         showTotal: (total, range) =>
-          `${range[0]}-${range[1]} trong tổng ${total} trưởng nhóm`,
+          `${range[0]}-${range[1]} trong tổng ${total} yêu cầu`,
         pageSizeOptions: [5, 10, 20, 50, 100],
       }}
     />

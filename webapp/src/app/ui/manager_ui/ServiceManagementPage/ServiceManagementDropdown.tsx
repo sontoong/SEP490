@@ -1,10 +1,16 @@
-import { EditOutlined, EllipsisOutlined, EyeOutlined } from "@ant-design/icons";
+import {
+  BarChartOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+  EyeOutlined,
+} from "@ant-design/icons";
 import { MenuProps } from "antd";
 import { Dropdown } from "../../../components/dropdown";
 import { ServicePackage } from "../../../models/service";
 import { useState } from "react";
 import UpdateServiceModal from "./UpdateServiceModal";
 import ViewServicePackageDetailsModal from "./ViewServicePackageDetailsModal";
+import ViewServicePackageStatisticsModal from "./ViewServicePackageStatisticsModal";
 
 const ServiceManagementDropdown = ({
   record,
@@ -14,6 +20,10 @@ const ServiceManagementDropdown = ({
   fetchServicePackage: any;
 }) => {
   const [isChangeLeaderModalOpen, setIsChangeLeaderModalOpen] = useState(false);
+  const [
+    isViewServicePackageStatisticsModalOpen,
+    setIsViewServicePackageStatisticsModalOpen,
+  ] = useState(false);
   const [isViewServicePackageModalOpen, setIsViewServicePackageModalOpen] =
     useState(false);
 
@@ -29,6 +39,12 @@ const ServiceManagementDropdown = ({
       label: "Chỉnh sửa",
       onClick: () => setIsChangeLeaderModalOpen(true),
       icon: <EditOutlined />,
+    },
+    {
+      key: "3",
+      label: "Xem thống kê",
+      onClick: () => setIsViewServicePackageStatisticsModalOpen(true),
+      icon: <BarChartOutlined />,
     },
   ];
 
@@ -46,6 +62,11 @@ const ServiceManagementDropdown = ({
       <ViewServicePackageDetailsModal
         open={isViewServicePackageModalOpen}
         setIsModalOpen={setIsViewServicePackageModalOpen}
+        servicePackage={record}
+      />
+      <ViewServicePackageStatisticsModal
+        open={isViewServicePackageStatisticsModalOpen}
+        setIsModalOpen={setIsViewServicePackageStatisticsModalOpen}
         servicePackage={record}
       />
     </>

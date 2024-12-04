@@ -80,7 +80,7 @@ export default function DashboardPage() {
           <Card
             title={
               <Space>
-                <div>Tổng thu nhập 3 tháng gần nhất</div>
+                <div>Tổng doanh thu 3 tháng gần nhất</div>
               </Space>
             }
           >
@@ -89,7 +89,7 @@ export default function DashboardPage() {
           <Card
             title={
               <Space>
-                <div>Tổng thu nhập theo từng năm</div>
+                <div>Tổng doanh thu theo từng năm</div>
                 <InputDate.RangePicker
                   disabledDate={disabledDate}
                   picker="year"

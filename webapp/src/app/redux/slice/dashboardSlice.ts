@@ -13,6 +13,10 @@ export type TDashboard = {
     values: { chartValues: PieChartValue[]; labelValues: object[] };
     total: number;
   };
+  revenueByMonthChart: {
+    values: { chartValues: ColumnChartValue[] };
+    total: number;
+  };
   extraStats: {
     name: string;
     currentMonthCount: number;
@@ -26,6 +30,7 @@ export type TDashboard = {
 const initialState: TDashboard = {
   netGainChart: { values: { chartValues: [], labelValues: [] }, total: 0 },
   revenueChart: { values: { chartValues: [], labelValues: [] }, total: 0 },
+  revenueByMonthChart: { values: { chartValues: [] }, total: 0 },
   extraStats: [],
   isFetching: false,
   isSending: false,
@@ -46,6 +51,12 @@ const dashboardSlice = createSlice({
       action: PayloadAction<TDashboard["revenueChart"]>,
     ) => {
       state.revenueChart = action.payload;
+    },
+    setRevenueByMonthChart: (
+      state,
+      action: PayloadAction<TDashboard["revenueByMonthChart"]>,
+    ) => {
+      state.revenueByMonthChart = action.payload;
     },
     setExtraStats: (state, action: PayloadAction<TDashboard["extraStats"]>) => {
       state.extraStats = action.payload;
@@ -121,12 +132,38 @@ export const getStatistics = createAsyncThunk<any, GetStatisticsParams>(
   },
 );
 
-export const { setNetGainChart, setRevenueChart, setExtraStats } =
-  dashboardSlice.actions;
+export const getStatisticsByMonth = createAsyncThunk<
+  any,
+  GetStatisticsByMonthParams
+>("dashboard/fetch/getStatisticsByMonth", async (data, { rejectWithValue }) => {
+  const { Num } = data;
+  try {
+    const response = await agent.Transaction.getStatisticsByMonth({ Num });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+});
+
+export const {
+  setNetGainChart,
+  setRevenueChart,
+  setExtraStats,
+  setRevenueByMonthChart,
+} = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;
 
 export type GetStatisticsParams = {
   StartYear?: string;
   EndYear?: string;
+};
+
+export type GetStatisticsByMonthParams = {
+  Num: number;
 };

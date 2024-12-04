@@ -1,4 +1,4 @@
-import { Col, Drawer, Row, Space } from "antd";
+import { Drawer, Space } from "antd";
 import { RangePickerProps } from "antd/es/date-picker";
 import dayjs from "dayjs";
 import { useCallback, useEffect, useState } from "react";
@@ -8,14 +8,13 @@ import { useDashboard } from "../../hooks/useDashboard";
 import { useRequest } from "../../hooks/useRequest";
 import { useSpecialUI } from "../../hooks/useSpecialUI";
 import { useTitle } from "../../hooks/useTitle";
-import ExtraStats from "../../ui/manager_ui/Dashboard/ExtraStats";
 import { NetGainChart } from "../../ui/manager_ui/Dashboard/NetGainChart";
-import { RevenueChart } from "../../ui/manager_ui/Dashboard/RevenueChart";
 import RequestDetails from "../../ui/manager_ui/Dashboard/RequestTable/RequestDetails/RequestDetails";
 import TodaysOrderTable from "../../ui/manager_ui/Dashboard/OrderTable/TodaysOrderTable";
 import TodaysRequestTable from "../../ui/manager_ui/Dashboard/RequestTable/TodaysRequestTable";
 import TopServicePackagesTable from "../../ui/manager_ui/Dashboard/ServicePackageTable/TopServicePackagesTable";
 import TopProductsTable from "../../ui/manager_ui/Dashboard/ProductTable/TopProductsTable";
+import { NetGainByMonthChart } from "../../ui/manager_ui/Dashboard/NetGainByMonthChart";
 
 const disabledDate: RangePickerProps["disabledDate"] = (current) => {
   return current < dayjs().startOf("year");
@@ -26,7 +25,7 @@ export default function DashboardPage() {
     tabTitle: "Dashboard - EWMH",
     paths: [{ title: "", path: "/dashboard" }],
   });
-  const { handleGetStatistics } = useDashboard();
+  const { handleGetStatistics, handleGetStatisticsByMonth } = useDashboard();
   const { state: requestState } = useRequest();
 
   const { state: specialUIState } = useSpecialUI();
@@ -42,7 +41,11 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchStatistics();
-  }, [fetchStatistics]);
+  }, [fetchStatistics, handleGetStatisticsByMonth]);
+
+  useEffect(() => {
+    handleGetStatisticsByMonth({ Num: 3 });
+  }, [handleGetStatisticsByMonth]);
 
   return (
     <>
@@ -64,7 +67,7 @@ export default function DashboardPage() {
       <Space direction="vertical" size={40} className="w-full">
         <Space direction="vertical" size={20} className="w-full">
           <div className="text-5xl font-semibold text-primary">Thống kê</div>
-          <Row gutter={20}>
+          {/* <Row gutter={20}>
             <Col span={18}>
               <Card title="Số lần sử dụng dịch vụ năm nay">
                 <RevenueChart />
@@ -73,11 +76,20 @@ export default function DashboardPage() {
             <Col span={6}>
               <ExtraStats />
             </Col>
-          </Row>
+          </Row> */}
           <Card
             title={
               <Space>
-                <div>Trung bình thu nhập từ</div>
+                <div>Tổng thu nhập 3 tháng gần nhất</div>
+              </Space>
+            }
+          >
+            <NetGainByMonthChart />
+          </Card>
+          <Card
+            title={
+              <Space>
+                <div>Tổng thu nhập theo từng năm</div>
                 <InputDate.RangePicker
                   disabledDate={disabledDate}
                   picker="year"

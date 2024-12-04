@@ -151,6 +151,8 @@ const STATISTIC_BASE = "Transaction";
 const Transaction = {
   getStatistics: (params: any) =>
     requestRequests.get(`${STATISTIC_BASE}/1`, params),
+  getStatisticsByMonth: (params: any) =>
+    requestRequests.get(`${STATISTIC_BASE}/3`, params),
 };
 
 const agent = {

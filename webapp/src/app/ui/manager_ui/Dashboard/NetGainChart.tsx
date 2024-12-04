@@ -1,8 +1,10 @@
 import { ColumnChart } from "../../../components/charts";
 import { useDashboard } from "../../../hooks/useDashboard";
+import { useSpecialUI } from "../../../hooks/useSpecialUI";
 
 export function NetGainChart() {
   const { state } = useDashboard();
+  const { state: specialUIState } = useSpecialUI();
 
   return (
     <div>
@@ -11,7 +13,7 @@ export function NetGainChart() {
       </div> */}
       <ColumnChart
         data={state.netGainChart.values.chartValues}
-        loading={state.isFetching}
+        loading={specialUIState.isLoading}
       />
     </div>
   );

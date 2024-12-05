@@ -94,13 +94,6 @@ export function ViewRatingDetailModal({
                   </span>
                 </Space>
               </div>
-              <div>
-                <Space direction="horizontal" size={3}>
-                  <PhoneFilled />
-                  <strong>SĐT:</strong>
-                  <span>{feedbackState.currentFeedback.customerPhone}</span>
-                </Space>
-              </div>
             </Space>,
             <Space direction="vertical" size={15} className="w-full">
               <div>

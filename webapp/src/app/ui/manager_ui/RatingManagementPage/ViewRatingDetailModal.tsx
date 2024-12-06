@@ -13,6 +13,7 @@ import { Feedback } from "../../../models/feedback";
 import { useFeedback } from "../../../hooks/useFeedback";
 import { useEffect } from "react";
 import { useSpecialUI } from "../../../hooks/useSpecialUI";
+import { formatDateToLocal } from "../../../utils/helpers";
 
 export function ViewRatingDetailModal({
   feedback,
@@ -103,6 +104,9 @@ export function ViewRatingDetailModal({
                   allowHalf
                   value={feedbackState.currentFeedback.rate}
                 />
+                <div className="text-sm text-gray-500">
+                  {formatDateToLocal(feedbackState.currentFeedback.time, true)}
+                </div>
               </div>
               <div>{feedbackState.currentFeedback.content}</div>
             </Space>,

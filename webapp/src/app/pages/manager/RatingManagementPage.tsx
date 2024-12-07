@@ -11,7 +11,7 @@ import { Card } from "../../components/card";
 import { useFeedback } from "../../hooks/useFeedback";
 import { usePagination } from "../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
-import { isNonValue } from "../../utils/helpers";
+import { formatDateToLocal, isNonValue } from "../../utils/helpers";
 import RequestDetails from "../../ui/manager_ui/RatingManagementPage/RequestDetails/RequestDetails";
 import { useRequest } from "../../hooks/useRequest";
 import { useSpecialUI } from "../../hooks/useSpecialUI";
@@ -108,6 +108,11 @@ export default function RatingManagementPage() {
           {value}
         </Paragraph>
       ),
+    },
+    {
+      title: "Thời gian",
+      dataIndex: "time",
+      render: (value) => formatDateToLocal(value, true),
     },
     {
       title: "Trạng thái",

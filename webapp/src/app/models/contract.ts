@@ -1,5 +1,3 @@
-import { Customer } from "./user";
-
 export type Contract = {
   item: {
     contractId: string;
@@ -8,18 +6,21 @@ export type Contract = {
     name: string;
     fileUrl: string;
     purchaseTime: string;
+    expireDate: string;
+    numOfRequest: number;
     remainingNumOfRequests: number;
     orderCode: string | null;
     isOnlinePayment: boolean;
     totalPrice: number;
   };
-  getCusInfo: (Customer & {
-    customers: {
-      customerId: string;
-      cmT_CCCD: string;
-      orders: [];
-      requests: [];
-      rooms: [];
-    };
-  })[];
+  getCusInfo: {
+    accountId: string;
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    avatarUrl: string;
+    dateOfBirth: string;
+    cmT_CCCD: string;
+  };
+  requestIdList: { requestId: string; start: string }[];
 };

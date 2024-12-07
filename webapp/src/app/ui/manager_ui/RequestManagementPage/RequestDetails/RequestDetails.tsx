@@ -57,8 +57,8 @@ export default function RequestDetails({
             </span>
           </div>
           <div>
-            <span className="font-bold">Ngày bắt đầu: </span>
-            <span>{formatDateToLocal(request?.request.start)}</span>
+            <span className="font-bold">Thời gian bắt đầu: </span>
+            <span>{formatDateToLocal(request?.request.start, true)}</span>
           </div>
         </Space>
         <Space direction="vertical" className="w-4/12 text-sm">

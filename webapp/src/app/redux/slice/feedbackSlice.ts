@@ -27,6 +27,7 @@ const initialState: TFeedback = {
     feedbackId: "",
     rate: 0,
     status: false,
+    time: "",
   },
   isFetching: false,
   isSending: false,

@@ -179,7 +179,7 @@ export default function VerifyCustomerModalButton({
             </Space>,
             <Space direction="vertical" size={15} className="w-full">
               <div className="text-lg font-bold uppercase">
-                Thông tin căn hộ
+                Thông tin đăng ký
               </div>
               <Space direction="vertical" size={10}>
                 <div>

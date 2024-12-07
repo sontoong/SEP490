@@ -7,6 +7,7 @@ export type Feedback = {
   content: string;
   rate: number;
   status: boolean;
+  time: string;
 };
 
 export type FeedbackDetails = {
@@ -19,4 +20,5 @@ export type FeedbackDetails = {
   content: string;
   rate: number;
   status: boolean;
+  time: string;
 };

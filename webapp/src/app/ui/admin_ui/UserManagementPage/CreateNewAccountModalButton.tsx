@@ -55,7 +55,7 @@ export default function CreateNewAccountModalButton() {
           <Space direction="horizontal" size={30} className="flex w-full">
             <Space direction="vertical" size={5}>
               <div>
-                <strong>email:</strong> {values.email}
+                <strong>Email:</strong> {values.email}
               </div>
               <div>
                 <strong>SĐT:</strong> {values.phoneNumber}

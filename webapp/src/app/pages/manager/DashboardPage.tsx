@@ -113,12 +113,12 @@ export default function DashboardPage() {
           </Card>
         </Space>
         <Space direction="vertical" size={20} className="relative w-full">
-          <Card title="Danh sách các mặt hàng nổi trội">
+          <Card title="Top 5 sản phẩm được mua nhiều nhất">
             <TopProductsTable />
           </Card>
         </Space>
         <Space direction="vertical" size={20} className="relative w-full">
-          <Card title="Danh sách các gói dịch vụ được mua nhiều nhất">
+          <Card title="Top 5 gói dịch vụ được mua nhiều nhất">
             <TopServicePackagesTable />
           </Card>
         </Space>

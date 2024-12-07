@@ -40,7 +40,7 @@ export function ViewWorkerDetailButton({ worker }: { worker: User }) {
           />,
         ]}
         closeIcon={null}
-        width={700}
+        width={750}
       >
         <Grid
           className="text-sm"

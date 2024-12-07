@@ -133,7 +133,7 @@ export default function UpdateServiceModal({
             },
           ]}
         >
-          <Input placeholder="Nhập tên gói dịch vụ" size="large" disabled />
+          <Input placeholder="Nhập tên gói dịch vụ" size="large" />
         </Form.Item>
         <Form.Item
           name="Description"
@@ -147,7 +147,7 @@ export default function UpdateServiceModal({
             },
           ]}
         >
-          <TextEditor placeholder="Nhập mô tả" limit={250} />
+          <TextEditor placeholder="Nhập mô tả" limit={200} />
         </Form.Item>
         <Form.Item
           name="NumOfRequest"
@@ -166,7 +166,6 @@ export default function UpdateServiceModal({
             placeholder="Nhập số lần sửa chữa"
             className="w-1/2"
             size="large"
-            disabled
           />
         </Form.Item>
         <Form.Item

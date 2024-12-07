@@ -34,7 +34,7 @@ const WorkerManagementDropdown = ({
     },
     {
       key: "2",
-      label: "Giao cho Trưởng nhóm",
+      label: "Chọn Trưởng nhóm",
       onClick: () => setIsChangeLeaderModalOpen(true),
       icon: <EditOutlined />,
     },
@@ -43,7 +43,7 @@ const WorkerManagementDropdown = ({
   function handleViewDetail() {
     modal.info({
       icon: <UserOutlined />,
-      width: 700,
+      width: 800,
       title: (
         <div className="text-sm uppercase text-secondary">
           Thông tin của {record.item?.fullName}

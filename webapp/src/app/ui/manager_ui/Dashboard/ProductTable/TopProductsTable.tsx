@@ -14,7 +14,7 @@ export default function TopProductsTable() {
 
   const fetchTopProducts = useCallback(() => {
     handleGetRevenueAndNumberOfPurchaseOfProduct({
-      NumOfTop: 3,
+      NumOfTop: 5,
       ProductId: "",
     });
   }, [handleGetRevenueAndNumberOfPurchaseOfProduct]);
@@ -25,7 +25,7 @@ export default function TopProductsTable() {
 
   const topProductListColumns: TableColumnsType<TopProduct> = [
     {
-      title: "Xếp hạng",
+      title: "Số thứ tự",
       dataIndex: "Id",
       render: (_, __, index) => <>{index + 1}</>,
     },

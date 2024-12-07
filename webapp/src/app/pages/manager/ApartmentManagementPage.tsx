@@ -68,7 +68,10 @@ export default function ApartmentManagementPage() {
             <div className="text-base font-bold">{name}</div>
             <Space>
               <EnvironmentFilled />
-              <Paragraph ellipsis={{ rows: 1 }} className="!m-0 text-sm">
+              <Paragraph
+                ellipsis={{ rows: 1 }}
+                className="!m-0 max-w-[250px] text-sm"
+              >
                 {address}
               </Paragraph>
             </Space>

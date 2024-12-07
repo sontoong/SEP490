@@ -152,7 +152,7 @@ export default function UpdateProductModal({
             },
           ]}
         >
-          <TextEditor placeholder="Nhập mô tả" limit={250} />
+          <TextEditor placeholder="Nhập mô tả" />
         </Form.Item>
         <Form.Item
           name="Price"

@@ -28,7 +28,7 @@ export default function WorkerTable({
       ),
     },
     {
-      title: "Vai trò",
+      title: "Chức vụ",
       dataIndex: "role",
       render: (_, record) => {
         if (record.accountId === leader.accountId) {

@@ -149,7 +149,11 @@ export default function UpdateApartmentModal({
               },
             ]}
           >
-            <Input placeholder="Nhập tên chung cư" size="large" />
+            <Input
+              placeholder="Nhập tên chung cư"
+              size="large"
+              maxLength={18}
+            />
           </Form.Item>
           <Form.Item
             name="Address"

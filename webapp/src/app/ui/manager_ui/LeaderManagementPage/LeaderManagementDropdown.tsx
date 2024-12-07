@@ -39,7 +39,7 @@ const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
   function handleViewDetail() {
     modal.info({
       icon: <UserOutlined />,
-      width: 700,
+      width: 800,
       title: (
         <div className="text-sm uppercase text-secondary">
           Thông tin của {record.fullName}

@@ -206,7 +206,7 @@ export default function CreateNewApartmentModalButton() {
               },
             ]}
           >
-            <TextEditor placeholder="Nhập mô tả" limit={250} />
+            <TextEditor placeholder="Nhập mô tả" limit={200} />
           </Form.Item>
           <Space direction="vertical" className="w-full" size={0}>
             <Form.Item

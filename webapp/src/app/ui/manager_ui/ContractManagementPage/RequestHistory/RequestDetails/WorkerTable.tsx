@@ -29,7 +29,7 @@ export default function WorkerTable({
     },
     {
       title: "SĐT",
-      dataIndex: "phoneNumber",
+      dataIndex: ["getWokerInfo", "phoneNumber"],
     },
     {
       title: "",

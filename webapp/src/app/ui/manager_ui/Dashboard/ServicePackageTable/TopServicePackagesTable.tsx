@@ -14,7 +14,7 @@ export default function TopServicePackageTable() {
 
   const fetchTopServicePackages = useCallback(() => {
     handleGetRevenueAndNumberOfPurchaseOfServicePackage({
-      NumOfTop: 3,
+      NumOfTop: 5,
       ServicePackageId: "",
     });
   }, [handleGetRevenueAndNumberOfPurchaseOfServicePackage]);
@@ -25,7 +25,7 @@ export default function TopServicePackageTable() {
 
   const topServiceListColumns: TableColumnsType<TopServicePackage> = [
     {
-      title: "Xếp hạng",
+      title: "Số thứ tự",
       dataIndex: "Id",
       render: (_, __, index) => <>{index + 1}</>,
     },

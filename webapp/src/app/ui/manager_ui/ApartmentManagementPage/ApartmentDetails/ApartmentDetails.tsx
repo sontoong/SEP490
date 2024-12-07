@@ -40,7 +40,14 @@ export default function ApartmentDetails({
   return (
     <Space direction="vertical" size={20} className="w-full">
       <div className="flex w-full gap-10">
-        <Image src={apartment.avatarUrl} preview={true} />
+        <div className="flex min-h-[500px] min-w-[500px] justify-center">
+          <Image
+            src={apartment.avatarUrl}
+            preview={true}
+            height={500}
+            className="object-contain"
+          />
+        </div>
         <Card>
           <Space direction="vertical" className="w-full text-sm" size={15}>
             <div>
@@ -68,7 +75,7 @@ export default function ApartmentDetails({
       </div>
       <Space direction="vertical" className="w-full">
         <div className="text-lg font-bold">
-          Ban quản lý và nhân viên chung cư
+          Thông tin của trưởng nhóm và nhân viên phục vụ cho chung cư
         </div>
         <WorkerTable
           leader={apartment.account}

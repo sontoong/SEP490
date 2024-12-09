@@ -5,48 +5,49 @@ import { Input } from "../../components/inputs";
 import { Table } from "../../components/table";
 import { useTitle } from "../../hooks/useTitle";
 import { statusGenerator } from "../../utils/generators/status";
-import { Leader } from "../../models/user";
-import LeaderManagementDropdown from "../../ui/manager_ui/LeaderManagementPage/LeaderManagementDropdown";
+import { Customer, User } from "../../models/user";
+import CustomerManagementDropdown from "../../ui/manager_ui/CustomerManagementPage/CustomerManagementDropdown";
 import { Modal } from "../../components/modals";
 import { WarningOutlined } from "@ant-design/icons";
 import { useAccount } from "../../hooks/useAccount";
 import { usePagination } from "../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
+import { ROLE } from "../../../constants/role";
 
-export default function LeaderManagementPage() {
-  // const { notification } = App.useApp();
+export default function CustomerManagementPage() {
   useTitle({
-    tabTitle: "Leaders - EWMH",
-    paths: [{ title: "Danh sách trưởng nhóm", path: "/leaders" }],
+    tabTitle: "Customers - EWMH",
+    paths: [{ title: "Danh sách khách hàng", path: "/customers" }],
   });
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();
   const [disableReasonForm] = Form.useForm();
-  const { state, handleGetAllLeaderPaginated, handleDisableUser } =
+  const { state, handleGetAllAccountPaginated, handleDisableUser } =
     useAccount();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
     usePagination();
   const [searchByName, setSearchByName] = useState<string>();
   const [tableParams, setTableParams] = useState<TableParams>();
 
-  const fetchLeaders = useCallback(() => {
-    handleGetAllLeaderPaginated({
+  const fetchCustomers = useCallback(() => {
+    handleGetAllAccountPaginated({
       PageIndex: currentPage,
       Pagesize: currentPageSize,
       SearchByEmail: searchByName,
       IsDisabled: tableParams?.filters?.isDisabled?.[0],
+      Role: ROLE.customer,
     });
   }, [
     currentPage,
     currentPageSize,
-    handleGetAllLeaderPaginated,
+    handleGetAllAccountPaginated,
     searchByName,
     tableParams?.filters?.isDisabled,
   ]);
 
   useEffect(() => {
-    fetchLeaders();
-  }, [fetchLeaders]);
+    fetchCustomers();
+  }, [fetchCustomers]);
 
   const initialValuesSearch = {
     searchString: "",
@@ -59,7 +60,7 @@ export default function LeaderManagementPage() {
 
   function handleConfirmLock(accountId: string) {
     const initialValuesDisableReason = {
-      disableReason: "",
+      disabledReason: "",
     };
 
     modal.confirm({
@@ -87,7 +88,7 @@ export default function LeaderManagementPage() {
           >
             <Form.Item
               noStyle
-              name="disableReason"
+              name="disabledReason"
               rules={[
                 {
                   type: "string",
@@ -108,7 +109,7 @@ export default function LeaderManagementPage() {
             disable: true,
             disabledReason: values.disabledReason,
           });
-          fetchLeaders();
+          fetchCustomers();
         });
       },
     });
@@ -133,12 +134,12 @@ export default function LeaderManagementPage() {
           disable: false,
           disabledReason: "",
         });
-        fetchLeaders();
+        fetchCustomers();
       },
     });
   }
 
-  const leaderListColumns: TableColumnsType<Leader> = [
+  const customerListColumns: TableColumnsType<User> = [
     {
       title: "Họ và Tên",
       dataIndex: "fullName",
@@ -157,40 +158,17 @@ export default function LeaderManagementPage() {
       dataIndex: "phoneNumber",
     },
     {
-      title: "Chung cư",
-      dataIndex: "name",
-    },
-    {
       title: "Trạng thái",
       dataIndex: "isDisabled",
-      render: (_, { isDisabled, accountId, areaId }) => {
-        return areaId ? (
+      render: (_, { isDisabled, accountId }) => {
+        return (
           <div
-          // className="w-fit cursor-pointer"
-          // onClick={() => {
-          //   notification.info({
-          //     message: "Trưởng nhóm có liên kết với chung cư",
-          //     description: (
-          //       <>
-          //         Vui lòng thay trưởng nhóm của chung cư{" "}
-          //         <span className="font-bold">{name}</span> để có thể vô
-          //         hiệu hóa tài khoản.
-          //       </>
-          //     ),
-          //     placement: "topRight",
-          //   });
-          // }}
-          >
-            {statusGenerator(isDisabled)}
-          </div>
-        ) : (
-          <div
-            className="w-fit cursor-pointer"
             onClick={() =>
               isDisabled
                 ? handleConfirmUnlock(accountId)
                 : handleConfirmLock(accountId)
             }
+            className="w-fit cursor-pointer"
           >
             {statusGenerator(isDisabled)}
           </div>
@@ -199,18 +177,22 @@ export default function LeaderManagementPage() {
       filters: [
         {
           text: "Hoạt động",
-          value: "false",
+          value: false,
         },
         {
           text: "Vô hiệu hóa",
-          value: "true",
+          value: true,
         },
       ],
     },
     {
+      title: "Ghi chú",
+      dataIndex: "disabledReason",
+    },
+    {
       title: "",
       key: "actions",
-      render: (_, record) => <LeaderManagementDropdown record={record} />,
+      render: (_, record) => <CustomerManagementDropdown record={record} />,
     },
   ];
 
@@ -248,13 +230,13 @@ export default function LeaderManagementPage() {
           </Form>
         </div>
         <Table
-          columns={leaderListColumns}
-          dataSource={state.currentLeaderList.users as Leader[]}
+          columns={customerListColumns}
+          dataSource={state.currentUserList.users as Customer[]}
           rowKey={(record) => record.accountId}
           loading={state.isFetching}
           pagination={{
             showSizeChanger: true,
-            total: state.currentLeaderList.total,
+            total: state.currentUserList.total,
             pageSize: currentPageSize,
             current: currentPage,
             onChange: (pageIndex, pageSize) => {
@@ -262,7 +244,7 @@ export default function LeaderManagementPage() {
               setPageSize(pageSize);
             },
             showTotal: (total, range) =>
-              `${range[0]}-${range[1]} trong tổng ${total} trưởng nhóm`,
+              `${range[0]}-${range[1]} trong tổng ${total} khách hàng`,
             pageSizeOptions: [5, 10, 20, 50, 100],
           }}
           onChange={(_, filters) => {

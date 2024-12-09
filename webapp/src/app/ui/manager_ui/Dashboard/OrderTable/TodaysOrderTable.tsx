@@ -63,12 +63,12 @@ export default function TodaysOrderTable() {
     <>
       <Table
         columns={todaysOrderListColumns}
-        dataSource={state.currentOrderList.orders}
+        dataSource={state.todaysOrderList.orders}
         rowKey={(record) => record.order?.orderId}
         loading={state.isFetching}
         pagination={{
           showSizeChanger: true,
-          total: state.currentOrderList.total,
+          total: state.todaysOrderList.total,
           pageSize: currentPageSize,
           current: currentPage,
           onChange: (pageIndex, pageSize) => {

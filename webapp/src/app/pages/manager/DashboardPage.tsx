@@ -15,6 +15,7 @@ import TodaysRequestTable from "../../ui/manager_ui/Dashboard/RequestTable/Today
 import TopServicePackagesTable from "../../ui/manager_ui/Dashboard/ServicePackageTable/TopServicePackagesTable";
 import TopProductsTable from "../../ui/manager_ui/Dashboard/ProductTable/TopProductsTable";
 import { NetGainByMonthChart } from "../../ui/manager_ui/Dashboard/NetGainByMonthChart";
+import { useTranslation } from "react-i18next";
 
 const disabledDate: RangePickerProps["disabledDate"] = (current) => {
   return current < dayjs().startOf("year");
@@ -25,9 +26,9 @@ export default function DashboardPage() {
     tabTitle: "Dashboard - EWMH",
     paths: [{ title: "", path: "/dashboard" }],
   });
+  const { t } = useTranslation(["dashboard"]);
   const { handleGetStatistics, handleGetStatisticsByMonth } = useDashboard();
   const { state: requestState } = useRequest();
-
   const { state: specialUIState } = useSpecialUI();
   const [range, setRange] = useState<string[]>();
   const [open, setOpen] = useState(false);
@@ -66,7 +67,9 @@ export default function DashboardPage() {
       </Drawer>
       <Space direction="vertical" size={40} className="w-full">
         <Space direction="vertical" size={20} className="w-full">
-          <div className="text-5xl font-semibold text-primary">Thống kê</div>
+          <div className="text-5xl font-semibold text-primary">
+            {t("statistics")}
+          </div>
           {/* <Row gutter={20}>
             <Col span={18}>
               <Card title="Số lần sử dụng dịch vụ năm nay">

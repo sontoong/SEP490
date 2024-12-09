@@ -88,7 +88,7 @@ export function ViewRoomsModal({
           <Space className="text-base">
             <HomeOutlined />
             <div className="uppercase text-secondary">
-              Số căn hộ của chung cư
+              Danh sách căn hộ của chung cư
             </div>
           </Space>
         }

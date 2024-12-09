@@ -9,4 +9,5 @@ export type Apartment = {
   address: string;
   managementCompany: string;
   avatarUrl: string;
+  roomIds: string[];
 };

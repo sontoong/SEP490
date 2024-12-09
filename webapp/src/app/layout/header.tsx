@@ -1,5 +1,10 @@
-import { LogoutOutlined, WechatOutlined } from "@ant-design/icons";
-import { Dropdown, Layout, Menu, MenuProps, Modal, Spin } from "antd";
+import {
+  DownOutlined,
+  GlobalOutlined,
+  LogoutOutlined,
+  WechatOutlined,
+} from "@ant-design/icons";
+import { Dropdown, Layout, Menu, MenuProps, Modal, Space, Spin } from "antd";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
@@ -10,10 +15,14 @@ import { useAuth } from "../hooks/useAuth";
 import { isLoggedIn } from "../redux/slice/authSlice";
 import { Envs } from "../utils/env";
 import { validateImageString } from "../utils/helpers";
+import { useTranslation } from "react-i18next";
+import { changeLanguage, locales } from "../i18n/i18n";
 
 const { Header } = Layout;
 
 export default function CustomHeader() {
+  const { i18n } = useTranslation();
+  const currentLanguage = locales[i18n.language as keyof typeof locales];
   const location = useLocation();
   const navigate = useNavigate();
   const { state, handleLogout, handleGetAccountInfo } = useAuth();
@@ -96,27 +105,49 @@ export default function CustomHeader() {
             onClick={() => navigate("/login")}
           />
         ) : (
-          <Dropdown
-            menu={{
-              items: getProfileDropdown(),
-              selectedKeys: location.pathname
-                .split("/")
-                .slice(1)
-                .map(
-                  (_, index, arr) => `/${arr.slice(0, index + 1).join("/")}`,
-                ),
-            }}
-            placement="bottomRight"
-            trigger={["click"]}
-            arrow
-          >
-            <Avatar
-              className="fixed right-4 top-3 cursor-pointer"
-              size={"large"}
-              src={validateImageString(state.currentUser.avatarUrl)}
-              loading={state.isFetching}
-            />
-          </Dropdown>
+          <Space size={30}>
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: "1",
+                    label: "Tiếng Việt",
+                    onClick: () => changeLanguage("vi"),
+                  },
+                  {
+                    key: "2",
+                    label: "English",
+                    onClick: () => changeLanguage("en"),
+                  },
+                ],
+              }}
+            >
+              <div className="cursor-pointer text-white">
+                <GlobalOutlined /> {currentLanguage} <DownOutlined />
+              </div>
+            </Dropdown>
+            <Dropdown
+              menu={{
+                items: getProfileDropdown(),
+                selectedKeys: location.pathname
+                  .split("/")
+                  .slice(1)
+                  .map(
+                    (_, index, arr) => `/${arr.slice(0, index + 1).join("/")}`,
+                  ),
+              }}
+              placement="bottomRight"
+              trigger={["click"]}
+              arrow
+            >
+              <Avatar
+                className="fixed right-4 top-3 cursor-pointer"
+                size={"large"}
+                src={validateImageString(state.currentUser.avatarUrl)}
+                loading={state.isFetching}
+              />
+            </Dropdown>
+          </Space>
         )}
       </Header>
       <Modal footer={null} closable={false} open={state.isSending}>

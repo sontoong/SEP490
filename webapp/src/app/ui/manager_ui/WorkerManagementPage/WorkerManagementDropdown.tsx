@@ -34,7 +34,7 @@ const WorkerManagementDropdown = ({
     },
     {
       key: "2",
-      label: "Giao cho Leader",
+      label: "Chọn Trưởng nhóm",
       onClick: () => setIsChangeLeaderModalOpen(true),
       icon: <EditOutlined />,
     },
@@ -43,7 +43,7 @@ const WorkerManagementDropdown = ({
   function handleViewDetail() {
     modal.info({
       icon: <UserOutlined />,
-      width: 700,
+      width: 800,
       title: (
         <div className="text-sm uppercase text-secondary">
           Thông tin của {record.item?.fullName}
@@ -85,7 +85,11 @@ const WorkerManagementDropdown = ({
                   </Space>
                 </div>
                 <div>
-                  <Space direction="horizontal" size={3}>
+                  <Space
+                    direction="horizontal"
+                    size={3}
+                    className="flex items-start"
+                  >
                     <MailFilled />
                     <strong>Email:</strong>
                     <span className="break-all">{record.item.email}</span>

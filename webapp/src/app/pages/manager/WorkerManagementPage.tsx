@@ -156,7 +156,7 @@ export default function WorkerManagementPage() {
         getLeaderInfo?.accountId ? (
           <Tag color="green">{getLeaderInfo.fullName}</Tag>
         ) : (
-          <Tag color="volcano">Không</Tag>
+          <Tag color="volcano">Chưa có</Tag>
         ),
     },
     {

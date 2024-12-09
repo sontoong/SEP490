@@ -3,6 +3,7 @@ import {
   DownloadOutlined,
   EllipsisOutlined,
   EyeOutlined,
+  HistoryOutlined,
   MailFilled,
   PhoneFilled,
   UserOutlined,
@@ -13,9 +14,13 @@ import { Dropdown } from "../../../components/dropdown";
 import { Contract } from "../../../models/contract";
 import { Grid } from "../../../components/grids";
 import { formatDateToLocal } from "../../../utils/helpers";
+import ViewRequestHistoryModal from "./RequestHistory/ViewRequestHistory";
+import { useState } from "react";
 
 const ContractManagementDropdown = ({ record }: { record: Contract }) => {
   const [modal, contextHolder] = Modal.useModal();
+  const [isViewRequestHistoryModalOpen, setIsViewRequestHistoryModalOpen] =
+    useState(false);
 
   const items: MenuProps["items"] = [
     {
@@ -32,6 +37,12 @@ const ContractManagementDropdown = ({ record }: { record: Contract }) => {
       },
       icon: <DownloadOutlined />,
     },
+    {
+      key: "3",
+      label: "Lịch sử yêu cầu",
+      onClick: () => setIsViewRequestHistoryModalOpen(true),
+      icon: <HistoryOutlined />,
+    },
   ];
 
   function handleViewDetail() {
@@ -40,7 +51,7 @@ const ContractManagementDropdown = ({ record }: { record: Contract }) => {
       width: 750,
       title: (
         <div className="text-sm uppercase text-secondary">
-          Thông tin của {record.getCusInfo[0].fullName}
+          Thông tin của {record.getCusInfo.fullName}
         </div>
       ),
       content: (
@@ -48,13 +59,13 @@ const ContractManagementDropdown = ({ record }: { record: Contract }) => {
           className="text-sm"
           items={[
             <Space direction="vertical" size={10}>
-              <Avatar src={record.getCusInfo[0].avatarUrl} size={150} />
+              <Avatar src={record.getCusInfo.avatarUrl} size={150} />
               <div>
-                <strong>Họ và Tên:</strong> {record.getCusInfo[0].fullName}
+                <strong>Họ và Tên:</strong> {record.getCusInfo.fullName}
               </div>
               <div>
                 <strong>CCCD: </strong>
-                {record.getCusInfo[0].customers.cmT_CCCD}
+                {record.getCusInfo.cmT_CCCD}
               </div>
             </Space>,
             <Space direction="vertical" size={15}>
@@ -66,7 +77,7 @@ const ContractManagementDropdown = ({ record }: { record: Contract }) => {
                   <Space direction="horizontal" size={3}>
                     <PhoneFilled />
                     <strong>SĐT:</strong>
-                    <span>{record.getCusInfo[0].phoneNumber}</span>
+                    <span>{record.getCusInfo.phoneNumber}</span>
                   </Space>
                 </div>
                 <div>
@@ -74,7 +85,7 @@ const ContractManagementDropdown = ({ record }: { record: Contract }) => {
                     <CalendarFilled />
                     <strong>Ngày sinh:</strong>
                     <span>
-                      {formatDateToLocal(record.getCusInfo[0].dateOfBirth)}
+                      {formatDateToLocal(record.getCusInfo.dateOfBirth)}
                     </span>
                   </Space>
                 </div>
@@ -86,9 +97,7 @@ const ContractManagementDropdown = ({ record }: { record: Contract }) => {
                   >
                     <MailFilled />
                     <strong>Email:</strong>
-                    <span className="break-all">
-                      {record.getCusInfo[0].email}
-                    </span>
+                    <span className="break-all">{record.getCusInfo.email}</span>
                   </Space>
                 </div>
               </Space>
@@ -105,6 +114,11 @@ const ContractManagementDropdown = ({ record }: { record: Contract }) => {
       <Dropdown menu={{ items }} trigger={["click"]}>
         <EllipsisOutlined className="text-lg" />
       </Dropdown>
+      <ViewRequestHistoryModal
+        contract={record}
+        open={isViewRequestHistoryModalOpen}
+        setIsModalOpen={setIsViewRequestHistoryModalOpen}
+      />
       {contextHolder}
     </>
   );

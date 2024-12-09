@@ -87,7 +87,8 @@ export default function LoginPage() {
                   <Input.Password placeholder="Nhập mật khẩu" size="large" />
                 </Form.Item>
                 <Link to="/forgot-password">
-                  <span className="underline">Đổi mật khẩu</span>
+                  Đổi mật khẩu
+                  {/* <span className="underline">Đổi mật khẩu</span> */}
                 </Link>
               </div>
               <div className="flex justify-center">

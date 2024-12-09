@@ -11,6 +11,7 @@ import {
   LikeOutlined,
   HomeOutlined,
   UserOutlined,
+  ProfileOutlined,
 } from "@ant-design/icons";
 import { ConfigProvider, Layout, Menu, MenuProps } from "antd";
 import React, { useEffect, useState } from "react";
@@ -51,6 +52,12 @@ export default function MySider() {
             "/dashboard",
             () => navigate("/dashboard"),
             <FundOutlined />,
+          ),
+          getItem(
+            "Khách hàng",
+            "/customers",
+            () => navigate("/customers"),
+            <UserOutlined />,
           ),
           getItem(
             "Trưởng nhóm",
@@ -110,7 +117,7 @@ export default function MySider() {
             "Chờ duyệt",
             "/customer-verify",
             () => navigate("/customer-verify"),
-            <UserOutlined />,
+            <ProfileOutlined />,
           ),
         ];
       default:

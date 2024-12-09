@@ -1,16 +1,27 @@
-import { EditOutlined, EllipsisOutlined, EyeOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  EllipsisOutlined,
+  EyeOutlined,
+  HomeOutlined,
+} from "@ant-design/icons";
 import { MenuProps } from "antd";
 import { Dropdown } from "../../../components/dropdown";
 import { useState } from "react";
-import { ViewApartmentDetailModal } from "./RoomManagement/ViewApartmentDetailModal";
+import { ViewRoomsModal } from "./RoomManagement/ViewRoomsModal";
 import { Apartment } from "../../../models/apartment";
 import UpdateApartmentModal from "./UpdateApartmentModal";
+import { useAppDispatch } from "../../../redux/hook";
+import { setCurrentApartment } from "../../../redux/slice/apartmentSlice";
 
 const ApartmentManagementDropdown = ({
   apartment,
+  setDrawerOpen,
 }: {
   apartment: Apartment;
+  setDrawerOpen?: any;
 }) => {
+  const dispatch = useAppDispatch();
+
   const [
     isViewApartmentDetailModalVisible,
     setIsViewApartmentDetailModalVisible,
@@ -21,15 +32,24 @@ const ApartmentManagementDropdown = ({
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: "Xem các căn hộ",
+      label: "Xem thông tin chi tiết",
       icon: <EyeOutlined />,
-      onClick: () => setIsViewApartmentDetailModalVisible(true),
+      onClick: () => {
+        dispatch(setCurrentApartment(apartment));
+        setDrawerOpen(true);
+      },
     },
     {
       key: "2",
       label: "Chỉnh sửa chung cư",
       icon: <EditOutlined />,
       onClick: () => setIsUpdateApartmentModalOpen(true),
+    },
+    {
+      key: "3",
+      label: "Quản lý căn hộ",
+      icon: <HomeOutlined />,
+      onClick: () => setIsViewApartmentDetailModalVisible(true),
     },
   ];
 
@@ -38,7 +58,7 @@ const ApartmentManagementDropdown = ({
       <Dropdown menu={{ items }} trigger={["click"]}>
         <EllipsisOutlined className="text-lg" />
       </Dropdown>
-      <ViewApartmentDetailModal
+      <ViewRoomsModal
         apartmentId={apartment.areaId}
         isModalVisible={isViewApartmentDetailModalVisible}
         setIsModalVisible={setIsViewApartmentDetailModalVisible}

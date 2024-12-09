@@ -1,10 +1,16 @@
-import { EditOutlined, EllipsisOutlined, EyeOutlined } from "@ant-design/icons";
+import {
+  BarChartOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+  EyeOutlined,
+} from "@ant-design/icons";
 import { MenuProps } from "antd";
 import { useState } from "react";
 import { Dropdown } from "../../../components/dropdown";
 import { Product } from "../../../models/product";
 import UpdateProductModal from "./UpdateProductModal";
 import ViewProductDetailsModal from "./ViewProductDetailsModal";
+import ViewProductStatisticsModal from "./ViewProductStatisticsModal";
 
 const ProductManagementDropdown = ({
   record,
@@ -15,6 +21,10 @@ const ProductManagementDropdown = ({
 }) => {
   const [isUpdateProductModalOpen, setIsUpdateProductModalOpen] =
     useState(false);
+  const [
+    isViewProductStatisticsModalOpen,
+    setIsViewProductStatisticsModalOpen,
+  ] = useState(false);
   const [isViewProductModalOpen, setIsViewProductModalOpen] = useState(false);
 
   const items: MenuProps["items"] = [
@@ -29,6 +39,12 @@ const ProductManagementDropdown = ({
       label: "Chỉnh sửa",
       onClick: () => setIsUpdateProductModalOpen(true),
       icon: <EditOutlined />,
+    },
+    {
+      key: "3",
+      label: "Xem thống kê",
+      onClick: () => setIsViewProductStatisticsModalOpen(true),
+      icon: <BarChartOutlined />,
     },
   ];
 
@@ -46,6 +62,11 @@ const ProductManagementDropdown = ({
       <ViewProductDetailsModal
         open={isViewProductModalOpen}
         setIsModalOpen={setIsViewProductModalOpen}
+        product={record}
+      />
+      <ViewProductStatisticsModal
+        open={isViewProductStatisticsModalOpen}
+        setIsModalOpen={setIsViewProductStatisticsModalOpen}
         product={record}
       />
     </>

@@ -206,7 +206,6 @@ export default function LeaderManagementPage() {
           value: "true",
         },
       ],
-      onFilter: (value, record) => record.isDisabled.toString() === value,
     },
     {
       title: "",

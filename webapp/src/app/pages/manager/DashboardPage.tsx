@@ -1,19 +1,21 @@
-import { Col, Drawer, Row, Space } from "antd";
-import { useTitle } from "../../hooks/useTitle";
-import TodaysRequestTable from "../../ui/manager_ui/Dashboard/TodaysRequestTable";
-import { RevenueChart } from "../../ui/manager_ui/Dashboard/RevenueChart";
-import { Card } from "../../components/card";
-import NetGainChart from "../../ui/manager_ui/Dashboard/NetGainChart";
-import ExtraStats from "../../ui/manager_ui/Dashboard/ExtraStats";
-import { useDashboard } from "../../hooks/useDashboard";
-import { InputDate } from "../../components/inputs";
-import { useCallback, useEffect, useState } from "react";
+import { Drawer, Space } from "antd";
 import { RangePickerProps } from "antd/es/date-picker";
 import dayjs from "dayjs";
-import RequestDetails from "../../ui/manager_ui/Dashboard/RequestDetails/RequestDetails";
-import { useSpecialUI } from "../../hooks/useSpecialUI";
+import { useCallback, useEffect, useState } from "react";
+import { Card } from "../../components/card";
+import { InputDate } from "../../components/inputs";
+import { useDashboard } from "../../hooks/useDashboard";
 import { useRequest } from "../../hooks/useRequest";
-import TodaysOrderTab from "../../ui/manager_ui/Dashboard/TodaysOrderTable";
+import { useSpecialUI } from "../../hooks/useSpecialUI";
+import { useTitle } from "../../hooks/useTitle";
+import { NetGainChart } from "../../ui/manager_ui/Dashboard/NetGainChart";
+import RequestDetails from "../../ui/manager_ui/Dashboard/RequestTable/RequestDetails/RequestDetails";
+import TodaysOrderTable from "../../ui/manager_ui/Dashboard/OrderTable/TodaysOrderTable";
+import TodaysRequestTable from "../../ui/manager_ui/Dashboard/RequestTable/TodaysRequestTable";
+import TopServicePackagesTable from "../../ui/manager_ui/Dashboard/ServicePackageTable/TopServicePackagesTable";
+import TopProductsTable from "../../ui/manager_ui/Dashboard/ProductTable/TopProductsTable";
+import { NetGainByMonthChart } from "../../ui/manager_ui/Dashboard/NetGainByMonthChart";
+import { useTranslation } from "react-i18next";
 
 const disabledDate: RangePickerProps["disabledDate"] = (current) => {
   return current < dayjs().startOf("year");
@@ -24,7 +26,8 @@ export default function DashboardPage() {
     tabTitle: "Dashboard - EWMH",
     paths: [{ title: "", path: "/dashboard" }],
   });
-  const { handleGetStatistics } = useDashboard();
+  const { t } = useTranslation(["dashboard"]);
+  const { handleGetStatistics, handleGetStatisticsByMonth } = useDashboard();
   const { state: requestState } = useRequest();
   const { state: specialUIState } = useSpecialUI();
   const [range, setRange] = useState<string[]>();
@@ -39,7 +42,11 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchStatistics();
-  }, [fetchStatistics]);
+  }, [fetchStatistics, handleGetStatisticsByMonth]);
+
+  useEffect(() => {
+    handleGetStatisticsByMonth({ Num: 3 });
+  }, [handleGetStatisticsByMonth]);
 
   return (
     <>
@@ -60,21 +67,32 @@ export default function DashboardPage() {
       </Drawer>
       <Space direction="vertical" size={40} className="w-full">
         <Space direction="vertical" size={20} className="w-full">
-          <div className="text-5xl font-semibold text-primary">Thống kê</div>
-          <Row gutter={20}>
+          <div className="text-5xl font-semibold text-primary">
+            {t("statistics")}
+          </div>
+          {/* <Row gutter={20}>
             <Col span={18}>
-              <Card title="Trung bình doanh thu năm nay">
+              <Card title="Số lần sử dụng dịch vụ năm nay">
                 <RevenueChart />
               </Card>
             </Col>
             <Col span={6}>
               <ExtraStats />
             </Col>
-          </Row>
+          </Row> */}
           <Card
             title={
               <Space>
-                <div>Trung bình thu nhập từ</div>
+                <div>Tổng doanh thu 3 tháng gần nhất</div>
+              </Space>
+            }
+          >
+            <NetGainByMonthChart />
+          </Card>
+          <Card
+            title={
+              <Space>
+                <div>Tổng doanh thu theo từng năm</div>
                 <InputDate.RangePicker
                   disabledDate={disabledDate}
                   picker="year"
@@ -88,16 +106,24 @@ export default function DashboardPage() {
           </Card>
         </Space>
         <Space direction="vertical" size={20} className="relative w-full">
-          <div className="text-5xl font-semibold text-primary">
-            Danh sách yêu cầu trong hôm nay
-          </div>
-          <TodaysRequestTable setDrawerOpen={setOpen} />
+          <Card title="Danh sách yêu cầu hôm nay">
+            <TodaysRequestTable setDrawerOpen={setOpen} />
+          </Card>
         </Space>
         <Space direction="vertical" size={20} className="relative w-full">
-          <div className="text-5xl font-semibold text-primary">
-            Danh sách đơn hàng trong hôm nay
-          </div>
-          <TodaysOrderTab />
+          <Card title="Danh sách đơn hàng hôm nay">
+            <TodaysOrderTable />
+          </Card>
+        </Space>
+        <Space direction="vertical" size={20} className="relative w-full">
+          <Card title="Top 5 sản phẩm được mua nhiều nhất">
+            <TopProductsTable />
+          </Card>
+        </Space>
+        <Space direction="vertical" size={20} className="relative w-full">
+          <Card title="Top 5 gói dịch vụ được mua nhiều nhất">
+            <TopServicePackagesTable />
+          </Card>
         </Space>
       </Space>
     </>

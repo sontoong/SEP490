@@ -10,8 +10,11 @@ import {
   GetAllProductPaginatedParams,
   getProduct,
   GetProductParams,
+  getRevenueAndNumberOfPurchaseOfProduct,
+  GetRevenueAndNumberOfPurchaseOfProductParams,
   setCurrentProduct,
   setCurrentProductList,
+  setTopProductList,
   updateProduct,
   UpdateProductParams,
 } from "../redux/slice/productSlice";
@@ -185,6 +188,34 @@ export function useProduct() {
     [dispatch, notification],
   );
 
+  const handleGetRevenueAndNumberOfPurchaseOfProduct = useCallback(
+    async (values: GetRevenueAndNumberOfPurchaseOfProductParams) => {
+      const resultAction = await dispatch(
+        getRevenueAndNumberOfPurchaseOfProduct(values),
+      );
+      if (
+        getRevenueAndNumberOfPurchaseOfProduct.fulfilled.match(resultAction)
+      ) {
+        dispatch(setTopProductList(resultAction.payload[0]));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Lỗi",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Lỗi",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleGetAllProductPaginated,
@@ -192,5 +223,6 @@ export function useProduct() {
     handleUpdateProduct,
     handleGetProduct,
     handleDisableProduct,
+    handleGetRevenueAndNumberOfPurchaseOfProduct,
   };
 }

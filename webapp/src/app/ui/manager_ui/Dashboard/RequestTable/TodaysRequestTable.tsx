@@ -10,8 +10,10 @@ import { EyeOutlined } from "@ant-design/icons";
 import { useRequest } from "../../../../hooks/useRequest";
 import { usePagination } from "../../../../hooks/usePagination";
 import { useCallback, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function TodaysRequestTable(props: TodaysRequestTableProps) {
+  const { t } = useTranslation("requests");
   const { state, handleGetAllTodaysRequestsPaginated } = useRequest();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
     usePagination();
@@ -31,28 +33,28 @@ export default function TodaysRequestTable(props: TodaysRequestTableProps) {
 
   const todaysRequestListColumns: TableColumnsType<Request> = [
     {
-      title: "Khách hàng",
+      title: t("customer"),
       render: (_, { customer_Leader }) => (
         <div className="text-base font-bold">{customer_Leader[0].fullName}</div>
       ),
     },
     {
-      title: "Loại yêu cầu",
+      title: t("request_type"),
       dataIndex: ["request", "categoryRequest"],
       render: (value) => requestTypeGenerator(value),
     },
     {
-      title: "Bắt đầu",
+      title: t("start_time"),
       dataIndex: ["request", "start"],
       render: (value) => <div>{formatDateToLocal(value, true)}</div>,
     },
     {
-      title: "Kết thúc",
+      title: t("end_time"),
       dataIndex: ["request", "end"],
       render: (value) => <div>{value ? formatDateToLocal(value) : "N/A"}</div>,
     },
     {
-      title: "Trạng thái",
+      title: t("request_status"),
       dataIndex: "Status",
       render: (_, { request }) => {
         return <div>{requestStatusGenerator(request.status)}</div>;

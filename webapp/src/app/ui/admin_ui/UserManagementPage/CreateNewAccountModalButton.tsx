@@ -184,7 +184,7 @@ export default function CreateNewAccountModalButton() {
                 {
                   icon: <TeamOutlined />,
                   enName: "Worker",
-                  vnName: "Công nhân",
+                  vnName: "Nhân viên",
                   value: ROLE.worker,
                 },
               ]}

@@ -21,10 +21,12 @@ import { cn } from "../../utils/cn";
 import logo from "../../../assets/images/logo.png";
 import logo2 from "../../../assets/images/logo2.png";
 import { ROLE } from "../../../constants/role";
+import { useTranslation } from "react-i18next";
 
 const { Sider } = Layout;
 
 export default function MySider() {
+  const { t } = useTranslation(["sider"]);
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = useAuth();
@@ -48,73 +50,73 @@ export default function MySider() {
       case ROLE.manager:
         return [
           getItem(
-            "Thống kê",
+            t("dashboard"),
             "/dashboard",
             () => navigate("/dashboard"),
             <FundOutlined />,
           ),
           getItem(
-            "Khách hàng",
+            t("customers"),
             "/customers",
             () => navigate("/customers"),
             <UserOutlined />,
           ),
           getItem(
-            "Trưởng nhóm",
+            t("leaders"),
             "/leaders",
             () => navigate("/leaders"),
             <SolutionOutlined />,
           ),
           getItem(
-            "Nhân viên",
+            t("workers"),
             "/workers",
             () => navigate("/workers"),
             <TeamOutlined />,
           ),
           getItem(
-            "Gói dịch vụ",
+            t("service_package"),
             "/services",
             () => navigate("/services"),
             <BookOutlined />,
           ),
           getItem(
-            "Sản phẩm",
+            t("products"),
             "/products",
             () => navigate("/products"),
             <ToolOutlined />,
           ),
           getItem(
-            "Hợp đồng",
+            t("contracts"),
             "/contracts",
             () => navigate("/contracts"),
             <FileTextOutlined />,
           ),
           getItem(
-            "Yêu cầu",
+            t("requests"),
             "/requests",
             () => navigate("/requests"),
             <DropboxOutlined />,
           ),
           getItem(
-            "Đơn hàng",
+            t("orders"),
             "/orders",
             () => navigate("/orders"),
             <ShoppingCartOutlined />,
           ),
           getItem(
-            "Đánh giá",
+            t("ratings"),
             "/ratings",
             () => navigate("/ratings"),
             <LikeOutlined />,
           ),
           getItem(
-            "Chung cư",
+            t("apartments"),
             "/apartments",
             () => navigate("/apartments"),
             <HomeOutlined />,
           ),
           getItem(
-            "Chờ duyệt",
+            t("customer-verify"),
             "/customer-verify",
             () => navigate("/customer-verify"),
             <ProfileOutlined />,

@@ -12,13 +12,15 @@ import CanceledRequestTab from "../../ui/manager_ui/RequestManagementPage/Cancel
 import { EditFilled } from "@ant-design/icons";
 import { PrimaryButton } from "../../components/buttons";
 import { ViewRequestValuesModal } from "../../ui/manager_ui/RequestManagementPage/RequestValues/ViewRequestValuesModal";
+import { useTranslation } from "react-i18next";
 
 export default function RequestManagementPage() {
+  const { t } = useTranslation("requests");
   useTitle({
     tabTitle: "Requests - EWMH",
     paths: [
       {
-        title: "Danh sách yêu cầu",
+        title: t("request_list"),
         path: "/requests",
         actions: [
           <PrimaryButton.Icon
@@ -39,22 +41,22 @@ export default function RequestManagementPage() {
   const items: TabsProps["items"] = [
     {
       key: "1",
-      label: "Yêu cầu mới",
+      label: t("new_request"),
       children: <NewRequestTab status={0} setDrawerOpen={setOpen} />,
     },
     {
       key: "2",
-      label: "Đang xử lý",
+      label: t("processing_request"),
       children: <ProcessingRequestTab status={1} setDrawerOpen={setOpen} />,
     },
     {
       key: "3",
-      label: "Đã hoàn thành",
+      label: t("finished_request"),
       children: <CompletedRequestTab status={2} setDrawerOpen={setOpen} />,
     },
     {
       key: "4",
-      label: "Đã hủy",
+      label: t("canceled_request"),
       children: <CanceledRequestTab status={3} setDrawerOpen={setOpen} />,
     },
   ];
@@ -66,7 +68,7 @@ export default function RequestManagementPage() {
         setIsModalVisible={setIsViewRequestValuesModalVisible}
       />
       <Drawer
-        title="Thông tin yêu cầu"
+        title={t("request_details")}
         placement="right"
         open={open}
         getContainer={false}

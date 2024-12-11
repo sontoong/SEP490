@@ -9,6 +9,7 @@ import { useRequest } from "../../../../hooks/useRequest";
 import { formatCurrency } from "../../../../utils/helpers";
 import { DollarCircleOutlined } from "@ant-design/icons";
 import { requestValuesGenerator } from "../../../../utils/generators/requestValues";
+import { useTranslation } from "react-i18next";
 
 export function ViewRequestValuesModal({
   isModalVisible,
@@ -17,6 +18,7 @@ export function ViewRequestValuesModal({
   isModalVisible: boolean;
   setIsModalVisible: any;
 }) {
+  const { t } = useTranslation("requests");
   const { state: requestState, handleGetCurrentPriceOfRequest } = useRequest();
   const { state: specialUIState } = useSpecialUI();
 
@@ -32,18 +34,18 @@ export function ViewRequestValuesModal({
 
   const roomListColumns: TableColumnsType = [
     {
-      title: "Tên",
+      title: t("name"),
       dataIndex: "name",
       render: (_, { name }) => <div>{requestValuesGenerator(name).name}</div>,
     },
     {
-      title: "Mô tả",
+      title: t("description"),
       render: (_, { name }) => (
         <div>{requestValuesGenerator(name).description}</div>
       ),
     },
     {
-      title: "Giá hiện tại",
+      title: t("current_price"),
       dataIndex: "value",
       render: (_, { value }) => <div>{formatCurrency(value)}</div>,
     },
@@ -60,7 +62,9 @@ export function ViewRequestValuesModal({
         title={
           <Space className="text-base">
             <DollarCircleOutlined />
-            <div className="uppercase text-secondary">Bảng giá yêu cầu</div>
+            <div className="uppercase text-secondary">
+              {t("request_price_table")}
+            </div>
           </Space>
         }
         maskClosable={false}

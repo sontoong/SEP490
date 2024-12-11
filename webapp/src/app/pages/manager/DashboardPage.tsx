@@ -83,7 +83,7 @@ export default function DashboardPage() {
           <Card
             title={
               <Space>
-                <div>Tổng doanh thu 3 tháng gần nhất</div>
+                <div>{t("net_gain_nearest_months", { months: 3 })}</div>
               </Space>
             }
           >
@@ -92,7 +92,7 @@ export default function DashboardPage() {
           <Card
             title={
               <Space>
-                <div>Tổng doanh thu theo từng năm</div>
+                <div>{t("net_gain_range_year")}</div>
                 <InputDate.RangePicker
                   disabledDate={disabledDate}
                   picker="year"
@@ -106,22 +106,22 @@ export default function DashboardPage() {
           </Card>
         </Space>
         <Space direction="vertical" size={20} className="relative w-full">
-          <Card title="Danh sách yêu cầu hôm nay">
+          <Card title={t("todays_request_list")}>
             <TodaysRequestTable setDrawerOpen={setOpen} />
           </Card>
         </Space>
         <Space direction="vertical" size={20} className="relative w-full">
-          <Card title="Danh sách đơn hàng hôm nay">
+          <Card title={t("todays_order_list")}>
             <TodaysOrderTable />
           </Card>
         </Space>
         <Space direction="vertical" size={20} className="relative w-full">
-          <Card title="Top 5 sản phẩm được mua nhiều nhất">
+          <Card title={t("top_selling_products", { top: 5 })}>
             <TopProductsTable />
           </Card>
         </Space>
         <Space direction="vertical" size={20} className="relative w-full">
-          <Card title="Top 5 gói dịch vụ được mua nhiều nhất">
+          <Card title={t("top_selling_service_package", { top: 5 })}>
             <TopServicePackagesTable />
           </Card>
         </Space>

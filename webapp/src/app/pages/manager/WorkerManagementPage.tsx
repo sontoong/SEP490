@@ -12,12 +12,13 @@ import WorkerManagementDropdown from "../../ui/manager_ui/WorkerManagementPage/W
 import { useAccount } from "../../hooks/useAccount";
 import { usePagination } from "../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function WorkerManagementPage() {
-  // const { notification } = App.useApp();
+  const { t } = useTranslation("workers");
   useTitle({
     tabTitle: "Workers - EWMH",
-    paths: [{ title: "Danh sách nhân viên", path: "/workers" }],
+    paths: [{ title: t("worker_list"), path: "/workers" }],
   });
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();

@@ -68,7 +68,7 @@ export default function RequestManagementPage() {
         setIsModalVisible={setIsViewRequestValuesModalVisible}
       />
       <Drawer
-        title={t("request_details")}
+        title={t("request_details.request_details")}
         placement="right"
         open={open}
         getContainer={false}

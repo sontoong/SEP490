@@ -64,7 +64,9 @@ export default function RequestDetails({
           </div>
         </Space>
         <Space direction="vertical" className="w-4/12 text-sm">
-          <span className="font-bold">{t("customer_details")}:</span>
+          <span className="font-bold">
+            {t("request_details.customer_details")}:
+          </span>
           <div className="w-full rounded-lg border-2 border-solid border-secondary px-3 py-2">
             <div className="flex gap-5">
               <div className="flex flex-col items-center">
@@ -92,7 +94,9 @@ export default function RequestDetails({
           </div>
         </Space>
         <Space direction="vertical" className="w-4/12 text-sm">
-          <span className="font-bold">{t("leader_details")}:</span>
+          <span className="font-bold">
+            {t("request_details.leader_details")}:
+          </span>
           <div className="w-full rounded-lg border-2 border-solid border-secondary px-3 py-2">
             <div className="flex gap-5">
               <div className="flex flex-col items-center">
@@ -124,7 +128,7 @@ export default function RequestDetails({
         <Collapse
           items={[
             {
-              label: t("worker_list"),
+              label: t("request_details.worker_list"),
               children: <WorkerTable workers={request?.workerList} />,
             },
           ]}
@@ -134,20 +138,24 @@ export default function RequestDetails({
         <></>
       )}
       <div className="text-sm">
-        <div className="font-bold">{t("request_description")}: </div>
+        <div className="font-bold">
+          {t("request_details.request_description")}:{" "}
+        </div>
         <div>{request?.request.customerProblem}</div>
       </div>
       <div className="text-sm">
-        <div className="font-bold">{t("worker_conclusion")}: </div>
+        <div className="font-bold">
+          {t("request_details.worker_conclusion")}:{" "}
+        </div>
         <div>
           {request?.request.conclusion
             ? request.request.conclusion
-            : t("not_have_yet")}
+            : t("request_details.not_have_yet")}
         </div>
       </div>
       {request?.request.status && [2].includes(request?.request.status) ? (
         <PrimaryButton
-          text={t("download_receipt")}
+          text={t("request_details.download_receipt")}
           icon={<DownloadOutlined />}
           className="w-full"
           onClick={() => {
@@ -164,7 +172,7 @@ export default function RequestDetails({
         <Collapse
           items={[
             {
-              label: t("product_list"),
+              label: t("request_details.product_list"),
               children: <RequestProductList products={request?.productList} />,
               forceRender: true,
             },
@@ -177,18 +185,22 @@ export default function RequestDetails({
       {request?.request.status && [2].includes(request?.request.status) ? (
         <>
           <Space className="flex justify-between text-sm">
-            <div className="font-bold">{t("request_price")}: </div>
+            <div className="font-bold">
+              {t("request_details.request_price")}:{" "}
+            </div>
             <div className="font-semibold">
               {request?.request.requestPrice === 0
-                ? t("free")
+                ? t("request_details.free")
                 : formatCurrency(request?.request.requestPrice)}
             </div>
           </Space>
           <Space className="flex justify-between text-sm">
-            <div className="font-bold">{t("total_price")}: </div>
+            <div className="font-bold">
+              {t("request_details.total_price")}:{" "}
+            </div>
             <div className="font-bold">
               {isNull(request?.request.totalPrice)
-                ? t("free")
+                ? t("request_details.free")
                 : formatCurrency(request?.request.totalPrice)}
             </div>
           </Space>

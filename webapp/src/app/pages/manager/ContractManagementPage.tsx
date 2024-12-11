@@ -10,11 +10,13 @@ import ContractManagementDropdown from "../../ui/manager_ui/ContractManagementPa
 import { useCallback, useEffect, useState } from "react";
 import { usePagination } from "../../hooks/usePagination";
 import { useContract } from "../../hooks/useContract";
+import { useTranslation } from "react-i18next";
 
 export default function ContractManagementPage() {
+  const { t } = useTranslation("contracts");
   useTitle({
     tabTitle: "Contracts - EWMH",
-    paths: [{ title: "Danh sách hợp đồng", path: "/contracts" }],
+    paths: [{ title: t("contract_list"), path: "/contracts" }],
   });
   const [searchForm] = Form.useForm();
   const { state, handleGetAllContractPaginated } = useContract();

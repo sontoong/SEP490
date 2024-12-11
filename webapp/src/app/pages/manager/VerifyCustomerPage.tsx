@@ -8,11 +8,13 @@ import VerifyCustomerModalButton from "../../ui/manager_ui/VerifyCustomerPage/Ve
 import { useAccount } from "../../hooks/useAccount";
 import { usePagination } from "../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function VerifyCustomerPage() {
+  const { t } = useTranslation("customerVerify");
   useTitle({
     tabTitle: "Customer Verify - EWMH",
-    paths: [{ title: "Danh sách chờ duyệt", path: "/customer-verify" }],
+    paths: [{ title: t("verify_request_list"), path: "/customer-verify" }],
   });
   const [searchForm] = Form.useForm();
   const { state, handleGetAllPendingAccountPaginated } = useAccount();

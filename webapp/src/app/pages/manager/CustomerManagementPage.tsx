@@ -13,11 +13,13 @@ import { useAccount } from "../../hooks/useAccount";
 import { usePagination } from "../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
 import { ROLE } from "../../../constants/role";
+import { useTranslation } from "react-i18next";
 
 export default function CustomerManagementPage() {
+  const { t } = useTranslation("customers");
   useTitle({
     tabTitle: "Customers - EWMH",
-    paths: [{ title: "Danh sách khách hàng", path: "/customers" }],
+    paths: [{ title: t("customer_list"), path: "/customers" }],
   });
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();

@@ -1,8 +1,8 @@
 {
   "dashboard": "Statistics",
   "customers": "Customers",
-  "leaders": "Team Leaders",
-  "workers": "Employees",
+  "leaders": "Leaders",
+  "workers": "Workers",
   "service_package": "Service Packages",
   "products": "Products",
   "contracts": "Contracts",

@@ -34,18 +34,18 @@ export function ViewRequestValuesModal({
 
   const roomListColumns: TableColumnsType = [
     {
-      title: t("name"),
+      title: t("request_price_table.name"),
       dataIndex: "name",
       render: (_, { name }) => <div>{requestValuesGenerator(name).name}</div>,
     },
     {
-      title: t("description"),
+      title: t("request_price_table.description"),
       render: (_, { name }) => (
         <div>{requestValuesGenerator(name).description}</div>
       ),
     },
     {
-      title: t("current_price"),
+      title: t("request_price_table.current_price"),
       dataIndex: "value",
       render: (_, { value }) => <div>{formatCurrency(value)}</div>,
     },
@@ -63,7 +63,7 @@ export function ViewRequestValuesModal({
           <Space className="text-base">
             <DollarCircleOutlined />
             <div className="uppercase text-secondary">
-              {t("request_price_table")}
+              {t("request_price_table.request_price_table")}
             </div>
           </Space>
         }

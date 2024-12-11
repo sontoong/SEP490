@@ -15,13 +15,15 @@ import { useCallback, useEffect, useState } from "react";
 import htmlParse from "../../utils/htmlParser";
 import ApartmentDetails from "../../ui/manager_ui/ApartmentManagementPage/ApartmentDetails/ApartmentDetails";
 import { useSpecialUI } from "../../hooks/useSpecialUI";
+import { useTranslation } from "react-i18next";
 
 const { Paragraph } = Typography;
 
 export default function ApartmentManagementPage() {
+  const { t } = useTranslation("apartments");
   useTitle({
     tabTitle: "Apartments - EWMH",
-    paths: [{ title: "Danh sách chung cư", path: "/apartments" }],
+    paths: [{ title: t("apartment_list"), path: "/apartments" }],
   });
   const [searchForm] = Form.useForm();
   const { state: apartmentState, handleGetAllApartmentsPaginated } =

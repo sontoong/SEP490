@@ -14,7 +14,6 @@ import { PrimaryButton } from "../components/buttons";
 import { useAuth } from "../hooks/useAuth";
 import { isLoggedIn } from "../redux/slice/authSlice";
 import { Envs } from "../utils/env";
-import { validateImageString } from "../utils/helpers";
 import { useTranslation } from "react-i18next";
 import { changeLanguage, locales } from "../i18n/i18n";
 
@@ -143,7 +142,7 @@ export default function CustomHeader() {
               <Avatar
                 className="fixed right-4 top-3 cursor-pointer"
                 size={"large"}
-                src={validateImageString(state.currentUser.avatarUrl)}
+                src={state.currentUser.avatarUrl}
                 loading={state.isFetching}
               />
             </Dropdown>

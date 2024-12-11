@@ -12,12 +12,13 @@ import { WarningOutlined } from "@ant-design/icons";
 import { useAccount } from "../../hooks/useAccount";
 import { usePagination } from "../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function LeaderManagementPage() {
-  // const { notification } = App.useApp();
+  const { t } = useTranslation("leaders");
   useTitle({
     tabTitle: "Leaders - EWMH",
-    paths: [{ title: "Danh sách trưởng nhóm", path: "/leaders" }],
+    paths: [{ title: t("leader_list"), path: "/leaders" }],
   });
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();

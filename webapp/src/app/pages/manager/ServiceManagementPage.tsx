@@ -15,11 +15,13 @@ import { useServicePackage } from "../../hooks/useServicePackage";
 import { usePagination } from "../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
 import htmlParse from "../../utils/htmlParser";
+import { useTranslation } from "react-i18next";
 
 export default function ServiceManagementPage() {
+  const { t } = useTranslation("services");
   useTitle({
     tabTitle: "Service Packages - EWMH",
-    paths: [{ title: "Danh sách gói dịch vụ", path: "/services" }],
+    paths: [{ title: t("service_package_list"), path: "/services" }],
   });
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();

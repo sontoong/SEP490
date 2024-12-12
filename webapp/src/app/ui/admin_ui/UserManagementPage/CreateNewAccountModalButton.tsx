@@ -80,7 +80,11 @@ export default function CreateNewAccountModalButton() {
           values: values,
           callBackFn: () => {
             setIsModalVisible(false);
-            handleGetAllAccountPaginated({ PageIndex: 1, Pagesize: 8 });
+            handleGetAllAccountPaginated({
+              PageIndex: 1,
+              Pagesize: 8,
+              Role: values.role,
+            });
           },
         });
       },

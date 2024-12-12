@@ -138,7 +138,7 @@ export default function UpdateProductModal({
             },
           ]}
         >
-          <Input placeholder="Nhập tên sản phẩm" size="large" />
+          <Input placeholder="Nhập tên sản phẩm" size="large" disabled />
         </Form.Item>
         <Form.Item
           name="Description"

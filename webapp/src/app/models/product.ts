@@ -10,3 +10,18 @@ export type Product = {
   productPriceId?: string;
   date?: string;
 };
+
+export type TopProduct = {
+  productId: string;
+  totalPurchasedQuantity: number;
+  totalRevenue: number;
+  productName: string;
+  productDescription: string;
+  productImageUrl: string;
+  currentStock: number;
+  warantyMonths: number;
+  status: boolean;
+  latestPrice: number;
+  orderIdList: { orderId: string; purchaseTime: string }[];
+  doneRequestIdList: { orderId: string; purchaseTime: string }[];
+};

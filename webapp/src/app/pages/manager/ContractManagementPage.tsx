@@ -10,11 +10,13 @@ import ContractManagementDropdown from "../../ui/manager_ui/ContractManagementPa
 import { useCallback, useEffect, useState } from "react";
 import { usePagination } from "../../hooks/usePagination";
 import { useContract } from "../../hooks/useContract";
+import { useTranslation } from "react-i18next";
 
 export default function ContractManagementPage() {
+  const { t } = useTranslation("contracts");
   useTitle({
     tabTitle: "Contracts - EWMH",
-    paths: [{ title: "Danh sách hợp đồng", path: "/contracts" }],
+    paths: [{ title: t("contract_list"), path: "/contracts" }],
   });
   const [searchForm] = Form.useForm();
   const { state, handleGetAllContractPaginated } = useContract();
@@ -68,7 +70,7 @@ export default function ContractManagementPage() {
     },
     {
       title: "Khách hàng",
-      dataIndex: ["getCusInfo", "0", "fullName"],
+      dataIndex: ["getCusInfo", "fullName"],
     },
     {
       title: "Thanh toán vào",
@@ -78,14 +80,27 @@ export default function ContractManagementPage() {
       sortDirections: ["descend"],
     },
     {
+      title: "Tổng lần sửa",
+      dataIndex: ["item", "numOfRequest"],
+    },
+    {
       title: "Lần sửa còn",
       dataIndex: ["item", "remainingNumOfRequests"],
+    },
+    {
+      title: "Hạn sử dụng",
+      dataIndex: ["item", "expireDate"],
+      render: (value) => <div>{formatDateToLocal(value)}</div>,
     },
     {
       title: "Trạng thái",
       render: (_, { item }) => {
         return (
-          <div>{contractStatusGenerator(item.remainingNumOfRequests)}</div>
+          <div>
+            {contractStatusGenerator({
+              remaining: item.remainingNumOfRequests,
+            })}
+          </div>
         );
       },
     },

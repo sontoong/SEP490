@@ -10,11 +10,13 @@ import { usePagination } from "../../hooks/usePagination";
 import RequestDetails from "../../ui/manager_ui/OrderManagementPage/RequestDetails/RequestDetails";
 import { useRequest } from "../../hooks/useRequest";
 import { useSpecialUI } from "../../hooks/useSpecialUI";
+import { useTranslation } from "react-i18next";
 
 export default function OrderManagementPage() {
+  const { t } = useTranslation("orders");
   useTitle({
     tabTitle: "Orders - EWMH",
-    paths: [{ title: "Danh sách đơn hàng", path: "/orders" }],
+    paths: [{ title: t("order_list"), path: "/orders" }],
   });
   const [searchForm] = Form.useForm();
   const { goToPage } = usePagination();

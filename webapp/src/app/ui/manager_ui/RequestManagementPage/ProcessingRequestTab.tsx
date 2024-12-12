@@ -10,8 +10,10 @@ import { EyeOutlined } from "@ant-design/icons";
 import { useRequest } from "../../../hooks/useRequest";
 import { useCallback, useEffect } from "react";
 import { usePagination } from "../../../hooks/usePagination";
+import { useTranslation } from "react-i18next";
 
 export default function ProcessingRequestTab(props: NewRequestTabProps) {
+  const { t } = useTranslation("requests");
   const { state, handleGetAllRequestPaginated, handleGetDetailsOfRequest } =
     useRequest();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
@@ -36,30 +38,34 @@ export default function ProcessingRequestTab(props: NewRequestTabProps) {
 
   const contractListColumns: TableColumnsType<Request> = [
     {
-      title: "Mã yêu cầu",
+      title: t("request_id"),
       dataIndex: ["request", "requestId"],
     },
     {
-      title: "Khách hàng",
+      title: t("customer"),
       dataIndex: ["customer_Leader", "0", "fullName"],
     },
     {
-      title: "Loại yêu cầu",
+      title: t("request_type"),
       dataIndex: ["request", "categoryRequest"],
       render: (value) => requestTypeGenerator(value),
     },
     {
-      title: "Bắt đầu",
+      title: t("start_time"),
       dataIndex: ["request", "start"],
-      render: (value) => <div>{formatDateToLocal(value)}</div>,
+      render: (value) => (
+        <div>{value ? formatDateToLocal(value, true) : "N/A"}</div>
+      ),
     },
     {
-      title: "Kết thúc",
+      title: t("end_time"),
       dataIndex: ["request", "end"],
-      render: (value) => <div>{value ? formatDateToLocal(value) : "N/A"}</div>,
+      render: (value) => (
+        <div>{value ? formatDateToLocal(value, true) : "N/A"}</div>
+      ),
     },
     {
-      title: "Trạng thái",
+      title: t("request_status"),
       dataIndex: "Status",
       render: (_, { request }) => {
         return <div>{requestStatusGenerator(request.status)}</div>;
@@ -80,6 +86,7 @@ export default function ProcessingRequestTab(props: NewRequestTabProps) {
       ),
     },
   ];
+
   return (
     <Table
       columns={contractListColumns}

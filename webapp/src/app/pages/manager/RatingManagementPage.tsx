@@ -11,17 +11,19 @@ import { Card } from "../../components/card";
 import { useFeedback } from "../../hooks/useFeedback";
 import { usePagination } from "../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
-import { isNonValue } from "../../utils/helpers";
+import { formatDateToLocal, isNonValue } from "../../utils/helpers";
 import RequestDetails from "../../ui/manager_ui/RatingManagementPage/RequestDetails/RequestDetails";
 import { useRequest } from "../../hooks/useRequest";
 import { useSpecialUI } from "../../hooks/useSpecialUI";
+import { useTranslation } from "react-i18next";
 
 const { Paragraph } = Typography;
 
 export default function RatingManagementPage() {
+  const { t } = useTranslation("ratings");
   useTitle({
     tabTitle: "Ratings - EWMH",
-    paths: [{ title: "Danh sách đánh giá", path: "/ratings" }],
+    paths: [{ title: t("rating_list"), path: "/ratings" }],
   });
   const [modal, contextHolder] = Modal.useModal();
   const { state, handleGetAllFeedbacksPaginated, handleApproveFeedback } =
@@ -108,6 +110,11 @@ export default function RatingManagementPage() {
           {value}
         </Paragraph>
       ),
+    },
+    {
+      title: "Thời gian",
+      dataIndex: "time",
+      render: (value) => formatDateToLocal(value, true),
     },
     {
       title: "Trạng thái",

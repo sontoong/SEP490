@@ -22,6 +22,7 @@ import UserManagementPage from "../pages/admin/UserManagementPage";
 
 //manager
 import DashboardPage from "../pages/manager/DashboardPage";
+import CustomerManagementPage from "../pages/manager/CustomerManagementPage";
 import LeaderManagementPage from "../pages/manager/LeaderManagementPage";
 import WorkerManagementPage from "../pages/manager/WorkerManagementPage";
 import ServiceManagementPage from "../pages/manager/ServiceManagementPage";
@@ -74,6 +75,18 @@ export const router = createBrowserRouter([
             <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
               <ManagerLayout>
                 <DashboardPage />
+              </ManagerLayout>
+            </PrivateRoute>
+          </Suspense>
+        ),
+      },
+      {
+        path: "customers",
+        element: (
+          <Suspense fallback={<></>}>
+            <PrivateRoute inverted={false} requiredRoles={[ROLE.manager]}>
+              <ManagerLayout>
+                <CustomerManagementPage />
               </ManagerLayout>
             </PrivateRoute>
           </Suspense>
@@ -256,9 +269,7 @@ export const router = createBrowserRouter([
     path: "/change-password",
     element: (
       <Suspense fallback={<></>}>
-        <PrivateRoute inverted={true}>
-          <ChangePasswordPage />
-        </PrivateRoute>
+        <ChangePasswordPage />
       </Suspense>
     ),
   },

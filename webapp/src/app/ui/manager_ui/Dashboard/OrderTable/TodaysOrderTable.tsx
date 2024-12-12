@@ -1,13 +1,13 @@
-import { Table } from "../../../components/table";
+import { Table } from "../../../../components/table";
 import { TableColumnsType } from "antd";
-import { formatCurrency, formatDateToLocal } from "../../../utils/helpers";
-import { Order } from "../../../models/order";
+import { formatCurrency, formatDateToLocal } from "../../../../utils/helpers";
+import { Order } from "../../../../models/order";
 import { ViewDetailButton } from "./ViewOrderDetailModal";
-import { useOrder } from "../../../hooks/useOrder";
-import { usePagination } from "../../../hooks/usePagination";
+import { useOrder } from "../../../../hooks/useOrder";
+import { usePagination } from "../../../../hooks/usePagination";
 import { useCallback, useEffect } from "react";
 
-export default function TodaysOrderTab() {
+export default function TodaysOrderTable() {
   const { state, handleGetTodaysOrderPaginated } = useOrder();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
     usePagination();
@@ -16,6 +16,7 @@ export default function TodaysOrderTab() {
     handleGetTodaysOrderPaginated({
       PageIndex: currentPage,
       Pagesize: currentPageSize,
+      Date: new Date().toISOString(),
     });
   }, [currentPage, currentPageSize, handleGetTodaysOrderPaginated]);
 
@@ -23,7 +24,7 @@ export default function TodaysOrderTab() {
     fetchOrders();
   }, [fetchOrders]);
 
-  const contractListColumns: TableColumnsType<Order> = [
+  const todaysOrderListColumns: TableColumnsType<Order> = [
     {
       title: "Mã đơn hàng",
       dataIndex: ["order", "orderId"],
@@ -42,7 +43,7 @@ export default function TodaysOrderTab() {
     {
       title: "Ngày đặt",
       dataIndex: ["order", "purchaseTime"],
-      render: (value) => <div>{formatDateToLocal(value)}</div>,
+      render: (value) => <div>{formatDateToLocal(value, true)}</div>,
       sorter: true,
       sortDirections: ["ascend"],
     },
@@ -61,13 +62,13 @@ export default function TodaysOrderTab() {
   return (
     <>
       <Table
-        columns={contractListColumns}
-        dataSource={state.currentOrderList.orders}
+        columns={todaysOrderListColumns}
+        dataSource={state.todaysOrderList.orders}
         rowKey={(record) => record.order?.orderId}
         loading={state.isFetching}
         pagination={{
           showSizeChanger: true,
-          total: state.currentOrderList.total,
+          total: state.todaysOrderList.total,
           pageSize: currentPageSize,
           current: currentPage,
           onChange: (pageIndex, pageSize) => {

@@ -8,10 +8,13 @@ import {
   DisableServicePackageParams,
   getAllServicePackagePaginated,
   GetAllServicePackagePaginatedParams,
+  getRevenueAndNumberOfPurchaseOfServicePackage,
+  GetRevenueAndNumberOfPurchaseOfServicePackageParams,
   getServicePackage,
   GetServicePackageParams,
   setCurrentServicePackage,
   setCurrentServicePackageList,
+  setTopServicePackageList,
   updateServicePackage,
   UpdateServicePackageParams,
 } from "../redux/slice/servicePackageSlice";
@@ -185,6 +188,36 @@ export function useServicePackage() {
     [dispatch, notification],
   );
 
+  const handleGetRevenueAndNumberOfPurchaseOfServicePackage = useCallback(
+    async (values: GetRevenueAndNumberOfPurchaseOfServicePackageParams) => {
+      const resultAction = await dispatch(
+        getRevenueAndNumberOfPurchaseOfServicePackage(values),
+      );
+      if (
+        getRevenueAndNumberOfPurchaseOfServicePackage.fulfilled.match(
+          resultAction,
+        )
+      ) {
+        dispatch(setTopServicePackageList(resultAction.payload[0]));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Lỗi",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Lỗi",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleGetAllServicePackagePaginated,
@@ -192,5 +225,6 @@ export function useServicePackage() {
     handleUpdateServicePackage,
     handleGetServicePackage,
     handleDisableServicePackage,
+    handleGetRevenueAndNumberOfPurchaseOfServicePackage,
   };
 }

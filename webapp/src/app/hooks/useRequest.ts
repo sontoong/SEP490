@@ -100,8 +100,8 @@ export function useRequest() {
       if (getAllTodaysRequestsPaginated.fulfilled.match(resultAction)) {
         dispatch(
           setTodaysRequestList({
-            requests: resultAction.payload[0],
-            total: resultAction.payload[1],
+            requests: resultAction.payload.result,
+            total: resultAction.payload.count,
           }),
         );
       } else {

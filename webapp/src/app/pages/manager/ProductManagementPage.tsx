@@ -15,11 +15,13 @@ import { useCallback, useEffect, useState } from "react";
 import { usePagination } from "../../hooks/usePagination";
 import { useProduct } from "../../hooks/useProduct";
 import { productStatusGenerator } from "../../utils/generators/productStatus";
+import { useTranslation } from "react-i18next";
 
 export default function ProductManagementPage() {
+  const { t } = useTranslation("products");
   useTitle({
     tabTitle: "Products - EWMH",
-    paths: [{ title: "Danh sách sản phẩm", path: "/products" }],
+    paths: [{ title: t("product_list"), path: "/products" }],
   });
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();

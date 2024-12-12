@@ -25,6 +25,9 @@ import {
   setCurrentWorkerList,
   setFreeLeaderList,
   getAllLeaderPaginatedExcluded,
+  getAllWorkerFromLeader,
+  GetAllWorkerFromLeaderParams,
+  setWorkerOfLeaderList,
 } from "../redux/slice/accountSlice";
 
 export function useAccount() {
@@ -204,6 +207,34 @@ export function useAccount() {
     }
   }, [dispatch, notification]);
 
+  const handleGetAllWorkerFromLeader = useCallback(
+    async (values: GetAllWorkerFromLeaderParams) => {
+      const resultAction = await dispatch(getAllWorkerFromLeader(values));
+      if (getAllWorkerFromLeader.fulfilled.match(resultAction)) {
+        dispatch(
+          setWorkerOfLeaderList({
+            users: resultAction.payload,
+          }),
+        );
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Lỗi",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Lỗi",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   const handleCreatePersonnelAccount = useCallback(
     async ({
       values,
@@ -372,5 +403,6 @@ export function useAccount() {
     handleAssignWorkerToLeader,
     handleGetAllFreeLeaders,
     handleApproveCustomerAccount,
+    handleGetAllWorkerFromLeader,
   };
 }

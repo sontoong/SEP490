@@ -4,6 +4,7 @@ import {
   EyeOutlined,
   MailFilled,
   PhoneFilled,
+  TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { MenuProps, Modal, Space } from "antd";
@@ -12,23 +13,33 @@ import { Dropdown } from "../../../components/dropdown";
 import { Leader } from "../../../models/user";
 import { Grid } from "../../../components/grids";
 import { formatDateToLocal } from "../../../utils/helpers";
+import { useState } from "react";
+import { ViewWorkerListModal } from "./WorkerList/ViewWorkerList";
 
 const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
   const [modal, contextHolder] = Modal.useModal();
+  const [isViewWorkerListModalOpen, setIsViewWorkerListModalOpen] =
+    useState(false);
 
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: "Xem chi tiết",
+      label: "Xem thông tin chi tiết",
       onClick: handleViewDetail,
       icon: <EyeOutlined />,
+    },
+    {
+      key: "2",
+      label: "Xem danh sách nhân viên",
+      icon: <TeamOutlined />,
+      onClick: () => setIsViewWorkerListModalOpen(true),
     },
   ];
 
   function handleViewDetail() {
     modal.info({
       icon: <UserOutlined />,
-      width: 700,
+      width: 800,
       title: (
         <div className="text-sm uppercase text-secondary">
           Thông tin của {record.fullName}
@@ -92,6 +103,11 @@ const LeaderManagementDropdown = ({ record }: { record: Leader }) => {
       <Dropdown menu={{ items }} trigger={["click"]}>
         <EllipsisOutlined className="text-lg" />
       </Dropdown>
+      <ViewWorkerListModal
+        leaderId={record.accountId}
+        isModalVisible={isViewWorkerListModalOpen}
+        setIsModalVisible={setIsViewWorkerListModalOpen}
+      />
       {contextHolder}
     </>
   );

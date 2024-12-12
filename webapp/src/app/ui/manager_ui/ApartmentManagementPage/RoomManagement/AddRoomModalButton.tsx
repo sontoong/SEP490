@@ -1,4 +1,4 @@
-import { Space, Typography } from "antd";
+import { Space, Tag, Typography } from "antd";
 import { Form } from "../../../../components/form";
 import { Modal } from "../../../../components/modals";
 import { PrimaryButton } from "../../../../components/buttons";
@@ -83,18 +83,23 @@ export default function AddRoomModalButton({
             name="AddRoomForm"
             onFinish={(values) => {
               const { roomId, roomIds } = values;
-              const add = (roomId: string) => {
+              const addMultipleRooms = (roomIdInput: string) => {
+                const newRoomIds = roomIdInput
+                  .split(/[,\s]+/) // Split by commas or spaces
+                  .filter((id) => id.trim() !== ""); // Remove empty strings
                 addRoomForm.setFieldsValue({
-                  roomIds: [...roomIds, roomId],
+                  roomIds: [...new Set([...roomIds, ...newRoomIds])], // Ensure no duplicates
                 });
               };
-              addRoomForm.validateFields().then(() => add(roomId));
+              addRoomForm.validateFields().then(() => addMultipleRooms(roomId));
               addRoomForm.setFieldValue("roomId", null);
             }}
           >
             {dom}
           </Form>
         )}
+        width="fit-content"
+        className="min-w-[600px]"
       >
         <Space direction="vertical" className="w-full">
           <Space direction="vertical" className="w-full">
@@ -105,13 +110,12 @@ export default function AddRoomModalButton({
                 {
                   type: "string",
                   required: true,
-                  max: 10,
                 },
               ]}
               className="mb-0"
             >
               <Input
-                placeholder="Nhập số căn hộ"
+                placeholder="Nhập số căn hộ (vd: 101, 102, 103)"
                 size="large"
                 className="w-full"
               />
@@ -135,34 +139,54 @@ export default function AddRoomModalButton({
                       />
                     </Form.Item>
                     <div>{`Danh sách căn hộ (${fields.length} căn hộ)`}</div>
-                    {fields.length ? (
-                      fields.map((field) => (
-                        <Space className="w-fit" key={field.key}>
-                          <Form.Item
-                            shouldUpdate={(prevValues, curValues) =>
-                              prevValues.roomIds !== curValues.roomIds
-                            }
-                            noStyle
+                    <div
+                      // style={{
+                      //   display: "flex",
+                      //   flexDirection: "row",
+                      //   flexWrap: "nowrap",
+                      //   overflowX: "auto", // Enable horizontal scrolling
+                      //   padding: "0.5rem",
+                      //   border: "1px solid #ddd",
+                      //   borderRadius: "4px",
+                      // }}
+                      className="grid grid-flow-col grid-rows-4 gap-4"
+                    >
+                      {fields.length ? (
+                        fields.map((field) => (
+                          <Tag
+                            key={field.key}
+                            bordered={true}
+                            className="mr-3 w-fit"
                           >
-                            {({ getFieldValue }) => {
-                              const roomIds = getFieldValue("roomIds");
-                              return (
-                                <span className="text-sm">{`${roomIds[field.name]}`}</span>
-                              );
-                            }}
-                          </Form.Item>
-                          <CloseOutlined
-                            onClick={() => {
-                              remove(field.name);
-                            }}
-                          />
-                        </Space>
-                      ))
-                    ) : (
-                      <Text className="ant-form-text" type="secondary">
-                        ( Chưa có căn hộ. )
-                      </Text>
-                    )}
+                            <Space size={5}>
+                              <Form.Item
+                                shouldUpdate={(prevValues, curValues) =>
+                                  prevValues.roomIds !== curValues.roomIds
+                                }
+                                noStyle
+                              >
+                                {({ getFieldValue }) => {
+                                  const roomIds = getFieldValue("roomIds");
+                                  return (
+                                    <span className="text-sm">{`${roomIds[field.name]}`}</span>
+                                  );
+                                }}
+                              </Form.Item>
+                              <CloseOutlined
+                                onClick={() => {
+                                  remove(field.name);
+                                }}
+                                className="opacity-50"
+                              />
+                            </Space>
+                          </Tag>
+                        ))
+                      ) : (
+                        <Text className="ant-form-text" type="secondary">
+                          ( Chưa có căn hộ. )
+                        </Text>
+                      )}
+                    </div>
                   </div>
                 );
               }}

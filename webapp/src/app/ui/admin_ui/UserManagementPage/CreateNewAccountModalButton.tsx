@@ -20,8 +20,10 @@ import { useAccount } from "../../../hooks/useAccount";
 import { ROLE } from "../../../../constants/role";
 import { CreatePersonnelAccountParams } from "../../../redux/slice/accountSlice";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 export default function CreateNewAccountModalButton() {
+  const { t } = useTranslation("userManagement");
   const [form] = Form.useForm();
   const [modal, contextHolder] = Modal.useModal();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -88,7 +90,7 @@ export default function CreateNewAccountModalButton() {
   return (
     <>
       <PrimaryButton
-        text="Tạo Tài Khoản Mới"
+        text={t("create_new_user.title")}
         icon={<PlusCircleOutlined />}
         onClick={showModal}
       />
@@ -97,7 +99,7 @@ export default function CreateNewAccountModalButton() {
           <Space>
             <EditOutlined className="text-sm" />
             <div className="text-sm uppercase text-secondary">
-              Tạo tài khoản mới
+              {t("create_new_user.title")}
             </div>
           </Space>
         }
@@ -125,7 +127,7 @@ export default function CreateNewAccountModalButton() {
         <div className="w-[100%]">
           <Form.Item
             name="fullName"
-            label="Họ và Tên"
+            label={t("create_new_user.full_name")}
             rules={[
               {
                 type: "string",
@@ -138,7 +140,7 @@ export default function CreateNewAccountModalButton() {
           </Form.Item>
           <Form.Item
             name="email"
-            label="Email"
+            label={t("create_new_user.email")}
             rules={[{ type: "email", required: true }]}
           >
             <Input placeholder="Nhập email" size="large" />
@@ -146,7 +148,7 @@ export default function CreateNewAccountModalButton() {
           <Space className="flex w-full justify-between">
             <Form.Item
               name="phoneNumber"
-              label="SĐT"
+              label={t("create_new_user.phoneNumber")}
               rules={[
                 { required: true, whitespace: true },
                 {
@@ -161,7 +163,7 @@ export default function CreateNewAccountModalButton() {
             </Form.Item>
             <Form.Item
               name="dateOfBirth"
-              label="Ngày sinh"
+              label={t("create_new_user.dob")}
               rules={[{ required: true }]}
             >
               <InputDate

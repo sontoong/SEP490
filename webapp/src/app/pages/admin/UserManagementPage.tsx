@@ -16,8 +16,10 @@ import { User } from "../../models/user";
 import { useAccount } from "../../hooks/useAccount";
 import { useCallback, useEffect, useState } from "react";
 import { usePagination } from "../../hooks/usePagination";
+import { useTranslation } from "react-i18next";
 
 export default function UserManagementPage() {
+  const { t } = useTranslation("userManagement");
   const { notification } = App.useApp();
   useTitle({ tabTitle: "User Management - EWMH" });
   const [modal, contextHolder] = Modal.useModal();
@@ -146,7 +148,7 @@ export default function UserManagementPage() {
 
   const userListColumns: TableColumnsType<User> = [
     {
-      title: "Tên",
+      title: t("user_table.name"),
       dataIndex: "fullName",
       render: (_, { avatarUrl, fullName, email }) => (
         <Space direction="horizontal" size={15}>
@@ -159,7 +161,7 @@ export default function UserManagementPage() {
       ),
     },
     {
-      title: "Vai trò",
+      title: t("user_table.role"),
       dataIndex: "role",
       render: (_, { role }) => (
         <div className="text-sm">{roleNameGenerator(role)}</div>
@@ -188,7 +190,7 @@ export default function UserManagementPage() {
       ],
     },
     {
-      title: "Trạng thái",
+      title: t("user_table.status"),
       dataIndex: "isDisabled",
       render: (_, { isDisabled, accountId, role }) => {
         return (
@@ -240,7 +242,7 @@ export default function UserManagementPage() {
       ],
     },
     {
-      title: "Ghi chú",
+      title: t("user_table.notes"),
       dataIndex: "disabledReason",
     },
     {
@@ -258,7 +260,7 @@ export default function UserManagementPage() {
         </div>
         <div className="flex items-center justify-between">
           <div className="text-3xl font-semibold text-primary">
-            Danh sách người dùng
+            {t("user_list")}
           </div>
           <Form
             form={searchForm}
@@ -279,7 +281,7 @@ export default function UserManagementPage() {
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm theo email"
+                placeholder={t("find_by_email")}
                 onSearch={() => searchForm.submit()}
                 onClear={() => {
                   searchForm.setFieldValue("searchString", "");

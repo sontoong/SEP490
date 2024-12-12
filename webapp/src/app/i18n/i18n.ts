@@ -2,6 +2,8 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import SIDER_EN from "../locales/en/sider.json";
 import SIDER_VI from "../locales/vi/sider.json";
+import USER_MANAGEMENT_EN from "../locales/en/user-management.json";
+import USER_MANAGEMENT_VI from "../locales/vi/user-management.json";
 import DASHBOARD_EN from "../locales/en/dashboard.json";
 import DASHBOARD_VI from "../locales/vi/dashboard.json";
 import CUSTOMERS_EN from "../locales/en/customers.json";
@@ -39,6 +41,7 @@ export const changeLanguage = (language: string) => {
 export const resources = {
   en: {
     sider: SIDER_EN,
+    userManagement: USER_MANAGEMENT_EN,
     dashboard: DASHBOARD_EN,
     customers: CUSTOMERS_EN,
     requests: REQUEST_EN,
@@ -54,6 +57,7 @@ export const resources = {
   },
   vi: {
     sider: SIDER_VI,
+    userManagement: USER_MANAGEMENT_VI,
     dashboard: DASHBOARD_VI,
     customers: CUSTOMERS_VI,
     requests: REQUEST_VI,

@@ -132,7 +132,7 @@ export default function CreateNewServicePackageModalButton() {
               },
             ]}
           >
-            <TextEditor placeholder="Nhập mô tả" limit={250} />
+            <TextEditor placeholder="Nhập mô tả" limit={200} />
           </Form.Item>
           <Form.Item
             name="NumOfRequest"

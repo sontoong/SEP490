@@ -108,7 +108,7 @@ export default function ProductManagementPage() {
 
   const productListColumns: TableColumnsType<Product> = [
     {
-      title: "Tên sản phẩm",
+      title: t("product_table.product_info"),
       dataIndex: "name",
       render: (_, { name, imageUrl }) => (
         <Space direction="horizontal" size={15}>
@@ -120,7 +120,7 @@ export default function ProductManagementPage() {
       ),
     },
     {
-      title: "Giá hiện tại",
+      title: t("product_table.product_price"),
       dataIndex: "priceByDate",
       render: (value) => {
         return formatCurrency(value);
@@ -129,17 +129,17 @@ export default function ProductManagementPage() {
       sortDirections: ["ascend"],
     },
     {
-      title: "Số lượng",
+      title: t("product_table.product_quantity"),
       dataIndex: "inOfStock",
     },
     {
-      title: "Tình trạng",
+      title: t("product_table.product_quantity_status"),
       render: (_, { inOfStock }) => {
         return <div>{productStatusGenerator(inOfStock)}</div>;
       },
     },
     {
-      title: "Trạng thái",
+      title: t("product_table.product_status"),
       dataIndex: "status",
       render: (_, { status, productId }) => {
         return (
@@ -204,7 +204,7 @@ export default function ProductManagementPage() {
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm theo tên sản phẩm"
+                placeholder={t("search_by_name")}
                 onSearch={() => searchForm.submit()}
                 onClear={() => {
                   searchForm.setFieldValue("searchString", "");

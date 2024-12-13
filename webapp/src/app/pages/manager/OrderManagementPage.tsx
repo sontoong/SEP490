@@ -37,12 +37,12 @@ export default function OrderManagementPage() {
   const items: TabsProps["items"] = [
     {
       key: "1",
-      label: "Đơn hàng của khách hàng",
+      label: t("customer_order.title"),
       children: <CustomerOrderTab searchByPhone={searchByPhone} />,
     },
     {
       key: "2",
-      label: "Đơn hàng của yêu cầu",
+      label: t("request_order.title"),
       children: (
         <RequestOrderTab searchByPhone={searchByPhone} setOpen={setOpen} />
       ),
@@ -87,7 +87,7 @@ export default function OrderManagementPage() {
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm theo SĐT"
+                placeholder={t("search_by_phone")}
                 onSearch={() => searchForm.submit()}
                 onClear={() => {
                   searchForm.setFieldValue("searchString", "");

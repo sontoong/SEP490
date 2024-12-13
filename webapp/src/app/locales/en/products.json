@@ -1,3 +1,11 @@
 {
-  "product_list": "Product List"
+  "product_list": "Product List",
+  "search_by_name": "Search by name",
+  "product_table": {
+    "product_info": "Product Information",
+    "product_price": "Price",
+    "product_quantity": "Quantity",
+    "product_quantity_status": "Stock Status",
+    "product_status": "Status"
+  }
 }

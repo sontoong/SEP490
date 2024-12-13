@@ -1,3 +1,10 @@
 {
-  "service_package_list": "Danh sách gói dịch vụ"
+  "service_package_list": "Danh sách gói dịch vụ",
+  "search_by_name": "Tìm kiếm theo tên gói",
+  "service_package_table": {
+    "service_package_info": "Thông tin gói dịch vụ",
+    "service_package_desc": "Mô tả",
+    "service_package_price": "Giá",
+    "service_package_status": "Trạng thái"
+  }
 }

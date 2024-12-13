@@ -1,3 +1,10 @@
 {
-  "worker_list": "Danh sách nhân viên"
+  "worker_list": "Danh sách nhân viên",
+  "search_by_email": "Tìm kiếm theo email",
+  "worker_table": {
+    "worker_info": "Thông tin nhân viên",
+    "worker_phone": "SĐT",
+    "worker_leader": "Trưởng nhóm",
+    "worker_status": "Trạng thái"
+  }
 }

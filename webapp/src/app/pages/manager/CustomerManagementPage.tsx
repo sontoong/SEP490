@@ -143,7 +143,7 @@ export default function CustomerManagementPage() {
 
   const customerListColumns: TableColumnsType<User> = [
     {
-      title: "Họ và Tên",
+      title: t("customer_table.customer_info"),
       dataIndex: "fullName",
       render: (_, { avatarUrl, fullName, email }) => (
         <Space direction="horizontal" size={15}>
@@ -156,11 +156,11 @@ export default function CustomerManagementPage() {
       ),
     },
     {
-      title: "SĐT",
+      title: t("customer_table.customer_phone"),
       dataIndex: "phoneNumber",
     },
     {
-      title: "Trạng thái",
+      title: t("customer_table.customer_status"),
       dataIndex: "isDisabled",
       render: (_, { isDisabled, accountId }) => {
         return (
@@ -188,7 +188,7 @@ export default function CustomerManagementPage() {
       ],
     },
     {
-      title: "Ghi chú",
+      title: t("customer_table.customer_notes"),
       dataIndex: "disabledReason",
     },
     {
@@ -221,7 +221,7 @@ export default function CustomerManagementPage() {
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm theo email"
+                placeholder={t("search_by_email")}
                 onSearch={() => searchForm.submit()}
                 onClear={() => {
                   searchForm.setFieldValue("searchString", "");

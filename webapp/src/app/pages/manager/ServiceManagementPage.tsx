@@ -109,7 +109,7 @@ export default function ServiceManagementPage() {
 
   const serviceListColumns: TableColumnsType<ServicePackage> = [
     {
-      title: "Gói dịch vụ",
+      title: t("service_package_table.service_package_info"),
       dataIndex: "Name",
       render: (_, { imageUrl, name, numOfRequest }) => (
         <Space direction="horizontal" size={15}>
@@ -122,21 +122,21 @@ export default function ServiceManagementPage() {
       ),
     },
     {
-      title: "Mô tả",
+      title: t("service_package_table.service_package_desc"),
       dataIndex: "description",
       render: (value) => {
         return htmlParse(value);
       },
     },
     {
-      title: "Giá",
+      title: t("service_package_table.service_package_price"),
       dataIndex: "priceByDate",
       render: (value) => {
         return formatCurrency(value);
       },
     },
     {
-      title: "Trạng thái",
+      title: t("service_package_table.service_package_status"),
       dataIndex: "status",
       render: (_, { status, servicePackageId }) => {
         return (
@@ -201,7 +201,7 @@ export default function ServiceManagementPage() {
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm theo tên gói dịch vụ"
+                placeholder={t("search_by_name")}
                 onSearch={() => searchForm.submit()}
                 onClear={() => {
                   searchForm.setFieldValue("searchString", "");

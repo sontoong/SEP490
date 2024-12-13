@@ -56,11 +56,11 @@ export default function ContractManagementPage() {
 
   const contractListColumns: TableColumnsType<Contract> = [
     {
-      title: "Mã hợp đồng",
+      title: t("contract_table.contract_id"),
       dataIndex: ["item", "contractId"],
     },
     {
-      title: "Tên gói dịch vụ",
+      title: t("contract_table.service_package_name"),
       dataIndex: ["item", "name"],
       // render: (_, { item }) => (
       //   <Space direction="vertical">
@@ -69,31 +69,31 @@ export default function ContractManagementPage() {
       // ),
     },
     {
-      title: "Khách hàng",
+      title: t("contract_table.contract_customer_name"),
       dataIndex: ["getCusInfo", "fullName"],
     },
     {
-      title: "Thanh toán vào",
+      title: t("contract_table.contract_paid_date"),
       dataIndex: ["item", "purchaseTime"],
       render: (value) => <div>{formatDateToLocal(value)}</div>,
       sorter: true,
       sortDirections: ["descend"],
     },
     {
-      title: "Tổng lần sửa",
+      title: t("contract_table.contract_total_num_of_request"),
       dataIndex: ["item", "numOfRequest"],
     },
     {
-      title: "Lần sửa còn",
+      title: t("contract_table.contract_remaining_num_of_request"),
       dataIndex: ["item", "remainingNumOfRequests"],
     },
     {
-      title: "Hạn sử dụng",
+      title: t("contract_table.contract_end_date"),
       dataIndex: ["item", "expireDate"],
       render: (value) => <div>{formatDateToLocal(value)}</div>,
     },
     {
-      title: "Trạng thái",
+      title: t("contract_table.contract_status"),
       render: (_, { item }) => {
         return (
           <div>
@@ -134,7 +134,7 @@ export default function ContractManagementPage() {
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm theo SĐT"
+                placeholder={t("search_by_phone")}
                 onSearch={() => searchForm.submit()}
               />
             </Form.Item>

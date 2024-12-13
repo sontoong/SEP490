@@ -1,3 +1,10 @@
 {
-  "service_package_list": "Service Package List"
+  "service_package_list": "Service Package List",
+  "search_by_name": "Search by name",
+  "service_package_table": {
+    "service_package_info": "Service Package Information",
+    "service_package_desc": "Description",
+    "service_package_price": "Price",
+    "service_package_status": "Status"
+  }
 }

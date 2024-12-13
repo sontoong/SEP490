@@ -6,8 +6,10 @@ import RequestOrderDropdown from "./RequestOrderDropdown";
 import { useOrder } from "../../../hooks/useOrder";
 import { usePagination } from "../../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function RequestOrderTab(props: CustomerOrderTabProps) {
+  const { t } = useTranslation("orders");
   const { state: orderState, handleGetAllRequestOrderPaginated } = useOrder();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
     usePagination();
@@ -34,35 +36,35 @@ export default function RequestOrderTab(props: CustomerOrderTabProps) {
 
   const contractListColumns: TableColumnsType<RequestOrder> = [
     {
-      title: "Mã yêu cầu",
+      title: t("request_order.order_table.request_id"),
       dataIndex: ["order", "requestId"],
       // render: (_, { order }) => (
       //   <div className="text-base font-bold">{order.requestId}</div>
       // ),
     },
     {
-      title: "Khách hàng",
+      title: t("request_order.order_table.order_customer_name"),
       dataIndex: ["customer_Leader", "0", "fullName"],
     },
     {
-      title: "SĐT",
+      title: t("request_order.order_table.order_customer_phone"),
       dataIndex: ["customer_Leader", "0", "phoneNumber"],
     },
     {
-      title: "Ngày đặt",
+      title: t("request_order.order_table.order_date"),
       dataIndex: ["order", "purchaseTime"],
       render: (value) => <div>{formatDateToLocal(value)}</div>,
       sorter: true,
       sortDirections: ["ascend"],
     },
     {
-      title: "Tổng giá",
+      title: t("request_order.order_table.order_total_price"),
       render: (_, { order }) => {
         return <div>{formatCurrency(order.totalPrice)}</div>;
       },
     },
     {
-      title: "Trưởng nhóm",
+      title: t("request_order.order_table.order_leader_name"),
       dataIndex: ["customer_Leader", "1", "fullName"],
     },
     {

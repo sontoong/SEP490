@@ -134,7 +134,7 @@ export default function WorkerManagementPage() {
 
   const workerListColumns: TableColumnsType<Worker> = [
     {
-      title: "Họ và Tên",
+      title: t("worker_table.worker_info"),
       dataIndex: ["item", "fullName"],
       render: (_, { item }) => (
         <Space direction="horizontal" size={15}>
@@ -147,11 +147,11 @@ export default function WorkerManagementPage() {
       ),
     },
     {
-      title: "SĐT",
+      title: t("worker_table.worker_phone"),
       dataIndex: ["item", "phoneNumber"],
     },
     {
-      title: "Leader",
+      title: t("worker_table.worker_leader"),
       dataIndex: "leaderId",
       render: (_, { getLeaderInfo }) =>
         getLeaderInfo?.accountId ? (
@@ -161,7 +161,7 @@ export default function WorkerManagementPage() {
         ),
     },
     {
-      title: "Trạng thái",
+      title: t("worker_table.worker_status"),
       dataIndex: ["item", "isDisabled"],
       render: (isDisabled, { getLeaderInfo }) => {
         return getLeaderInfo?.accountId ? (
@@ -240,7 +240,7 @@ export default function WorkerManagementPage() {
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm theo email"
+                placeholder={t("search_by_email")}
                 onSearch={() => searchForm.submit()}
                 onClear={() => {
                   searchForm.setFieldValue("searchString", "");

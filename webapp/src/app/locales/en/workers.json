@@ -1,3 +1,10 @@
 {
-  "worker_list": "Worker List"
+  "worker_list": "Worker List",
+  "search_by_email": "Search by email",
+  "worker_table": {
+    "worker_info": "Worker Information",
+    "worker_phone": "Phone Number",
+    "worker_leader": "Team Leader",
+    "worker_status": "Status"
+  }
 }

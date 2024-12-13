@@ -141,7 +141,7 @@ export default function LeaderManagementPage() {
 
   const leaderListColumns: TableColumnsType<Leader> = [
     {
-      title: "Họ và Tên",
+      title: t("leader_table.leader_info"),
       dataIndex: "fullName",
       render: (_, { avatarUrl, fullName, email }) => (
         <Space direction="horizontal" size={15}>
@@ -154,15 +154,15 @@ export default function LeaderManagementPage() {
       ),
     },
     {
-      title: "SĐT",
+      title: t("leader_table.leader_phone"),
       dataIndex: "phoneNumber",
     },
     {
-      title: "Chung cư",
+      title: t("leader_table.leader_apartment"),
       dataIndex: "name",
     },
     {
-      title: "Trạng thái",
+      title: t("leader_table.leader_status"),
       dataIndex: "isDisabled",
       render: (_, { isDisabled, accountId, areaId }) => {
         return areaId ? (
@@ -238,7 +238,7 @@ export default function LeaderManagementPage() {
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm theo email"
+                placeholder={t("search_by_email")}
                 onSearch={() => searchForm.submit()}
                 onClear={() => {
                   searchForm.setFieldValue("searchString", "");

@@ -1,3 +1,11 @@
 {
-  "product_list": "Danh sách sản phẩm"
+  "product_list": "Danh sách sản phẩm",
+  "search_by_name": "Tìm kiếm theo tên sản phẩm",
+  "product_table": {
+    "product_info": "Thông tin sản phẩm",
+    "product_price": "Giá",
+    "product_quantity": "Số lượng",
+    "product_quantity_status": "Tình trạng",
+    "product_status": "Trạng thái"
+  }
 }

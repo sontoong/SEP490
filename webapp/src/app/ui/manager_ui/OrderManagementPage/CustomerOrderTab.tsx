@@ -6,8 +6,10 @@ import { ViewDetailButton } from "./ViewOrderDetailModal";
 import { useOrder } from "../../../hooks/useOrder";
 import { usePagination } from "../../../hooks/usePagination";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function CustomerOrderTab(props: CustomerOrderTabProps) {
+  const { t } = useTranslation("orders");
   const { state, handleGetAllOrderPaginated } = useOrder();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
     usePagination();
@@ -34,29 +36,29 @@ export default function CustomerOrderTab(props: CustomerOrderTabProps) {
 
   const contractListColumns: TableColumnsType<Order> = [
     {
-      title: "Mã đơn hàng",
+      title: t("customer_order.order_table.order_id"),
       dataIndex: ["order", "orderId"],
       // render: (_, { order }) => (
       //   <div className="text-base font-bold">{order?.orderId}</div>
       // ),
     },
     {
-      title: "Khách hàng",
+      title: t("customer_order.order_table.order_customer_name"),
       dataIndex: ["customer", "0", "fullName"],
     },
     {
-      title: "SĐT",
+      title: t("customer_order.order_table.order_customer_phone"),
       dataIndex: ["customer", "0", "phoneNumber"],
     },
     {
-      title: "Ngày đặt",
+      title: t("customer_order.order_table.order_date"),
       dataIndex: ["order", "purchaseTime"],
       render: (value) => <div>{formatDateToLocal(value)}</div>,
       sorter: true,
       sortDirections: ["ascend"],
     },
     {
-      title: "Tổng giá",
+      title: t("customer_order.order_table.order_total_price"),
       render: (_, { order }) => {
         return <div>{formatCurrency(order?.totalPrice)}</div>;
       },

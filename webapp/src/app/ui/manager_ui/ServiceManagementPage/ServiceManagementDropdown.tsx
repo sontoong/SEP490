@@ -11,6 +11,7 @@ import { useState } from "react";
 import UpdateServiceModal from "./UpdateServiceModal";
 import ViewServicePackageDetailsModal from "./ViewServicePackageDetailsModal";
 import ViewServicePackageStatisticsModal from "./ViewServicePackageStatisticsModal";
+import { useTranslation } from "react-i18next";
 
 const ServiceManagementDropdown = ({
   record,
@@ -19,6 +20,7 @@ const ServiceManagementDropdown = ({
   record: ServicePackage;
   fetchServicePackage: any;
 }) => {
+  const { t } = useTranslation("services");
   const [isChangeLeaderModalOpen, setIsChangeLeaderModalOpen] = useState(false);
   const [
     isViewServicePackageStatisticsModalOpen,
@@ -30,19 +32,19 @@ const ServiceManagementDropdown = ({
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: "Xem chi tiết",
+      label: t("dropdown.view_service_package_details"),
       onClick: () => setIsViewServicePackageModalOpen(true),
       icon: <EyeOutlined />,
     },
     {
       key: "2",
-      label: "Chỉnh sửa",
+      label: t("dropdown.update_service_package_details"),
       onClick: () => setIsChangeLeaderModalOpen(true),
       icon: <EditOutlined />,
     },
     {
       key: "3",
-      label: "Xem thống kê",
+      label: t("dropdown.view_statistics"),
       onClick: () => setIsViewServicePackageStatisticsModalOpen(true),
       icon: <BarChartOutlined />,
     },

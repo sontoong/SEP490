@@ -160,6 +160,13 @@ export default function LeaderManagementPage() {
     {
       title: t("leader_table.leader_apartment"),
       dataIndex: "name",
+      render: (_, { name, areaId }) => {
+        return areaId ? (
+          <div className="w-fit">{name}</div>
+        ) : (
+          <div className="w-fit text-red-500">Chưa có</div>
+        );
+      },
     },
     {
       title: t("leader_table.leader_status"),

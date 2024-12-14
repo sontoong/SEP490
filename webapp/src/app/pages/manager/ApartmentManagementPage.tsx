@@ -62,7 +62,7 @@ export default function ApartmentManagementPage() {
 
   const apartmentListColumns: TableColumnsType<Apartment> = [
     {
-      title: "Tên chung cư",
+      title: t("apartment_table.apartment_info"),
       render: (_, { name, avatarUrl, address }) => (
         <Space direction="horizontal" size={15}>
           <Avatar src={avatarUrl} size={60} shape="square" />
@@ -82,11 +82,11 @@ export default function ApartmentManagementPage() {
       ),
     },
     {
-      title: "Công ty",
+      title: t("apartment_table.apartment_company"),
       dataIndex: "managementCompany",
     },
     {
-      title: "Miêu tả",
+      title: t("apartment_table.apartment_description"),
       dataIndex: "description",
       render: (value) => (
         <Paragraph
@@ -98,7 +98,7 @@ export default function ApartmentManagementPage() {
       ),
     },
     {
-      title: "Trưởng nhóm",
+      title: t("apartment_table.apartment_leader_name"),
       render: (_, { account }) => {
         return <div>{leaderNameGenerator(account.fullName)}</div>;
       },
@@ -156,7 +156,7 @@ export default function ApartmentManagementPage() {
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm theo tên chung cư"
+                placeholder={t("search_by_apartment_name")}
                 onSearch={() => searchForm.submit()}
                 onClear={() => {
                   searchForm.setFieldValue("searchString", "");

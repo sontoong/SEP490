@@ -12,6 +12,7 @@ import { Apartment } from "../../../models/apartment";
 import UpdateApartmentModal from "./UpdateApartmentModal";
 import { useAppDispatch } from "../../../redux/hook";
 import { setCurrentApartment } from "../../../redux/slice/apartmentSlice";
+import { useTranslation } from "react-i18next";
 
 const ApartmentManagementDropdown = ({
   apartment,
@@ -20,6 +21,7 @@ const ApartmentManagementDropdown = ({
   apartment: Apartment;
   setDrawerOpen?: any;
 }) => {
+  const { t } = useTranslation("apartments");
   const dispatch = useAppDispatch();
 
   const [
@@ -32,7 +34,7 @@ const ApartmentManagementDropdown = ({
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: "Xem thông tin chi tiết",
+      label: t("dropdown.view_apartment_details"),
       icon: <EyeOutlined />,
       onClick: () => {
         dispatch(setCurrentApartment(apartment));
@@ -41,13 +43,13 @@ const ApartmentManagementDropdown = ({
     },
     {
       key: "2",
-      label: "Chỉnh sửa chung cư",
+      label: t("dropdown.update_apartment_details"),
       icon: <EditOutlined />,
       onClick: () => setIsUpdateApartmentModalOpen(true),
     },
     {
       key: "3",
-      label: "Quản lý căn hộ",
+      label: t("dropdown.manage_apartment_rooms"),
       icon: <HomeOutlined />,
       onClick: () => setIsViewApartmentDetailModalVisible(true),
     },

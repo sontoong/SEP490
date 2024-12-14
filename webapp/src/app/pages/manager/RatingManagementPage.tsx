@@ -80,7 +80,7 @@ export default function RatingManagementPage() {
 
   const feedbackListColumns: TableColumnsType<Feedback> = [
     {
-      title: "Họ và Tên",
+      title: t("rating_table.customer_info"),
       dataIndex: "fullName",
       render: (_, { customerName, avatarUrl, customerEmail }) => (
         <Space direction="horizontal" size={15}>
@@ -93,14 +93,14 @@ export default function RatingManagementPage() {
       ),
     },
     {
-      title: "Số sao",
+      title: t("rating_table.rating_value"),
       dataIndex: "rate",
       render: (value) => <Rate allowHalf disabled value={value} />,
       sorter: true,
       sortDirections: ["descend"],
     },
     {
-      title: "Đánh giá",
+      title: t("rating_table.rating_description"),
       dataIndex: "content",
       render: (value) => (
         <Paragraph
@@ -112,12 +112,12 @@ export default function RatingManagementPage() {
       ),
     },
     {
-      title: "Thời gian",
+      title: t("rating_table.rating_time"),
       dataIndex: "time",
       render: (value) => formatDateToLocal(value, true),
     },
     {
-      title: "Trạng thái",
+      title: t("rating_table.rating_status"),
       dataIndex: "status",
       render: (_, { status, feedbackId }) => {
         return (
@@ -170,7 +170,7 @@ export default function RatingManagementPage() {
         <Space>
           <Card
             style={{ width: 300 }}
-            title="Số lượng người đánh giá"
+            title={t("total_reviews")}
             loading={state.isFetching}
           >
             <Space className="text-2xl">
@@ -182,7 +182,7 @@ export default function RatingManagementPage() {
           </Card>
           <Card
             style={{ width: 300 }}
-            title="Trung bình số sao"
+            title={t("avg_rating")}
             loading={state.isFetching}
           >
             <Space className="text-2xl">

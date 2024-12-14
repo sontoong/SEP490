@@ -50,7 +50,7 @@ export default function VerifyCustomerPage() {
 
   const pendingAccountListColumns: TableColumnsType<PendingCustomer> = [
     {
-      title: "Họ và Tên",
+      title: t("approve_request_request_table.approve_request_request_info"),
       dataIndex: "fullName",
       render: (_, { get }) => (
         <Space direction="horizontal" size={15}>
@@ -62,15 +62,19 @@ export default function VerifyCustomerPage() {
       ),
     },
     {
-      title: "SĐT",
+      title: t("approve_request_request_table.approve_request_request_phone"),
       dataIndex: ["get", "phoneNumber"],
     },
     {
-      title: "Chung cư",
+      title: t(
+        "approve_request_request_table.approve_request_request_apartment",
+      ),
       dataIndex: ["apartment", "0", "name"],
     },
     {
-      title: "Căn hộ",
+      title: t(
+        "approve_request_request_table.approve_request_request_apartment_room",
+      ),
       dataIndex: ["get", "roomIds"],
       render: (_, { get }) => (
         <>
@@ -119,7 +123,7 @@ export default function VerifyCustomerPage() {
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm theo SĐT"
+                placeholder={t("search_by_phone")}
                 onSearch={() => searchForm.submit()}
                 onClear={() => {
                   searchForm.setFieldValue("searchString", "");

@@ -114,7 +114,7 @@ export default function AddRoomModalButton({
               ]}
               className="mb-0"
             >
-              <Input
+              <Input.TextArea
                 placeholder="Nhập số căn hộ (vd: 101, 102, 103)"
                 size="large"
                 className="w-full"

@@ -11,8 +11,10 @@ import { UploadImage } from "../../../components/image-upload/image-upload";
 import { useProduct } from "../../../hooks/useProduct";
 import { AddProductParams } from "../../../redux/slice/productSlice";
 import { getFiles } from "../../../utils/helpers";
+import { useTranslation } from "react-i18next";
 
 export default function CreateNewProductModalButton() {
+  const { t } = useTranslation("products");
   const { notification } = App.useApp();
   const [createNewProductForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -65,7 +67,7 @@ export default function CreateNewProductModalButton() {
   return (
     <>
       <PrimaryButton
-        text="Tạo sản phẩm mới"
+        text={t("create_new_product.title")}
         icon={<PlusCircleOutlined />}
         onClick={showModal}
       />
@@ -73,7 +75,9 @@ export default function CreateNewProductModalButton() {
         title={
           <Space className="text-base">
             <EditOutlined />
-            <div className="uppercase text-secondary">Tạo sản phẩm mới</div>
+            <div className="uppercase text-secondary">
+              {t("create_new_product.title")}
+            </div>
           </Space>
         }
         open={isModalVisible}
@@ -102,7 +106,11 @@ export default function CreateNewProductModalButton() {
           <ImageUpload images={images} setImages={setImages} maxCount={1} />
           <Form.Item
             name="Name"
-            label={<div className="text-sm text-secondary">Tên sản phẩm</div>}
+            label={
+              <div className="text-sm text-secondary">
+                {t("create_new_product.product_name")}
+              </div>
+            }
             rules={[
               {
                 type: "string",
@@ -120,7 +128,11 @@ export default function CreateNewProductModalButton() {
           </Form.Item>
           <Form.Item
             name="Description"
-            label={<div className="text-sm text-secondary">Mô tả</div>}
+            label={
+              <div className="text-sm text-secondary">
+                {t("create_new_product.product_description")}
+              </div>
+            }
             rules={[
               {
                 type: "string",
@@ -134,7 +146,11 @@ export default function CreateNewProductModalButton() {
           </Form.Item>
           <Form.Item
             name="Price"
-            label={<div className="text-sm text-secondary">Giá sản phẩm</div>}
+            label={
+              <div className="text-sm text-secondary">
+                {t("create_new_product.product_price")}
+              </div>
+            }
             rules={[
               {
                 type: "number",
@@ -153,7 +169,11 @@ export default function CreateNewProductModalButton() {
           </Form.Item>
           <Form.Item
             name="InOfStock"
-            label={<div className="text-sm text-secondary">Số lượng</div>}
+            label={
+              <div className="text-sm text-secondary">
+                {t("create_new_product.product_quantity")}
+              </div>
+            }
             rules={[
               {
                 type: "number",
@@ -172,7 +192,9 @@ export default function CreateNewProductModalButton() {
           <Form.Item
             name="WarantyMonths"
             label={
-              <div className="text-sm text-secondary">Số tháng bảo hành</div>
+              <div className="text-sm text-secondary">
+                {t("create_new_product.product_warranty_month")}
+              </div>
             }
             rules={[
               {

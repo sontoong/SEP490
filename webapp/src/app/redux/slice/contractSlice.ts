@@ -2,19 +2,45 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import agent from "../../services/agent";
 import { AxiosError } from "axios";
 import { excludedActionsPending } from "./specialUISlice";
-import { Contract } from "../../models/contract";
+import { Contract, ContractDetails } from "../../models/contract";
 
 export type TContract = {
   currentContractList: {
     contracts: Contract[];
     total: number;
   };
+  currentContract: ContractDetails;
   isFetching: boolean;
   isSending: boolean;
 };
 
 const initialState: TContract = {
   currentContractList: { contracts: [], total: 0 },
+  currentContract: {
+    contract: {
+      contractId: "",
+      customerId: "",
+      fileUrl: "",
+      isOnlinePayment: false,
+      orderCode: "",
+      purchaseTime: "",
+      remainingNumOfRequests: 0,
+      servicePackageId: "",
+      totalPrice: 0,
+    },
+    customerInfo: {
+      accountId: "",
+      avatarUrl: "",
+      cmT_CCCD: "",
+      dateOfBirth: "",
+      disabledReason: "",
+      email: "",
+      fullName: "",
+      isDisabled: false,
+      phoneNumber: "",
+    },
+    requestIdList: [],
+  },
   isFetching: false,
   isSending: false,
 };
@@ -28,6 +54,12 @@ const contractSlice = createSlice({
       action: PayloadAction<TContract["currentContractList"]>,
     ) => {
       state.currentContractList = action.payload;
+    },
+    setCurrentContract: (
+      state,
+      action: PayloadAction<TContract["currentContract"]>,
+    ) => {
+      state.currentContract = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -100,7 +132,28 @@ export const getAllContractsPaginated = createAsyncThunk<
   },
 );
 
-export const { setCurrentContractList } = contractSlice.actions;
+export const getContractDetails = createAsyncThunk<
+  any,
+  GetContractDetailsParams
+>("contract/fetch/getContractDetails", async (data, { rejectWithValue }) => {
+  const { ContractId } = data;
+  try {
+    const response = await agent.ServicePackage.getContractDetails({
+      ContractId,
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+});
+
+export const { setCurrentContractList, setCurrentContract } =
+  contractSlice.actions;
 
 export default contractSlice.reducer;
 
@@ -109,4 +162,8 @@ export type GetAllContractsPaginatedParams = {
   Pagesize: number;
   SearchByPhone?: string;
   PurchaseTime_Des_Sort?: boolean;
+};
+
+export type GetContractDetailsParams = {
+  ContractId: string;
 };

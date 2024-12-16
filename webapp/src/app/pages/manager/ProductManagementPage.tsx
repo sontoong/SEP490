@@ -126,7 +126,6 @@ export default function ProductManagementPage() {
         return formatCurrency(value);
       },
       sorter: true,
-      sortDirections: ["ascend"],
     },
     {
       title: t("product_table.product_quantity"),
@@ -236,9 +235,12 @@ export default function ProductManagementPage() {
             setTableParams({
               filters: filters,
               sorter: {
-                priceByDate: Array.isArray(sorter)
-                  ? undefined
-                  : sorter.order === "ascend",
+                priceByDate:
+                  Array.isArray(sorter) || !sorter.order
+                    ? undefined
+                    : sorter.order === "ascend"
+                      ? true
+                      : false,
               },
             });
           }}

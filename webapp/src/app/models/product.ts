@@ -23,5 +23,5 @@ export type TopProduct = {
   status: boolean;
   latestPrice: number;
   orderIdList: { orderId: string; purchaseTime: string }[];
-  doneRequestIdList: { orderId: string; purchaseTime: string }[];
+  doneRequestIdList: { requestId: string; purchaseTime: string }[];
 };

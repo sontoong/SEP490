@@ -4,6 +4,9 @@ import { useAppDispatch, useAppSelector } from "../redux/hook";
 import {
   getAllContractsPaginated,
   GetAllContractsPaginatedParams,
+  getContractDetails,
+  GetContractDetailsParams,
+  setCurrentContract,
   setCurrentContractList,
 } from "../redux/slice/contractSlice";
 
@@ -41,8 +44,33 @@ export function useContract() {
     [dispatch, notification],
   );
 
+  const handleGetContractDetails = useCallback(
+    async (value: GetContractDetailsParams) => {
+      const resultAction = await dispatch(getContractDetails(value));
+      if (getContractDetails.fulfilled.match(resultAction)) {
+        dispatch(setCurrentContract(resultAction.payload));
+      } else {
+        if (resultAction.payload) {
+          notification.error({
+            message: "Lỗi",
+            description: `${resultAction.payload}`,
+            placement: "topRight",
+          });
+        } else {
+          notification.error({
+            message: "Lỗi",
+            description: resultAction.error.message,
+            placement: "topRight",
+          });
+        }
+      }
+    },
+    [dispatch, notification],
+  );
+
   return {
     state,
     handleGetAllContractPaginated,
+    handleGetContractDetails,
   };
 }

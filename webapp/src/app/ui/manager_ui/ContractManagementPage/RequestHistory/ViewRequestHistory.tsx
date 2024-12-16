@@ -55,12 +55,8 @@ export default function ViewRequestHistoryModal({
                 onClick={() => handleViewDetail(request.requestId)}
               >
                 <div className="w-full">
-                  <div className="w-1/4">
-                    Yêu cầu {contract.requestIdList.length - index}
-                  </div>
-                  <div className="w-3/4">
-                    {formatDateToLocal(request.start)}
-                  </div>
+                  <div>Yêu cầu {contract.requestIdList.length - index}</div>
+                  <div>{formatDateToLocal(request.start)}</div>
                 </div>
                 <RightOutlined />
               </div>

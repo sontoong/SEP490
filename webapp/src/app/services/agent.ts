@@ -108,6 +108,8 @@ const ServicePackage = {
     saleRequests.get(`${SERVICEPAKAGE_BASE}/14`, params),
   getRevenueAndNumberOfPurchaseOfServicePackage: (params: any) =>
     saleRequests.get(`${SERVICEPAKAGE_BASE}/18`, params),
+  getContractDetails: (params: any) =>
+    saleRequests.get(`${SERVICEPAKAGE_BASE}/19`, params),
 };
 
 //Requests.Api

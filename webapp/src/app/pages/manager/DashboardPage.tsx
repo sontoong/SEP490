@@ -18,7 +18,9 @@ import { NetGainByMonthChart } from "../../ui/manager_ui/Dashboard/NetGainByMont
 import { useTranslation } from "react-i18next";
 
 const disabledDate: RangePickerProps["disabledDate"] = (current) => {
-  return current < dayjs().startOf("year");
+  return (
+    current && (current.year() < 2020 || current.isAfter(dayjs().endOf("year")))
+  );
 };
 
 export default function DashboardPage() {

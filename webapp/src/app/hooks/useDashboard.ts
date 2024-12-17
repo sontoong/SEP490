@@ -71,7 +71,7 @@ export function useDashboard() {
                 };
               }
               return null;
-            })[0].total,
+            })[0]?.total,
           }),
         );
         dispatch(
@@ -84,7 +84,7 @@ export function useDashboard() {
                 };
               }
               return null;
-            })[0].total,
+            })[0]?.total,
           }),
         );
         dispatch(setExtraStats(resultAction.payload[1]));

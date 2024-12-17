@@ -154,12 +154,25 @@ export default function CreateNewAccountModalButton() {
               name="phoneNumber"
               label={t("create_new_user.phoneNumber")}
               rules={[
-                { required: true, whitespace: true },
                 {
-                  type: "string",
-                  pattern: /^[0-9]+$/,
-                  len: 11,
-                  message: "Số điện thoại không hợp lệ",
+                  required: true,
+                  whitespace: true,
+                  message: "Số điện thoại không được để trống",
+                },
+                {
+                  validator: (_, value) => {
+                    // Strip spaces and validate the number
+                    const normalizedValue = value.replace(/\s+/g, "");
+                    const isValid =
+                      /^0[35789]\d{8}$/.test(normalizedValue) ||
+                      /^01\d{9}$/.test(normalizedValue);
+                    if (isValid) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("Số điện thoại không hợp lệ"),
+                    );
+                  },
                 },
               ]}
             >

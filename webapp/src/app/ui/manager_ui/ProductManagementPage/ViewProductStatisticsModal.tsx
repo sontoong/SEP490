@@ -115,10 +115,18 @@ export default function ViewProductStatisticsModal({
           </Space>
           <Space direction="vertical" className="w-full">
             <div className="text-lg font-bold uppercase">
-              Giao dịch mua hàng gần đây
+              Danh sách đơn hàng sản phẩm
             </div>
-            <div>
-              {topProduct?.orderIdList?.length ? (
+            {topProduct?.orderIdList?.length ||
+            topProduct?.doneRequestIdList?.length ? (
+              <div
+                style={{
+                  maxHeight: "400px",
+                  overflowY: "auto",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "8px",
+                }}
+              >
                 <Space direction="vertical" className="w-full text-sm">
                   {topProduct.orderIdList.map((order, index) => (
                     <div
@@ -134,12 +142,6 @@ export default function ViewProductStatisticsModal({
                     </div>
                   ))}
                 </Space>
-              ) : (
-                <></>
-              )}
-            </div>
-            <div>
-              {topProduct?.orderIdList?.length ? (
                 <Space direction="vertical" className="w-full text-sm">
                   {topProduct.doneRequestIdList.map((request, index) => (
                     <div
@@ -157,14 +159,10 @@ export default function ViewProductStatisticsModal({
                     </div>
                   ))}
                 </Space>
-              ) : (
-                <></>
-              )}
-              {!(
-                topProduct?.orderIdList?.length ||
-                topProduct?.doneRequestIdList?.length
-              ) && <Empty />}
-            </div>
+              </div>
+            ) : (
+              <Empty />
+            )}
           </Space>
         </div>
       </Modal>

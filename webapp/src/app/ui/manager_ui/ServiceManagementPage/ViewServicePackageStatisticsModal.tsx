@@ -75,7 +75,7 @@ export default function ViewServicePackageStatisticsModal({
         maskClosable={false}
         loading={specialUIState.isLoading}
       >
-        <div>
+        <Space direction="vertical" className="w-full">
           <Space direction="vertical" className="w-full text-sm">
             <div className="text-xs text-gray-400">
               #{servicePackage.servicePackageId}
@@ -114,29 +114,38 @@ export default function ViewServicePackageStatisticsModal({
           </Space>
           <Space direction="vertical" className="w-full">
             <div className="text-lg font-bold uppercase">
-              Giao dịch mua gần đây
+              Danh sách hợp đồng mua gói
             </div>
             {topServicePackage?.contractIdList?.length ? (
-              <Space direction="vertical" className="w-full text-sm">
-                {topServicePackage.contractIdList.map((contract, index) => (
-                  <div
-                    key={index}
-                    className="flex cursor-pointer justify-between rounded-lg p-3 hover:bg-gray-100"
-                    onClick={() => handleViewDetail(contract.contractId)}
-                  >
-                    <div className="w-full">
-                      <div>Hợp đồng {contract.contractId}</div>
-                      <div>{formatDateToLocal(contract.purchaseTime)}</div>
+              <div
+                style={{
+                  maxHeight: "400px",
+                  overflowY: "auto",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "8px",
+                }}
+              >
+                <Space direction="vertical" className="w-full text-sm">
+                  {topServicePackage.contractIdList.map((contract, index) => (
+                    <div
+                      key={index}
+                      className="flex cursor-pointer justify-between rounded-lg p-3 hover:bg-gray-100"
+                      onClick={() => handleViewDetail(contract.contractId)}
+                    >
+                      <div className="w-full">
+                        <div>Hợp đồng {contract.contractId}</div>
+                        <div>{formatDateToLocal(contract.purchaseTime)}</div>
+                      </div>
+                      <RightOutlined />
                     </div>
-                    <RightOutlined />
-                  </div>
-                ))}
-              </Space>
+                  ))}
+                </Space>
+              </div>
             ) : (
               <Empty />
             )}
           </Space>
-        </div>
+        </Space>
       </Modal>
       {/* Modal contract details */}
       <Modal

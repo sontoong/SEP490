@@ -72,7 +72,7 @@ export default function LoginPage() {
               <div className="flex justify-center">
                 <PrimaryButton.BoldText
                   htmlType="submit"
-                  text="Gửi link"
+                  text="Đồng ý"
                   loading={stateAuth.isSending}
                   className="w-full"
                 />

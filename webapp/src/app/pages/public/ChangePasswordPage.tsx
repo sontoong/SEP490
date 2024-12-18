@@ -34,7 +34,7 @@ export default function LoginPage() {
     if (token) {
       handleResetPassword({
         values: { password: values.password, token: token },
-        callBackFn: () => navigate("/login", { replace: true }),
+        // callBackFn: () => navigate("/login", { replace: true }),
       });
     }
   };

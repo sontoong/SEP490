@@ -75,7 +75,8 @@ export function useAuth() {
         }
         notification.success({
           message: "Success",
-          description: "Gửi yêu cầu thành công",
+          description:
+            "Gửi yêu cầu thành công. Vui lòng kiểm tra email để tiếp tục.",
           placement: "topRight",
         });
       } else {

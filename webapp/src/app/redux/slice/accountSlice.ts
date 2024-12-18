@@ -295,6 +295,9 @@ export const createPersonnelAccount = createAsyncThunk<
   CreatePersonnelAccountParams
 >("account/send/createPersonnelAccount", async (data, { rejectWithValue }) => {
   const { fullName, email, phoneNumber, dateOfBirth, role } = data;
+
+  const sanitizedPhoneNumber = phoneNumber.replace(/\s+/g, "");
+
   let stringDateOfBirth = "";
   if (typeof dateOfBirth === "string") {
     stringDateOfBirth = dateOfBirth;
@@ -306,7 +309,7 @@ export const createPersonnelAccount = createAsyncThunk<
     const response = await agent.Account.createPersonnelAccount({
       fullName,
       email,
-      phoneNumber,
+      phoneNumber: sanitizedPhoneNumber,
       dateOfBirth: stringDateOfBirth.split("T")[0],
       role,
     });

@@ -34,7 +34,7 @@ export default function LoginPage() {
     if (token) {
       handleResetPassword({
         values: { password: values.password, token: token },
-        callBackFn: () => navigate("/login", { replace: true }),
+        // callBackFn: () => navigate("/login", { replace: true }),
       });
     }
   };
@@ -129,8 +129,10 @@ export default function LoginPage() {
                     size="large"
                   />
                 </Form.Item>
+
                 <Link to="/login">
-                  <span className="underline">Đăng nhập</span>
+                  Về trang đăng nhập
+                  {/* <span className="underline">Đăng nhập</span> */}
                 </Link>
               </div>
               <div className="flex justify-center">

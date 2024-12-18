@@ -15,11 +15,13 @@ import { useCallback, useEffect, useState } from "react";
 import { usePagination } from "../../hooks/usePagination";
 import { useProduct } from "../../hooks/useProduct";
 import { productStatusGenerator } from "../../utils/generators/productStatus";
+import { useTranslation } from "react-i18next";
 
 export default function ProductManagementPage() {
+  const { t } = useTranslation("products");
   useTitle({
     tabTitle: "Products - EWMH",
-    paths: [{ title: "Danh sách sản phẩm", path: "/products" }],
+    paths: [{ title: t("product_list"), path: "/products" }],
   });
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();
@@ -106,7 +108,7 @@ export default function ProductManagementPage() {
 
   const productListColumns: TableColumnsType<Product> = [
     {
-      title: "Tên sản phẩm",
+      title: t("product_table.product_info"),
       dataIndex: "name",
       render: (_, { name, imageUrl }) => (
         <Space direction="horizontal" size={15}>
@@ -118,26 +120,25 @@ export default function ProductManagementPage() {
       ),
     },
     {
-      title: "Giá hiện tại",
+      title: t("product_table.product_price"),
       dataIndex: "priceByDate",
       render: (value) => {
         return formatCurrency(value);
       },
       sorter: true,
-      sortDirections: ["ascend"],
     },
     {
-      title: "Số lượng",
+      title: t("product_table.product_quantity"),
       dataIndex: "inOfStock",
     },
     {
-      title: "Tình trạng",
+      title: t("product_table.product_quantity_status"),
       render: (_, { inOfStock }) => {
         return <div>{productStatusGenerator(inOfStock)}</div>;
       },
     },
     {
-      title: "Trạng thái",
+      title: t("product_table.product_status"),
       dataIndex: "status",
       render: (_, { status, productId }) => {
         return (
@@ -202,7 +203,7 @@ export default function ProductManagementPage() {
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm theo tên sản phẩm"
+                placeholder={t("search_by_name")}
                 onSearch={() => searchForm.submit()}
                 onClear={() => {
                   searchForm.setFieldValue("searchString", "");
@@ -234,9 +235,12 @@ export default function ProductManagementPage() {
             setTableParams({
               filters: filters,
               sorter: {
-                priceByDate: Array.isArray(sorter)
-                  ? undefined
-                  : sorter.order === "ascend",
+                priceByDate:
+                  Array.isArray(sorter) || !sorter.order
+                    ? undefined
+                    : sorter.order === "ascend"
+                      ? true
+                      : false,
               },
             });
           }}

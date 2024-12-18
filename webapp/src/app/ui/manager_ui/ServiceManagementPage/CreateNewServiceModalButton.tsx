@@ -11,8 +11,10 @@ import { UploadImage } from "../../../components/image-upload/image-upload";
 import { useServicePackage } from "../../../hooks/useServicePackage";
 import { AddServicePackageParams } from "../../../redux/slice/servicePackageSlice";
 import { getFiles } from "../../../utils/helpers";
+import { useTranslation } from "react-i18next";
 
 export default function CreateNewServicePackageModalButton() {
+  const { t } = useTranslation("services");
   const { notification } = App.useApp();
   const [createNewServicePackageForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -69,7 +71,7 @@ export default function CreateNewServicePackageModalButton() {
   return (
     <>
       <PrimaryButton
-        text="Tạo gói dịch vụ mới"
+        text={t("create_new_service_package.title")}
         icon={<PlusCircleOutlined />}
         onClick={showModal}
       />
@@ -77,7 +79,9 @@ export default function CreateNewServicePackageModalButton() {
         title={
           <Space className="text-base">
             <EditOutlined />
-            <div className="uppercase text-secondary">Tạo gói dịch vụ mới</div>
+            <div className="uppercase text-secondary">
+              {t("create_new_service_package.title")}
+            </div>
           </Space>
         }
         open={isModalVisible}
@@ -107,7 +111,9 @@ export default function CreateNewServicePackageModalButton() {
           <Form.Item
             name="Name"
             label={
-              <div className="text-sm text-secondary">Tên gói dịch vụ</div>
+              <div className="text-sm text-secondary">
+                {t("create_new_service_package.service_package_name")}
+              </div>
             }
             rules={[
               {
@@ -122,7 +128,11 @@ export default function CreateNewServicePackageModalButton() {
           </Form.Item>
           <Form.Item
             name="Description"
-            label={<div className="text-sm text-secondary">Mô tả</div>}
+            label={
+              <div className="text-sm text-secondary">
+                {t("create_new_service_package.service_package_description")}
+              </div>
+            }
             rules={[
               {
                 type: "string",
@@ -132,12 +142,14 @@ export default function CreateNewServicePackageModalButton() {
               },
             ]}
           >
-            <TextEditor placeholder="Nhập mô tả" />
+            <TextEditor placeholder="Nhập mô tả" limit={200} />
           </Form.Item>
           <Form.Item
             name="NumOfRequest"
             label={
-              <div className="text-sm text-secondary">Số lần sửa chữa</div>
+              <div className="text-sm text-secondary">
+                {t("create_new_service_package.service_package_num_of_request")}
+              </div>
             }
             rules={[
               {
@@ -157,7 +169,11 @@ export default function CreateNewServicePackageModalButton() {
           </Form.Item>
           <Form.Item
             name="Price"
-            label={<div className="text-sm text-secondary">Giá gói (VND)</div>}
+            label={
+              <div className="text-sm text-secondary">
+                {t("create_new_service_package.service_package_price")}
+              </div>
+            }
             rules={[
               {
                 type: "number",

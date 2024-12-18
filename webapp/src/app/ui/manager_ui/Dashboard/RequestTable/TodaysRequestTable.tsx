@@ -1,17 +1,19 @@
-import { Table } from "../../../components/table";
+import { Table } from "../../../../components/table";
 import { TableColumnsType } from "antd";
-import { Request } from "../../../models/request";
+import { Request } from "../../../../models/request";
 import {
   requestStatusGenerator,
   requestTypeGenerator,
-} from "../../../utils/generators/requestStatus";
-import { formatDateToLocal } from "../../../utils/helpers";
+} from "../../../../utils/generators/requestStatus";
+import { formatDateToLocal } from "../../../../utils/helpers";
 import { EyeOutlined } from "@ant-design/icons";
-import { useRequest } from "../../../hooks/useRequest";
-import { usePagination } from "../../../hooks/usePagination";
+import { useRequest } from "../../../../hooks/useRequest";
+import { usePagination } from "../../../../hooks/usePagination";
 import { useCallback, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function TodaysRequestTable(props: TodaysRequestTableProps) {
+  const { t } = useTranslation("requests");
   const { state, handleGetAllTodaysRequestsPaginated } = useRequest();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
     usePagination();
@@ -21,6 +23,7 @@ export default function TodaysRequestTable(props: TodaysRequestTableProps) {
     handleGetAllTodaysRequestsPaginated({
       PageIndex: currentPage,
       Pagesize: currentPageSize,
+      Date: new Date().toISOString(),
     });
   }, [currentPage, currentPageSize, handleGetAllTodaysRequestsPaginated]);
 
@@ -28,30 +31,30 @@ export default function TodaysRequestTable(props: TodaysRequestTableProps) {
     fetchRequests();
   }, [fetchRequests]);
 
-  const contractListColumns: TableColumnsType<Request> = [
+  const todaysRequestListColumns: TableColumnsType<Request> = [
     {
-      title: "Khách hàng",
+      title: t("customer"),
       render: (_, { customer_Leader }) => (
         <div className="text-base font-bold">{customer_Leader[0].fullName}</div>
       ),
     },
     {
-      title: "Loại yêu cầu",
+      title: t("request_type"),
       dataIndex: ["request", "categoryRequest"],
       render: (value) => requestTypeGenerator(value),
     },
     {
-      title: "Bắt đầu",
+      title: t("start_time"),
       dataIndex: ["request", "start"],
-      render: (value) => <div>{formatDateToLocal(value)}</div>,
+      render: (value) => <div>{formatDateToLocal(value, true)}</div>,
     },
     {
-      title: "Kết thúc",
+      title: t("end_time"),
       dataIndex: ["request", "end"],
       render: (value) => <div>{value ? formatDateToLocal(value) : "N/A"}</div>,
     },
     {
-      title: "Trạng thái",
+      title: t("request_status"),
       dataIndex: "Status",
       render: (_, { request }) => {
         return <div>{requestStatusGenerator(request.status)}</div>;
@@ -74,7 +77,7 @@ export default function TodaysRequestTable(props: TodaysRequestTableProps) {
   ];
   return (
     <Table
-      columns={contractListColumns}
+      columns={todaysRequestListColumns}
       dataSource={state.todaysRequestList.requests}
       rowKey={(record) => record.request.requestId}
       loading={state.isFetching}
@@ -88,7 +91,7 @@ export default function TodaysRequestTable(props: TodaysRequestTableProps) {
           setPageSize(pageSize);
         },
         showTotal: (total, range) =>
-          `${range[0]}-${range[1]} trong tổng ${total} trưởng nhóm`,
+          `${range[0]}-${range[1]} trong tổng ${total} yêu cầu`,
         pageSizeOptions: [5, 10, 20, 50, 100],
       }}
     />

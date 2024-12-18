@@ -1,4 +1,7 @@
+import { DownloadOutlined } from "@ant-design/icons";
 import { Space } from "antd";
+import WorkerTable from "./WorkerTable";
+import { Skeleton } from "../../../../components/skeletons";
 import { Request } from "../../../../models/request";
 import {
   requestStatusGenerator,
@@ -6,13 +9,9 @@ import {
 } from "../../../../utils/generators/requestStatus";
 import { formatCurrency, formatDateToLocal } from "../../../../utils/helpers";
 import { Avatar } from "../../../../components/avatar";
-import { DownloadOutlined } from "@ant-design/icons";
 import { Collapse } from "../../../../components/collapse";
-import WorkerTable from "./WorkerTable";
 import { PrimaryButton } from "../../../../components/buttons";
 import RequestProductList from "./RequestProductList";
-import { useEffect } from "react";
-import { Skeleton } from "../../../../components/skeletons";
 
 export default function RequestDetails({
   request,
@@ -21,24 +20,16 @@ export default function RequestDetails({
   request?: Request;
   loading: boolean;
 }) {
-  useEffect(() => {
-    const originalScrollPosition = window.scrollY;
-    window.scrollTo(0, 0);
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      window.scrollTo(0, originalScrollPosition);
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
-
   if (loading) {
-    return <Skeleton />;
+    return (
+      <div className="h-[500px] w-[1000px]">
+        <Skeleton />
+      </div>
+    );
   }
 
   return (
-    <Space direction="vertical" size={20} className="w-full">
+    <Space direction="vertical" size={20}>
       <div className="flex w-full justify-between">
         <Space direction="vertical" className="w-3/12 text-sm" size={15}>
           <div>
@@ -56,13 +47,13 @@ export default function RequestDetails({
             </span>
           </div>
           <div>
-            <span className="font-bold">Ngày bắt đầu: </span>
-            <span>{formatDateToLocal(request?.request.start)}</span>
+            <span className="font-bold">Thời gian bắt đầu: </span>
+            <span>{formatDateToLocal(request?.request.start, true)}</span>
           </div>
         </Space>
         <Space direction="vertical" className="w-4/12 text-sm">
           <span className="font-bold">Thông tin khách hàng:</span>
-          <div className="w-full rounded-lg border-2 border-solid border-secondary px-3 py-2">
+          <div className="rounded-lg border-2 border-solid border-secondary px-3 py-2">
             <div className="flex gap-5">
               <div className="flex flex-col items-center">
                 <Avatar
@@ -90,7 +81,7 @@ export default function RequestDetails({
         </Space>
         <Space direction="vertical" className="w-4/12 text-sm">
           <span className="font-bold">Thông tin trưởng nhóm:</span>
-          <div className="w-full rounded-lg border-2 border-solid border-secondary px-3 py-2">
+          <div className="rounded-lg border-2 border-solid border-secondary px-3 py-2">
             <div className="flex gap-5">
               <div className="flex flex-col items-center">
                 <Avatar

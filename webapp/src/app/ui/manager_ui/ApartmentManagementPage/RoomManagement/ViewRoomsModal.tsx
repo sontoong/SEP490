@@ -6,13 +6,14 @@ import AddRoomModalButton from "./AddRoomModalButton";
 import { Table } from "../../../../components/table";
 import { Room } from "../../../../models/room";
 import { customerNameGenerator } from "../../../../utils/generators/name";
-import EditRoomModalButton from "./UpdateRoomModalButton";
-import { useCallback, useEffect } from "react";
+import UpdateRoomModalButton from "./UpdateRoomModalButton";
+import { useCallback, useEffect, useState } from "react";
 import { useApartment } from "../../../../hooks/useApartment";
 import { useSpecialUI } from "../../../../hooks/useSpecialUI";
 import { usePagination } from "../../../../hooks/usePagination";
+import CustomerDetailsModal from "./CustomerDetailsModal";
 
-export function ViewApartmentDetailModal({
+export function ViewRoomsModal({
   apartmentId,
   isModalVisible,
   setIsModalVisible,
@@ -25,6 +26,9 @@ export function ViewApartmentDetailModal({
   const { state: specialUIState } = useSpecialUI();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
     usePagination();
+  const [isViewCustomerDetailsModalOpen, setIsViewCustomerDetailsModalOpen] =
+    useState(false);
+  const [customerEmail, setcustomerEmail] = useState("");
 
   const fetchRooms = useCallback(() => {
     handleGetAllRoomsPaginated({
@@ -47,27 +51,44 @@ export function ViewApartmentDetailModal({
     },
     {
       title: "Khách hàng",
-      render: (_, { customer }) => {
-        return <div>{customerNameGenerator(customer)}</div>;
+      render: (_, { customer, customerEmail }) => {
+        return customerEmail ? (
+          <div
+            className="w-fit cursor-pointer"
+            onClick={() => {
+              setcustomerEmail(customerEmail);
+              setIsViewCustomerDetailsModalOpen(true);
+            }}
+          >
+            {customerNameGenerator(customer)}
+          </div>
+        ) : (
+          <div className="w-fit">{customerNameGenerator(customer)}</div>
+        );
       },
     },
     {
       title: "",
       key: "actions",
       render: (_, { areaId, roomId }) => (
-        <EditRoomModalButton areaId={areaId} oldRoomId={roomId} />
+        <UpdateRoomModalButton areaId={areaId} oldRoomId={roomId} />
       ),
     },
   ];
 
   return (
     <>
+      <CustomerDetailsModal
+        open={isViewCustomerDetailsModalOpen}
+        setOpen={setIsViewCustomerDetailsModalOpen}
+        customerEmail={customerEmail}
+      />
       <Modal
         title={
           <Space className="text-base">
             <HomeOutlined />
             <div className="uppercase text-secondary">
-              Số căn hộ của chung cư
+              Danh sách căn hộ của chung cư
             </div>
           </Space>
         }

@@ -3,7 +3,7 @@ WORKDIR /app
 COPY ./package*.json ./
 RUN npm i
 COPY . .
-RUN npm run build
+RUN npm run build --verbose
 
 FROM nginx:1.21.6-alpine
 EXPOSE 3000

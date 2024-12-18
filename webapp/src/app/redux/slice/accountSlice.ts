@@ -27,6 +27,9 @@ export type TAccount = {
   freeLeaderList: {
     users: Leader[];
   };
+  workerOfLeaderList: {
+    users: User[];
+  };
   currentWorkerList: {
     users: Worker[];
     total: number;
@@ -41,6 +44,7 @@ const initialState: TAccount = {
   currentLeaderList: { users: [], total: 0 },
   freeLeaderList: { users: [] },
   currentWorkerList: { users: [], total: 0 },
+  workerOfLeaderList: { users: [] },
   isFetching: false,
   isSending: false,
 };
@@ -78,6 +82,12 @@ const accountSlice = createSlice({
       action: PayloadAction<TAccount["currentWorkerList"]>,
     ) => {
       state.currentWorkerList = action.payload;
+    },
+    setWorkerOfLeaderList: (
+      state,
+      action: PayloadAction<TAccount["workerOfLeaderList"]>,
+    ) => {
+      state.workerOfLeaderList = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -214,6 +224,24 @@ export const getAllFreeLeaders = createAsyncThunk<any, void>(
   },
 );
 
+export const getAllWorkerFromLeader = createAsyncThunk<
+  any,
+  GetAllWorkerFromLeaderParams
+>("account/fetch/getAllWorkerFromLeader", async (data, { rejectWithValue }) => {
+  const { LeaderId } = data;
+  try {
+    const response = await agent.Account.getAllWorkerFromLeader({ LeaderId });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      if (!error.response) {
+        throw error;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+});
+
 export const getAllPendingAccountPaginated = createAsyncThunk<
   any,
   GetAllPendingAccountPaginatedParams
@@ -267,6 +295,9 @@ export const createPersonnelAccount = createAsyncThunk<
   CreatePersonnelAccountParams
 >("account/send/createPersonnelAccount", async (data, { rejectWithValue }) => {
   const { fullName, email, phoneNumber, dateOfBirth, role } = data;
+
+  const sanitizedPhoneNumber = phoneNumber.replace(/\s+/g, "");
+
   let stringDateOfBirth = "";
   if (typeof dateOfBirth === "string") {
     stringDateOfBirth = dateOfBirth;
@@ -278,7 +309,7 @@ export const createPersonnelAccount = createAsyncThunk<
     const response = await agent.Account.createPersonnelAccount({
       fullName,
       email,
-      phoneNumber,
+      phoneNumber: sanitizedPhoneNumber,
       dateOfBirth: stringDateOfBirth.split("T")[0],
       role,
     });
@@ -365,6 +396,7 @@ export const {
   setCurrentWorkerList,
   setCurrentPendingAccountList,
   setFreeLeaderList,
+  setWorkerOfLeaderList,
 } = accountSlice.actions;
 
 export default accountSlice.reducer;
@@ -389,6 +421,10 @@ export type GetAllWorkerPaginatedParams = {
   Pagesize: number;
   SearchByPhone?: string;
   IsDisabled?: boolean;
+};
+
+export type GetAllWorkerFromLeaderParams = {
+  LeaderId: string;
 };
 
 export type GetAllPendingAccountPaginatedParams = {

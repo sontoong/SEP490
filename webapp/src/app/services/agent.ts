@@ -34,6 +34,8 @@ const Account = {
   getAllWorkerPaginated: (params: any) =>
     userRequests.get(`${ACCOUNT_BASE}/19`, params),
   getAllFreeLeaders: () => userRequests.get(`${ACCOUNT_BASE}/21`),
+  getAllWorkerFromLeader: (params: any) =>
+    userRequests.get(`${ACCOUNT_BASE}/22`, params),
 };
 
 const APARTMENT_BASE = "apartment";
@@ -76,6 +78,8 @@ const Product = {
   getProduct: (params: any) => saleRequests.get(`${PRODUCT_BASE}/4`, params),
   getAllProductPaginated: (params: any) =>
     saleRequests.get(`${PRODUCT_BASE}/5`, params),
+  getRevenueAndNumberOfPurchaseOfProduct: (params: any) =>
+    saleRequests.get(`${PRODUCT_BASE}/6`, params),
 };
 
 const SERVICEPAKAGE_BASE = "service-package";
@@ -102,6 +106,10 @@ const ServicePackage = {
     saleRequests.del(`${SERVICEPAKAGE_BASE}/10`, data),
   getAllContractsPaginated: (params: any) =>
     saleRequests.get(`${SERVICEPAKAGE_BASE}/14`, params),
+  getRevenueAndNumberOfPurchaseOfServicePackage: (params: any) =>
+    saleRequests.get(`${SERVICEPAKAGE_BASE}/18`, params),
+  getContractDetails: (params: any) =>
+    saleRequests.get(`${SERVICEPAKAGE_BASE}/19`, params),
 };
 
 //Requests.Api
@@ -145,6 +153,8 @@ const STATISTIC_BASE = "Transaction";
 const Transaction = {
   getStatistics: (params: any) =>
     requestRequests.get(`${STATISTIC_BASE}/1`, params),
+  getStatisticsByMonth: (params: any) =>
+    requestRequests.get(`${STATISTIC_BASE}/3`, params),
 };
 
 const agent = {

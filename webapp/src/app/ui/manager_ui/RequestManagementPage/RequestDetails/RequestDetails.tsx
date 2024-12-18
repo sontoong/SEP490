@@ -14,6 +14,7 @@ import RequestProductList from "./RequestProductList";
 import { useEffect } from "react";
 import { Skeleton } from "../../../../components/skeletons";
 import { isNull } from "lodash";
+import { useTranslation } from "react-i18next";
 
 export default function RequestDetails({
   request,
@@ -22,6 +23,7 @@ export default function RequestDetails({
   request?: Request;
   loading: boolean;
 }) {
+  const { t } = useTranslation("requests");
   useEffect(() => {
     const originalScrollPosition = window.scrollY;
     window.scrollTo(0, 0);
@@ -43,26 +45,28 @@ export default function RequestDetails({
       <div className="flex w-full justify-between">
         <Space direction="vertical" className="w-3/12 text-sm" size={15}>
           <div>
-            <span className="font-bold">Mã số yêu cầu: </span>
+            <span className="font-bold">{t("request_id")}: </span>
             <span>{request?.request.requestId}</span>
           </div>
           <div>
-            <span className="font-bold">Trạng thái: </span>
+            <span className="font-bold">{t("request_status")}: </span>
             <span>{requestStatusGenerator(request?.request.status)}</span>
           </div>
           <div>
-            <span className="font-bold">Loại yêu cầu: </span>
+            <span className="font-bold">{t("request_type")}: </span>
             <span>
               {requestTypeGenerator(request?.request.categoryRequest)}
             </span>
           </div>
           <div>
-            <span className="font-bold">Ngày bắt đầu: </span>
-            <span>{formatDateToLocal(request?.request.start)}</span>
+            <span className="font-bold">{t("start_time")}: </span>
+            <span>{formatDateToLocal(request?.request.start, true)}</span>
           </div>
         </Space>
         <Space direction="vertical" className="w-4/12 text-sm">
-          <span className="font-bold">Thông tin khách hàng:</span>
+          <span className="font-bold">
+            {t("request_details.customer_details")}:
+          </span>
           <div className="w-full rounded-lg border-2 border-solid border-secondary px-3 py-2">
             <div className="flex gap-5">
               <div className="flex flex-col items-center">
@@ -90,7 +94,9 @@ export default function RequestDetails({
           </div>
         </Space>
         <Space direction="vertical" className="w-4/12 text-sm">
-          <span className="font-bold">Thông tin trưởng nhóm:</span>
+          <span className="font-bold">
+            {t("request_details.leader_details")}:
+          </span>
           <div className="w-full rounded-lg border-2 border-solid border-secondary px-3 py-2">
             <div className="flex gap-5">
               <div className="flex flex-col items-center">
@@ -122,7 +128,7 @@ export default function RequestDetails({
         <Collapse
           items={[
             {
-              label: "Danh sách nhân viên",
+              label: t("request_details.worker_list"),
               children: <WorkerTable workers={request?.workerList} />,
             },
           ]}
@@ -132,18 +138,24 @@ export default function RequestDetails({
         <></>
       )}
       <div className="text-sm">
-        <div className="font-bold">Mô tả vấn đề của khách hàng: </div>
+        <div className="font-bold">
+          {t("request_details.request_description")}:{" "}
+        </div>
         <div>{request?.request.customerProblem}</div>
       </div>
       <div className="text-sm">
-        <div className="font-bold">Kết luận của nhân viên: </div>
+        <div className="font-bold">
+          {t("request_details.worker_conclusion")}:{" "}
+        </div>
         <div>
-          {request?.request.conclusion ? request.request.conclusion : "Chưa có"}
+          {request?.request.conclusion
+            ? request.request.conclusion
+            : t("request_details.not_have_yet")}
         </div>
       </div>
       {request?.request.status && [2].includes(request?.request.status) ? (
         <PrimaryButton
-          text="Tải hóa đơn"
+          text={t("request_details.download_receipt")}
           icon={<DownloadOutlined />}
           className="w-full"
           onClick={() => {
@@ -160,7 +172,7 @@ export default function RequestDetails({
         <Collapse
           items={[
             {
-              label: "Đơn hàng của yêu cầu",
+              label: t("request_details.product_list"),
               children: <RequestProductList products={request?.productList} />,
               forceRender: true,
             },
@@ -173,18 +185,22 @@ export default function RequestDetails({
       {request?.request.status && [2].includes(request?.request.status) ? (
         <>
           <Space className="flex justify-between text-sm">
-            <div className="font-bold">Giá gửi yêu cầu: </div>
+            <div className="font-bold">
+              {t("request_details.request_price")}:{" "}
+            </div>
             <div className="font-semibold">
               {request?.request.requestPrice === 0
-                ? "Miễn phí"
+                ? t("request_details.free")
                 : formatCurrency(request?.request.requestPrice)}
             </div>
           </Space>
           <Space className="flex justify-between text-sm">
-            <div className="font-bold">Tổng giá: </div>
+            <div className="font-bold">
+              {t("request_details.total_price")}:{" "}
+            </div>
             <div className="font-bold">
               {isNull(request?.request.totalPrice)
-                ? "Miễn phí"
+                ? t("request_details.free")
                 : formatCurrency(request?.request.totalPrice)}
             </div>
           </Space>

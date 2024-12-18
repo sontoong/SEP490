@@ -29,9 +29,7 @@ export default function ViewProductDetailsModal({
       title={
         <Space className="text-base">
           <ToolOutlined />
-          <div className="uppercase text-secondary">
-            Thông tin {product.name}
-          </div>
+          <div className="uppercase text-secondary">Thông tin sản phẩm</div>
         </Space>
       }
       open={open}
@@ -49,29 +47,39 @@ export default function ViewProductDetailsModal({
     >
       <Space direction="vertical" className="w-full text-sm">
         <Space direction="vertical" size={5} className="w-full">
-          <Avatar
-            src={state.currentProduct.imageUrl}
-            size={200}
-            shape="square"
-          />
-          <div className="text-lg font-bold">{state.currentProduct.name}</div>
-          <Space size={25} className="flex w-full justify-between">
+          <div className="flex gap-5">
             <div>
-              <span className="font-bold">Giá hiện tại: </span>
-              {formatCurrency(state.currentProduct.priceByDate)}
+              <Avatar
+                src={state.currentProduct.imageUrl}
+                size={200}
+                shape="square"
+              />
             </div>
             <div>
-              <span className="font-bold">Số lượng: </span>
-              {state.currentProduct.inOfStock}
+              <div>
+                <span className="font-bold">Tên sản phẩm: </span>
+                {state.currentProduct.name}
+              </div>
+              <div>
+                <span className="font-bold">Giá hiện tại: </span>
+                {formatCurrency(state.currentProduct.priceByDate)}
+              </div>
+              <div>
+                <span className="font-bold">Số lượng trong kho: </span>
+                {state.currentProduct.inOfStock}
+              </div>
+              <div>
+                <span className="font-bold">Bảo hành: </span>
+                {state.currentProduct.warantyMonths} tháng
+              </div>
             </div>
-            <div>
-              <span className="font-bold">Bảo hành: </span>
-              {state.currentProduct.warantyMonths} tháng
-            </div>
-          </Space>
+          </div>
         </Space>
         <Space direction="vertical" size={5}>
-          <div>{htmlParse(state.currentProduct.description)}</div>
+          <div>
+            <div className="font-bold">Mô tả: </div>
+            {htmlParse(state.currentProduct.description)}
+          </div>
         </Space>
       </Space>
     </Modal>

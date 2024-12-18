@@ -10,11 +10,13 @@ import ContractManagementDropdown from "../../ui/manager_ui/ContractManagementPa
 import { useCallback, useEffect, useState } from "react";
 import { usePagination } from "../../hooks/usePagination";
 import { useContract } from "../../hooks/useContract";
+import { useTranslation } from "react-i18next";
 
 export default function ContractManagementPage() {
+  const { t } = useTranslation("contracts");
   useTitle({
     tabTitle: "Contracts - EWMH",
-    paths: [{ title: "Danh sách hợp đồng", path: "/contracts" }],
+    paths: [{ title: t("contract_list"), path: "/contracts" }],
   });
   const [searchForm] = Form.useForm();
   const { state, handleGetAllContractPaginated } = useContract();
@@ -54,11 +56,11 @@ export default function ContractManagementPage() {
 
   const contractListColumns: TableColumnsType<Contract> = [
     {
-      title: "Mã hợp đồng",
+      title: t("contract_table.contract_id"),
       dataIndex: ["item", "contractId"],
     },
     {
-      title: "Tên gói dịch vụ",
+      title: t("contract_table.service_package_name"),
       dataIndex: ["item", "name"],
       // render: (_, { item }) => (
       //   <Space direction="vertical">
@@ -67,25 +69,38 @@ export default function ContractManagementPage() {
       // ),
     },
     {
-      title: "Khách hàng",
-      dataIndex: ["getCusInfo", "0", "fullName"],
+      title: t("contract_table.contract_customer_name"),
+      dataIndex: ["getCusInfo", "fullName"],
     },
     {
-      title: "Thanh toán vào",
+      title: t("contract_table.contract_paid_date"),
       dataIndex: ["item", "purchaseTime"],
       render: (value) => <div>{formatDateToLocal(value)}</div>,
       sorter: true,
       sortDirections: ["descend"],
     },
     {
-      title: "Lần sửa còn",
+      title: t("contract_table.contract_total_num_of_request"),
+      dataIndex: ["item", "numOfRequest"],
+    },
+    {
+      title: t("contract_table.contract_remaining_num_of_request"),
       dataIndex: ["item", "remainingNumOfRequests"],
     },
     {
-      title: "Trạng thái",
+      title: t("contract_table.contract_end_date"),
+      dataIndex: ["item", "expireDate"],
+      render: (value) => <div>{formatDateToLocal(value)}</div>,
+    },
+    {
+      title: t("contract_table.contract_status"),
       render: (_, { item }) => {
         return (
-          <div>{contractStatusGenerator(item.remainingNumOfRequests)}</div>
+          <div>
+            {contractStatusGenerator({
+              remaining: item.remainingNumOfRequests,
+            })}
+          </div>
         );
       },
     },
@@ -119,7 +134,7 @@ export default function ContractManagementPage() {
               ]}
             >
               <Input.Search
-                placeholder="Tìm kiếm theo SĐT"
+                placeholder={t("search_by_phone")}
                 onSearch={() => searchForm.submit()}
               />
             </Form.Item>

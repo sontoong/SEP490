@@ -3,7 +3,7 @@ import agent from "../../services/agent";
 import { AxiosError } from "axios";
 import { excludedActionsPending } from "./specialUISlice";
 import { UploadImage } from "../../components/image-upload/image-upload";
-import { ServicePackage } from "../../models/service";
+import { ServicePackage, TopServicePackage } from "../../models/service";
 
 export type TServicePackage = {
   currentServicePackageList: {
@@ -11,6 +11,7 @@ export type TServicePackage = {
     total: number;
   };
   currentServicePackage: ServicePackage;
+  topServicePackageList: TopServicePackage[];
   isFetching: boolean;
   isSending: boolean;
 };
@@ -28,6 +29,7 @@ const initialState: TServicePackage = {
     date: "",
     policy: "",
   },
+  topServicePackageList: [],
   isFetching: false,
   isSending: false,
 };
@@ -47,6 +49,12 @@ const servicePackageSlice = createSlice({
       action: PayloadAction<TServicePackage["currentServicePackage"]>,
     ) => {
       state.currentServicePackage = action.payload;
+    },
+    setTopServicePackageList: (
+      state,
+      action: PayloadAction<TServicePackage["topServicePackageList"]>,
+    ) => {
+      state.topServicePackageList = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -226,8 +234,38 @@ export const disableServicePackage = createAsyncThunk<
   },
 );
 
-export const { setCurrentServicePackageList, setCurrentServicePackage } =
-  servicePackageSlice.actions;
+export const getRevenueAndNumberOfPurchaseOfServicePackage = createAsyncThunk<
+  any,
+  GetRevenueAndNumberOfPurchaseOfServicePackageParams
+>(
+  "servicePackage/fetch/getRevenueAndNumberOfPurchaseOfServicePackage",
+  async (data, { rejectWithValue }) => {
+    const { NumOfTop, ServicePackageId } = data;
+    try {
+      const response =
+        await agent.ServicePackage.getRevenueAndNumberOfPurchaseOfServicePackage(
+          {
+            NumOfTop,
+            ServicePackageId,
+          },
+        );
+      return response;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (!error.response) {
+          throw error;
+        }
+        return rejectWithValue(error.response.data);
+      }
+    }
+  },
+);
+
+export const {
+  setCurrentServicePackageList,
+  setCurrentServicePackage,
+  setTopServicePackageList,
+} = servicePackageSlice.actions;
 
 export default servicePackageSlice.reducer;
 
@@ -239,6 +277,11 @@ export type GetAllServicePackagePaginatedParams = {
 };
 
 export type GetServicePackageParams = {
+  ServicePackageId: string;
+};
+
+export type GetRevenueAndNumberOfPurchaseOfServicePackageParams = {
+  NumOfTop: number;
   ServicePackageId: string;
 };
 

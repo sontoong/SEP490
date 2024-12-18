@@ -147,7 +147,7 @@ export default function UpdateServiceModal({
             },
           ]}
         >
-          <TextEditor placeholder="Nhập mô tả" />
+          <TextEditor placeholder="Nhập mô tả" limit={200} />
         </Form.Item>
         <Form.Item
           name="NumOfRequest"

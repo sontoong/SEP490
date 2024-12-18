@@ -20,8 +20,10 @@ import { getFiles } from "../../../utils/helpers";
 import { useApartment } from "../../../hooks/useApartment";
 import { Skeleton } from "../../../components/skeletons";
 import { useSpecialUI } from "../../../hooks/useSpecialUI";
+import { useTranslation } from "react-i18next";
 
 export default function CreateNewApartmentModalButton() {
+  const { t } = useTranslation("apartments");
   const { notification } = App.useApp();
   const [createNewApartmentForm] = Form.useForm();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -101,7 +103,7 @@ export default function CreateNewApartmentModalButton() {
   return (
     <>
       <PrimaryButton
-        text="Thêm chung cư mới"
+        text={t("create_new_apartment.title")}
         icon={<PlusCircleOutlined />}
         onClick={showModal}
       />
@@ -109,7 +111,9 @@ export default function CreateNewApartmentModalButton() {
         title={
           <Space className="text-base">
             <HomeOutlined />
-            <div className="uppercase text-secondary">Thêm chung cư mới</div>
+            <div className="uppercase text-secondary">
+              {t("create_new_apartment.title")}
+            </div>
           </Space>
         }
         open={isModalVisible}
@@ -139,7 +143,11 @@ export default function CreateNewApartmentModalButton() {
           <ImageUpload images={images} setImages={setImages} />
           <Form.Item
             name="Name"
-            label={<div className="text-sm text-secondary">Tên chung cư</div>}
+            label={
+              <div className="text-sm text-secondary">
+                {t("create_new_apartment.apartment_name")}
+              </div>
+            }
             rules={[
               {
                 type: "string",
@@ -158,7 +166,11 @@ export default function CreateNewApartmentModalButton() {
           </Form.Item>
           <Form.Item
             name="Address"
-            label={<div className="text-sm text-secondary">Địa chỉ</div>}
+            label={
+              <div className="text-sm text-secondary">
+                {t("create_new_apartment.apartment_address")}
+              </div>
+            }
             rules={[
               {
                 type: "string",
@@ -177,7 +189,11 @@ export default function CreateNewApartmentModalButton() {
           </Form.Item>
           <Form.Item
             name="ManagementCompany"
-            label={<div className="text-sm text-secondary">Công ty</div>}
+            label={
+              <div className="text-sm text-secondary">
+                {t("create_new_apartment.apartment_company")}
+              </div>
+            }
             rules={[
               {
                 type: "string",
@@ -196,7 +212,11 @@ export default function CreateNewApartmentModalButton() {
           </Form.Item>
           <Form.Item
             name="Description"
-            label={<div className="text-sm text-secondary">Mô tả</div>}
+            label={
+              <div className="text-sm text-secondary">
+                {t("create_new_apartment.apartment_description")}
+              </div>
+            }
             rules={[
               {
                 type: "string",
@@ -211,7 +231,11 @@ export default function CreateNewApartmentModalButton() {
           <Space direction="vertical" className="w-full" size={0}>
             <Form.Item
               name="LeaderId"
-              label={<div className="text-sm text-secondary">Trưởng nhóm</div>}
+              label={
+                <div className="text-sm text-secondary">
+                  {t("create_new_apartment.apartment_leader")}
+                </div>
+              }
               rules={[
                 {
                   required: true,

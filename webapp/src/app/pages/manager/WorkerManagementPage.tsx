@@ -1,4 +1,4 @@
-import { Space, TableColumnsType, Tag } from "antd";
+import { App, Space, TableColumnsType, Tag } from "antd";
 import { useTitle } from "../../hooks/useTitle";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
@@ -15,6 +15,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function WorkerManagementPage() {
+  const { notification } = App.useApp();
   const { t } = useTranslation("workers");
   useTitle({
     tabTitle: "Workers - EWMH",
@@ -23,7 +24,8 @@ export default function WorkerManagementPage() {
   const [modal, contextHolder] = Modal.useModal();
   const [searchForm] = Form.useForm();
   const [disableReasonForm] = Form.useForm();
-  const { state, handleGetAllWorkerPaginated } = useAccount();
+  const { state, handleGetAllWorkerPaginated, handleDisableUser } =
+    useAccount();
   const { currentPage, currentPageSize, setPageSize, goToPage } =
     usePagination();
   const [searchByPhone, setSearchByPhone] = useState<string>();
@@ -57,13 +59,9 @@ export default function WorkerManagementPage() {
     setSearchByPhone(searchString);
   };
 
-  function handleConfirmLock() {
+  function handleConfirmLock(accountId: string) {
     const initialValuesDisableReason = {
-      disableReason: "",
-    };
-
-    const handleConfirmLockSubmit = (values: any) => {
-      console.log(values);
+      disabledReason: "",
     };
 
     modal.confirm({
@@ -88,11 +86,10 @@ export default function WorkerManagementPage() {
             form={disableReasonForm}
             initialValues={initialValuesDisableReason}
             name="DisableReasonForm"
-            onFinish={handleConfirmLockSubmit}
           >
             <Form.Item
               noStyle
-              name="disableReason"
+              name="disabledReason"
               rules={[
                 {
                   type: "string",
@@ -105,17 +102,21 @@ export default function WorkerManagementPage() {
         </Space>
       ),
       onOk: async () => {
-        const sleep = (ms: number) => {
-          return new Promise((resolve) => setTimeout(resolve, ms));
-        };
+        await disableReasonForm.validateFields().then(async () => {
+          const values = disableReasonForm.getFieldsValue(true);
 
-        disableReasonForm.submit();
-        await sleep(1000); // Example delay
+          await handleDisableUser({
+            accountId: accountId,
+            disable: true,
+            disabledReason: values.disabledReason,
+          });
+          fetchWorkerList();
+        });
       },
     });
   }
 
-  function handleConfirmUnlock() {
+  function handleConfirmUnlock(accountId: string) {
     modal.confirm({
       icon: <WarningOutlined />,
       width: "fit-content",
@@ -128,7 +129,14 @@ export default function WorkerManagementPage() {
           <span>?</span>
         </div>
       ),
-      onOk() {},
+      onOk: async () => {
+        await handleDisableUser({
+          accountId: accountId,
+          disable: false,
+          disabledReason: "",
+        });
+        fetchWorkerList();
+      },
     });
   }
 
@@ -163,30 +171,32 @@ export default function WorkerManagementPage() {
     {
       title: t("worker_table.worker_status"),
       dataIndex: ["item", "isDisabled"],
-      render: (isDisabled, { getLeaderInfo }) => {
+      render: (isDisabled, { getLeaderInfo, item }) => {
         return getLeaderInfo?.accountId ? (
           <div
-          // className="w-fit cursor-pointer"
-          // onClick={() => {
-          //   notification.info({
-          //     message: "Nhân viên có liên kết với trưởng nhóm",
-          //     description: (
-          //       <>
-          //         Vui lòng bỏ gán nhân viên khỏi trưởng nhóm{" "}
-          //         <span className="font-bold">{getLeaderInfo.fullName}</span>{" "}
-          //         để có thể vô hiệu hóa tài khoản.
-          //       </>
-          //     ),
-          //     placement: "topRight",
-          //   });
-          // }}
+            className="w-fit cursor-pointer"
+            onClick={() => {
+              notification.info({
+                message: "Nhân viên có liên kết với trưởng nhóm",
+                description: (
+                  <>
+                    Vui lòng bỏ gán nhân viên khỏi trưởng nhóm{" "}
+                    <span className="font-bold">{getLeaderInfo.fullName}</span>{" "}
+                    để có thể vô hiệu hóa tài khoản.
+                  </>
+                ),
+                placement: "topRight",
+              });
+            }}
           >
             {statusGenerator(isDisabled)}
           </div>
         ) : (
           <div
             onClick={() =>
-              isDisabled ? handleConfirmUnlock() : handleConfirmLock()
+              isDisabled
+                ? handleConfirmUnlock(item.accountId)
+                : handleConfirmLock(item.accountId)
             }
             className="cursor-pointer"
           >
@@ -204,6 +214,10 @@ export default function WorkerManagementPage() {
           value: true,
         },
       ],
+    },
+    {
+      title: t("worker_table.worker_notes"),
+      dataIndex: ["item", "disabledReason"],
     },
     {
       title: "",
@@ -240,7 +254,7 @@ export default function WorkerManagementPage() {
               ]}
             >
               <Input.Search
-                placeholder={t("search_by_email")}
+                placeholder={t("search_by_phone")}
                 onSearch={() => searchForm.submit()}
                 onClear={() => {
                   searchForm.setFieldValue("searchString", "");

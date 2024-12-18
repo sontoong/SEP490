@@ -1,4 +1,4 @@
-import { Space, TableColumnsType, Tag } from "antd";
+import { App, Space, TableColumnsType, Tag } from "antd";
 import { Avatar } from "../../components/avatar";
 import { Form } from "../../components/form";
 import { Input } from "../../components/inputs";
@@ -15,6 +15,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function LeaderManagementPage() {
+  const { notification } = App.useApp();
   const { t } = useTranslation("leaders");
   useTitle({
     tabTitle: "Leaders - EWMH",
@@ -60,7 +61,7 @@ export default function LeaderManagementPage() {
 
   function handleConfirmLock(accountId: string) {
     const initialValuesDisableReason = {
-      disableReason: "",
+      disabledReason: "",
     };
 
     modal.confirm({
@@ -88,7 +89,7 @@ export default function LeaderManagementPage() {
           >
             <Form.Item
               noStyle
-              name="disableReason"
+              name="disabledReason"
               rules={[
                 {
                   type: "string",
@@ -171,23 +172,23 @@ export default function LeaderManagementPage() {
     {
       title: t("leader_table.leader_status"),
       dataIndex: "isDisabled",
-      render: (_, { isDisabled, accountId, areaId }) => {
+      render: (_, { isDisabled, accountId, areaId, name }) => {
         return areaId ? (
           <div
-          // className="w-fit cursor-pointer"
-          // onClick={() => {
-          //   notification.info({
-          //     message: "Trưởng nhóm có liên kết với chung cư",
-          //     description: (
-          //       <>
-          //         Vui lòng thay trưởng nhóm của chung cư{" "}
-          //         <span className="font-bold">{name}</span> để có thể vô
-          //         hiệu hóa tài khoản.
-          //       </>
-          //     ),
-          //     placement: "topRight",
-          //   });
-          // }}
+            className="w-fit cursor-pointer"
+            onClick={() => {
+              notification.info({
+                message: "Trưởng nhóm có liên kết với chung cư",
+                description: (
+                  <>
+                    Vui lòng thay trưởng nhóm của chung cư{" "}
+                    <span className="font-bold">{name}</span> để có thể vô hiệu
+                    hóa tài khoản.
+                  </>
+                ),
+                placement: "topRight",
+              });
+            }}
           >
             {statusGenerator(isDisabled)}
           </div>
@@ -214,6 +215,10 @@ export default function LeaderManagementPage() {
           value: "true",
         },
       ],
+    },
+    {
+      title: t("leader_table.leader_notes"),
+      dataIndex: "disabledReason",
     },
     {
       title: "",

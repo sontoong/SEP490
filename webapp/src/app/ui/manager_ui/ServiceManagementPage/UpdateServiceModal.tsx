@@ -133,7 +133,7 @@ export default function UpdateServiceModal({
             },
           ]}
         >
-          <Input placeholder="Nhập tên gói dịch vụ" size="large" />
+          <Input placeholder="Nhập tên gói dịch vụ" size="large" disabled />
         </Form.Item>
         <Form.Item
           name="Description"

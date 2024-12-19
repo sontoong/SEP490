@@ -178,8 +178,16 @@ export default function CreateNewServicePackageModalButton() {
               {
                 type: "number",
                 required: true,
+              },
+              {
+                type: "number",
                 min: 2000,
                 message: "Giá gói phải ít nhất 2.000đ",
+              },
+              {
+                type: "number",
+                max: 50000000,
+                message: "Giá gói cao nhất 50.000.000đ",
               },
             ]}
           >

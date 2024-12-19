@@ -136,6 +136,10 @@ export default function ContractManagementPage() {
               <Input.Search
                 placeholder={t("search_by_phone")}
                 onSearch={() => searchForm.submit()}
+                onClear={() => {
+                  searchForm.setFieldValue("searchString", "");
+                  searchForm.submit();
+                }}
               />
             </Form.Item>
           </Form>

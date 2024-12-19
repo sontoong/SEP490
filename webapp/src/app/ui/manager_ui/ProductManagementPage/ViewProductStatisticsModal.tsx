@@ -254,8 +254,11 @@ export default function ViewProductStatisticsModal({
                 </div>
               </div>
               <div>
-                <strong>Ngày đặt:</strong>{" "}
-                {formatDateToLocal(orderState.currentOrder.order?.purchaseTime)}
+                <strong>Thời gian đặt:</strong>{" "}
+                {formatDateToLocal(
+                  orderState.currentOrder.order?.purchaseTime,
+                  true,
+                )}
               </div>
               <List
                 fontSize={16}

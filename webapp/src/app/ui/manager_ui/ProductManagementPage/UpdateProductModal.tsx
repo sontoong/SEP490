@@ -161,8 +161,16 @@ export default function UpdateProductModal({
             {
               type: "number",
               required: true,
+            },
+            {
+              type: "number",
               min: 2000,
               message: "Giá sản phẩm phải ít nhất 2.000đ",
+            },
+            {
+              type: "number",
+              max: 50000000,
+              message: "Giá sản phẩm cao nhất 50.000.000đ",
             },
           ]}
         >

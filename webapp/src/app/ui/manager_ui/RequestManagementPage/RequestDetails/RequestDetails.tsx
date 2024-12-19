@@ -62,6 +62,14 @@ export default function RequestDetails({
             <span className="font-bold">{t("start_time")}: </span>
             <span>{formatDateToLocal(request?.request.start, true)}</span>
           </div>
+          <div>
+            <span className="font-bold">Thời gian kết thúc: </span>
+            <span>
+              {request?.request.end
+                ? formatDateToLocal(request?.request.end, true)
+                : "N/A"}
+            </span>
+          </div>
         </Space>
         <Space direction="vertical" className="w-4/12 text-sm">
           <span className="font-bold">

@@ -51,7 +51,9 @@ export default function TodaysRequestTable(props: TodaysRequestTableProps) {
     {
       title: t("end_time"),
       dataIndex: ["request", "end"],
-      render: (value) => <div>{value ? formatDateToLocal(value) : "N/A"}</div>,
+      render: (value) => (
+        <div>{value ? formatDateToLocal(value, true) : "N/A"}</div>
+      ),
     },
     {
       title: t("request_status"),

@@ -87,8 +87,11 @@ export function ViewDetailButton({ orderId }: { orderId: string }) {
                 <div className="text-xs text-gray-400">#{orderId}</div>
               </div>
               <div>
-                <strong>Ngày đặt:</strong>{" "}
-                {formatDateToLocal(orderState.currentOrder.order?.purchaseTime)}
+                <strong>Thời gian đặt:</strong>{" "}
+                {formatDateToLocal(
+                  orderState.currentOrder.order?.purchaseTime,
+                  true,
+                )}
               </div>
               <List
                 fontSize={16}
